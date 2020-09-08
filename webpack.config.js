@@ -42,10 +42,10 @@ module.exports = {
 				]
 			},
 			{
-				test: /\.(png|jp(e*)g|svg)$/,  
+				test: /\.(png|jp(e*)g|svg)$/,
 				use: [{
 					loader: 'url-loader',
-					options: { 
+					options: {
 						limit: 8000, // Convert images < 8kb to base64 strings
 						name: 'images/[hash]-[name].[ext]'
 					}
@@ -65,7 +65,7 @@ module.exports = {
 			template: path.resolve(__dirname, 'public/index.html'),
 			hash: false,
 			filename: 'index.html',
-			inject: 'body'
+			inject: false
 		})
 		//, new CopyWebpackPlugin([
 		// 	{ from: 'public/css', to: 'css' },
