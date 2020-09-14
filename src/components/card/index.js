@@ -1,5 +1,5 @@
 "use strict;"
-
+import { Div, Span, HTMLElementCreator } from '@rebelstack-io/metaflux';
 /**
  * Card component
  * @param {string} content inner html content
@@ -10,12 +10,11 @@ function cahCard (content = "", className = "white", id = 0) {
 
 	this.id = id;// It's referenced from hand
 	const _storage = global.storage;
-
-	const card = document.createElement('cah-card');
-	card.className = className;
-	card.innerHTML = `<span></span><div>${content}</div>`;
-	card.id = `cah-card-${id}`;
-
+	const card = HTMLElementCreator('cah-card', {
+		className: className,
+		id: `cah-card-${id}`,
+		content: [Span(), Div(false, content)]
+	})
 	if (className === 'white') {
 		card.addEventListener('click', () => {
 			const { selectedCards, selectedCardsLimit } = _storage.getState().Main;

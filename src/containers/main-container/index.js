@@ -8,8 +8,10 @@ import '../../css/score-board.scss';
 import '../../css/corner-menu.scss';
 import '../../css/czar-indicator.scss';
 import '../../css/cah-popup.scss';
+import '../../css/lobby.scss';
 import '../../handlers';
 import { TableTop } from '../../containers/table-top';
+import { Lobby } from '../lobby'
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
@@ -21,7 +23,7 @@ class MainContainer extends MetaContainer {
 	render () {
 		return Div({
 			id: 'container'
-		}, TableTop());
+		}, Lobby());
 	}
 }
 

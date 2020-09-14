@@ -27,7 +27,13 @@ const MainDefaultState = {
 	czarCard: {
 		text: "But wait, there's more! If you order _ in the next 15 minutes, we'll throw in _ absolutely free!",
 		pick: 2
-	}
+	},
+	matchList: [
+		{ name: 'All Welcome', owner: 'Emmily Smith', people : '2/10', havePass: false },
+		{ name: 'Friday n beer', owner: 'Rein Petersen', people : '4/10', havePass: true },
+		{ name: 'oh wee', owner: 'Mr PoopyButthole', people : '4/10', havePass: false },
+		{ name: 'I’m BirdPerson', owner: 'Bird Person', people : '6/10', havePass: false },
+	]
 };
 
 export default {
