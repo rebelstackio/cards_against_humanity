@@ -1,12 +1,16 @@
-import { Div, H3, Img, Table, Tr, Td, Th } from '@rebelstack-io/metaflux';
+import { Div, Span, H3 } from '@rebelstack-io/metaflux';
 import { UserHeader } from '../../components/UserHeader';
 import { MatchsTable } from '../../components/MatchsTable';
+import { CreationMenu } from '../../components/CreationMenu';
+import { LoadignModal } from '../../components/LoadingModal';
 
 const Lobby = () => Div({
 	className: 'main-lobby'
 }, [
-	UserHeader,
-	MatchsTable
+	UserHeader(),
+	MatchsTable(),
+	CreationMenu(),
+	LoadignModal()
 ]);
 
 export {

@@ -13,17 +13,36 @@ import '../../handlers';
 import { TableTop } from '../../containers/table-top';
 import { Lobby } from '../lobby'
 import '@fortawesome/fontawesome-free/css/all.css';
-import '@fortawesome/fontawesome-free/js/fontawesome'
-import '@fortawesome/fontawesome-free/js/solid'
-import '@fortawesome/fontawesome-free/js/regular'
-import '@fortawesome/fontawesome-free/js/brands'
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/solid';
+import '@fortawesome/fontawesome-free/js/regular';
+import '@fortawesome/fontawesome-free/js/brands';
 
 class MainContainer extends MetaContainer {
+	constructor () {
+		super();
+		this._storage = global.storage;
+		this.storeEvents = this.storeEvents.bind(this);
+	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
-		return Div({
+		this.container =
+		Div({
 			id: 'container'
 		}, Lobby());
+		this.storeEvents();
+		return this.container;
+	}
+
+	storeEvents() {
+		this._storage.on('CREATE_NEW_GAME', () => {
+			this.container.innerHTML = '';
+			this.container.appendChild(TableTop());
+		});
+		this._storage.on('JOIN_GAME', () => {
+			this.container.innerHTML = '';
+			this.container.appendChild(TableTop());
+		});
 	}
 }
 
