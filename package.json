@@ -77,7 +77,8 @@
 		"webpack": "^4.44.1",
 		"webpack-cli": "^3.3.12",
 		"webpack-dev-server": "^3.11.0",
-		"webpack-uglify-js-plugin": "^1.1.9"
+		"webpack-uglify-js-plugin": "^1.1.9",
+		"dotenv": "^8.2.0"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^5.14.0",
