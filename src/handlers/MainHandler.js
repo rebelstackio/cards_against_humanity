@@ -33,7 +33,8 @@ const MainDefaultState = {
 		{ name: 'Friday n beer', owner: 'Rein Petersen', people : '4/10', havePass: true },
 		{ name: 'oh wee', owner: 'Mr PoopyButthole', people : '4/10', havePass: false },
 		{ name: 'I’m BirdPerson', owner: 'Bird Person', people : '6/10', havePass: false },
-	]
+	],
+	user: {}
 };
 
 export default {
@@ -56,5 +57,9 @@ export default {
 			state.Main.selectedCardIds = [];
 			return { newState: state };
 		},
+		'AUTH_CHANGE': (action, state) => {
+			state.Main.user = action.user;
+			return { newState: state }
+		}
 	}
 };

@@ -1,20 +1,21 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const dotenv = require('dotenv');
+const webpack = require('webpack');
 
 
 module.exports = () => {
 	// Call dotenv and it will return an Object with a parsed key
 	const env = dotenv.config({
-		path: path.resolve(process.cwd(), '../', '.env')
+		path: path.resolve(process.cwd(),'.env')
 	}).parsed;
-
 	// Reduce it to a nice object, the same as before
 	const envKeys = Object.keys(env).reduce((prev, next) => {
-			prev[`process.env.${next}`] = JSON.stringify(env[next]);
-			return prev;
+		prev[`process.env.${next}`] = JSON.stringify(env[next]);
+		return prev;
 	}, {});
-
-	return {
+	console.log(envKeys);
+	const config = {
 		entry: './src/main/index.js',
 		output: {
 			path: path.resolve(__dirname, 'build'),
@@ -74,12 +75,13 @@ module.exports = () => {
 			fs: 'empty'
 		},
 		plugins: [
+			new webpack.DefinePlugin(envKeys),
 			new HtmlWebpackPlugin({
 				template: path.resolve(__dirname, 'public/index.html'),
 				hash: false,
 				filename: 'index.html',
-				inject: false
-			})
+				inject: 'body'
+			}),
 			//, new CopyWebpackPlugin([
 			// 	{ from: 'public/css', to: 'css' },
 			// 	{ from: 'public/fonts', to: 'fonts' },
@@ -90,4 +92,5 @@ module.exports = () => {
 		],
 		devtool: 'source-map'
 	}
+	return config;
 };

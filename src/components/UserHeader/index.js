@@ -1,10 +1,45 @@
-import { Div, H3, Img } from '@rebelstack-io/metaflux'
+import { Div, H3, Img, Button, Span } from '@rebelstack-io/metaflux';
+import { singInWithGoogle } from '../../controllers/';
 
 const UserHeader = () => (
-	Div({ className: 'user-header' }, [
-		H3({}, 'Osmar Reyes'),
-		Img({src: 'https://lh3.googleusercontent.com/ogw/ADGmqu-jQuI-EP_xGtN4ITW-GX3qePYsSYfusfO3y9dw=s32-c-mo'})
-	])
+	Div({ className: 'user-header' }, _getHeaderByState())
+	.onStoreEvent('AUTH_CHANGE', (state, that) => {
+		that.innerHTML = '';
+		that.append(..._getHeaderByState())
+	})
 );
+
+const _opts = _getUserOpt();
+
+
+function _getHeaderByState() {
+	const { user } = global.storage.getState().Main;
+	return [
+		H3({},user.uid ? user.displayName : 'Sing In'),
+		_opts,
+		user.uid
+			? Img({src: user.photoURL, onclick: () => { _toggle() }})
+			: Div({class: 'socials'}, [
+					Button({ onclick: () => {
+						singInWithGoogle();
+					}},Span({className: 'fab fa-google'})),
+					Button({ onclick: () => {
+						singInWithGoogle();
+					}}, Span({className: 'fab fa-facebook-f'}))
+				])
+		]
+}
+
+function _getUserOpt() {
+	return Div({ className: 'user-opts hidden' }, [
+		Div({ onclick: () => { global.storage.dispatch({type: 'LOGOUT'}); _toggle(); } },
+			[Span({},'Logout'), Span({className: 'fas fa-sign-out-alt'})])
+	])
+}
+
+function _toggle() {
+	_opts.classList.toggle('hidden');
+}
+
 
 export { UserHeader }
