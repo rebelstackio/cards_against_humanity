@@ -14,7 +14,6 @@ module.exports = () => {
 		prev[`process.env.${next}`] = JSON.stringify(env[next]);
 		return prev;
 	}, {});
-	console.log(envKeys);
 	const config = {
 		entry: './src/main/index.js',
 		output: {
@@ -80,7 +79,7 @@ module.exports = () => {
 				template: path.resolve(__dirname, 'public/index.html'),
 				hash: false,
 				filename: 'index.html',
-				inject: 'body'
+				inject: 'false'
 			}),
 			//, new CopyWebpackPlugin([
 			// 	{ from: 'public/css', to: 'css' },
