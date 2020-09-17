@@ -11,6 +11,7 @@ cache:
 install:
 - npm install
 script:
+- printf '%s\n' "APIKEY=$APIKEY" "AUTHDOMAIN=${AUTHDOMAIN}" "DATABASEURL=$DATABASEURL" "PROJECTID=${PROJECTID}" "STORAGEBUCKET=$STORAGEBUCKET" "MESSAGINGSENDERID=${MESSAGINGSENDERID}" "MEASUREMENTID=${MEASUREMENTID}" >.env
 - npm run build
 deploy:
   provider: pages
