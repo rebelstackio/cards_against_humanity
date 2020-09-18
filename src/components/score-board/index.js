@@ -52,4 +52,4 @@ class ScoreBoard extends MetaComponent {
 	}
 }
 
-window.customElements.define("score-board", ScoreBoard);
+customElements.get("score-board") || customElements.define("score-board", ScoreBoard);

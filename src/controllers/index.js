@@ -9,7 +9,7 @@ var firebaseConfig = {
 	measurementId: process.env.MEASUREMENTID
 };
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 firebase.analytics();
 let provider = new firebase.auth.GoogleAuthProvider();
