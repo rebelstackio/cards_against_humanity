@@ -37,6 +37,10 @@ function getUrl () {
 function getParams () {
 	const paramArray = this.getUrl().match(/(\w+)=?(\w+)/g);
 
+	if ( !paramArray ) {
+		return null
+	}
+
 	return paramArray.map(chunk => {
 		let mappedParam = {};
 		const param = chunk.split('=');
