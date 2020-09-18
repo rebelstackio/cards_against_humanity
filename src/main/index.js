@@ -4,7 +4,7 @@ import Router from  '../router';
 
 console.log('main', process.env);
 document.addEventListener('DOMContentLoaded', () => {
-	new Router().on(/lobby/, () => {
+	new Router().on(/.*/, () => {
 		const container = document.createElement('main-container');
 		document.body.appendChild(container);
 	});
