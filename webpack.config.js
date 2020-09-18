@@ -18,7 +18,7 @@ module.exports = () => {
 		entry: './src/main/index.js',
 		output: {
 			path: path.resolve(__dirname, 'build'),
-			filename: 'main.js'
+			filename: 'cahbundle.js'
 		},
 		devServer: {
 			contentBase: path.resolve(__dirname, 'public')

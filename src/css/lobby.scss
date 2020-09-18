@@ -92,10 +92,22 @@
 			box-shadow: 0px 0 8px 5px #1d4943;
 		}
 		overflow: auto;
+		position: relative;
 	}
 	.match-table {
+
 		border-collapse: collapse;
 		width: 100%;
+		& .empty-state {
+			/* width: 100%; */
+			position: absolute;
+			bottom: 0;
+			top: 0;
+			right: 0;
+			left: 0;
+			display: grid;
+			place-content: center;
+		}
 		> tr {
 			background-color: var(--cah-lightest);
 			height: 45px;
