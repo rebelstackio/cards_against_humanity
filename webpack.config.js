@@ -79,7 +79,7 @@ module.exports = () => {
 				template: path.resolve(__dirname, 'public/index.html'),
 				hash: false,
 				filename: 'index.html',
-				inject: 'false'
+				inject: false
 			}),
 			//, new CopyWebpackPlugin([
 			// 	{ from: 'public/css', to: 'css' },

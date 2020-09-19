@@ -52,13 +52,51 @@ function getParams () {
 }
 
 /**
+ * @description Change url after hash
+ * @param {string} url
+ */
+function goToUrl ( url ) {
+	window.location.hash = `#${url}`;
+}
+
+function addCallback ( match, callback ) {
+
+	const that = this;
+
+	this.callStack.push({
+		id: match,
+		callback: () => {
+			that.onUrlChange( match, callback );
+		}
+	});
+
+}
+
+/**
  * @description Simple router
  */
 function Router () {
 
+	this.callStack = [];
+
 	this.getUrl = getUrl.bind( this );
 	this.getParams = getParams.bind( this );
-	this.on = onUrlChange.bind( this );
+	this.onUrlChange = onUrlChange.bind( this );
+	this.addCallback = addCallback.bind ( this );
+
+	this.on = function ( match, callback ) {
+		this.addCallback( match, callback );
+		this.onUrlChange( match, callback );
+		return this;
+	}
+	this.on = this.on.bind( this );
+
+	this.go = goToUrl.bind( this );
+
+	window.onhashchange = function () {
+		this.callStack.forEach( item => item.callback() );
+	}
+	window.onhashchange = window.onhashchange.bind( this );
 
 }
 

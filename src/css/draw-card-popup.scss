@@ -1,0 +1,55 @@
+.draw-card-popup {
+	span {
+		border-radius: 2px;
+		padding: 2px 4px 2px 4px;
+		margin: 0 2px 0 2px;
+		background-color: var(--cah-light);
+		color: var(--cah-lightest);
+	}
+}
+@for $i from 1 to 3 {
+	.draw-card-popup {
+		span.cah-card-count-#{$i} {
+			filter: hue-rotate(#{$i * 100deg});
+		}
+	}
+	.draw-card-popup {
+		span:nth-child(#{$i}) {
+			filter: hue-rotate(#{$i * 100deg});
+		}
+	}
+}
+.draw-card-body {
+	height: 100%;
+	position: relative;
+
+	.footer {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+
+		display: flex;
+		justify-content: space-between;
+
+		div {
+			user-select: none;
+			cursor: pointer;
+			padding: 2px;
+			border-radius: 4px;
+			min-width: 90px;
+		}
+
+		div:nth-child(1) {
+			background-color: var(--cah-light);
+			filter: hue-rotate(100deg);
+		}
+
+		div:nth-child(2) {
+			background-color: var(--cah-red);
+		}
+
+		span {
+			margin-left: 5px;
+		}
+	}
+}
