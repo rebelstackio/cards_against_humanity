@@ -17,15 +17,15 @@
 		}
 
 		cah-card.black > div {
-			width: calc(var(--cah-card-width) * 1.3);
-			height: calc(var(--cah-card-height) * 1.3);
+			width: calc(#{$cah-card-width} * 1.3);
+			height: calc(#{$cah-card-height} * 1.3);
 
 			span {
 				border-radius: 2px;
 				padding: 2px 4px 2px 4px;
 				margin: 0 2px 0 2px;
-				background-color: var(--cah-light);
-				color: var(--cah-lightest);
+				background-color: $cah-light;
+				color: $cah-lightest;
 			}
 		}
 	}

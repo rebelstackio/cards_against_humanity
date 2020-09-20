@@ -9,7 +9,7 @@ corner-menu {
 		* {
 			user-select: none;
 			cursor: pointer;
-			color: var(--cah-lightest);
+			color: $cah-lightest;
 		}
 
 		> *:not(:last-child) {

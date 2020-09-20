@@ -61,7 +61,6 @@ function _getRooms () {
 		coll.forEach((doc) => {
 			list[doc.id] = doc.data();
 		});
-		console.log(list);
 		_store.dispatch({ type: 'ROOMS_LIST', list })
 	})
 	.catch(err => {

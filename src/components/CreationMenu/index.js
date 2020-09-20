@@ -25,7 +25,7 @@ function createNew() {
 		setTimeout(() => {
 			global.storage.dispatch({ type:'LOADING_OFF' })
 			global.router.go("game");
-			//global.storage.dispatch({ type: 'CREATE_NEW_GAME', data})
+			global.storage.dispatch({ type: 'CREATE_NEW_GAME', data})
 		}, 2000)
 	} else {
 		//TODO: Display mandatory values message
