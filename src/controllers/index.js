@@ -13,7 +13,7 @@ firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 firebase.analytics();
 let provider = new firebase.auth.GoogleAuthProvider();
-provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+//provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 const _store = global.storage;
 
 const auth = firebase.auth();
@@ -35,15 +35,19 @@ firebase.auth().onAuthStateChanged(function (user) {
 	_store.dispatch({ type: 'AUTH_CHANGE', user: _user })
 });
 
-_store.on('LOBBY_CREATED', () => {
-	const { lobby, user } = _store.getState();
-	const password = document.querySelector('.lobby-new > input');
+_store.on('CREATE_NEW_GAME', (action) => {
+	const { data } = action;
+	const { user } = _store.getState();
 	db.collection('/rooms/').doc(user.uid).set({
-		connection_str: lobby,
-		name: user.displayName,
-		password: password.value === '' ? false : password.value
+		isActive: true,
+		name: data.name,
+		owner: user.displayName,
+		password: data.password,
+		winnigScore: data.winnigScore
 	}).then(() => {
 		console.log('document added')
+		_store.dispatch({ type: 'LOADING_OFF' });
+		_store.dispatch({ type: 'JOIN_GAME', matchId: user.uid })
 	})
 	.catch((err) => {
 		console.error('fail:', err)

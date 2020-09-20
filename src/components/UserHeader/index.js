@@ -4,18 +4,12 @@ import { singInWithGoogle } from '../../controllers/';
 const UserHeader = () => (
 	Div({ className: 'user-header' }, _getHeaderByState())
 	.onStoreEvent('AUTH_CHANGE', (state, that) => {
-		console.log('auth header', state, that)
 		that.innerHTML = '';
 		that.append(..._getHeaderByState())
 	})
 );
 
 const _store = global.storage;
-
-_store.on('AUTH_CHANGE', () => {
-	console.log('auth header ON')
-})
-
 const _opts = _getUserOpt();
 
 

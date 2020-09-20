@@ -9,7 +9,7 @@ const CreationMenu = () =>(
 		H3({}, 'Create Game'),
 		Label({for: 'name'}, 'Name'),
 		_name,
-		Label({for: 'max'}, 'Max Playes'),
+		Label({for: 'max'}, 'Wining score'),
 		_max,
 		Label({for: 'password'}, 'Password'),
 		_pass,

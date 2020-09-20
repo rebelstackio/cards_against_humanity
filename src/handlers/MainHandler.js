@@ -28,7 +28,7 @@ const MainDefaultState = {
 		text: "But wait, there's more! If you order _ in the next 15 minutes, we'll throw in _ absolutely free!",
 		pick: 2
 	},
-	matchList: [],
+	matchList: {},
 	user: {}
 };
 
