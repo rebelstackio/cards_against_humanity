@@ -28,7 +28,8 @@ function requestToJoin(match) {
 	//TODO: Call API
 	setTimeout(() => {
 		global.storage.dispatch({ type: 'LOADING_OFF' });
-		global.storage.dispatch({ type: 'JOIN_GAME', data: match })
+		global.router.go("game");
+		//global.storage.dispatch({ type: 'JOIN_GAME', data: match })
 	},2000)
 }
 

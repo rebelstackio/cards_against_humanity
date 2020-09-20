@@ -9,7 +9,13 @@ function CardBanner () {
 		Div({
 			className: 'button-group'
 		}, [
-			Div(false, "Draw!"),
+			Div({
+				onclick: () => {
+					global.storage.dispatch({
+						type: "OPEN_CARD_POPUP"
+					});
+				},
+			}, "Draw!"),
 			Div({
 				onclick: () => {
 					global.storage.dispatch({

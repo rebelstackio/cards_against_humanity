@@ -1,5 +1,6 @@
 import { MetaComponent, Div } from '@rebelstack-io/metaflux';
 import '../popup-settings';
+import DrawCardPopup from '../drawCardPopup';
 
 class Popup extends MetaComponent {
 	constructor () {
@@ -10,11 +11,6 @@ class Popup extends MetaComponent {
 		const cahCard = Div().HTMLElementCreator("cah-card", {});
 
 		this.content = cahCard.Div();
-		cahCard.Button({
-			'onclick': () => {
-				this.classList.add("hidden");
-			}
-		}, "close");
 
 		return cahCard.baseNode();
 	}
@@ -23,6 +19,14 @@ class Popup extends MetaComponent {
 		return {
 			'OPEN_MODAL_SETTINGS': _ => {
 				this.content.innerHTML = "<popup-settings></popup-settings>";
+				this.classList.toggle("hidden");
+			},
+			'OPEN_CARD_POPUP': _ => {
+				this.content.innerHTML = "";
+				this.content.appendChild( DrawCardPopup() );
+				this.classList.toggle("hidden");
+			},
+			'CLOSE_POPUP': _ => {
 				this.classList.toggle("hidden");
 			}
 		}
