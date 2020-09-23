@@ -11,8 +11,8 @@ function _getList() {
 			return Tr({onclick: () => { requestToJoin(_m) }}, [
 				Td({}, _m.name),
 				Td({}, _m.owner),
-				Td({}, _m.people),
-				Td({}, _m.havePass ? 'YES' : 'NO')
+				Td({}, '1/10'),
+				Td({}, _m.password ? 'YES' : 'NO')
 			])
 	});
 }

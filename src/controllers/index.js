@@ -1,3 +1,5 @@
+import { DBController } from './db';
+
 var firebaseConfig = {
 	apiKey: process.env.APIKEY,
 	authDomain: process.env.AUTHDOMAIN,
@@ -19,6 +21,11 @@ const _store = global.storage;
 const auth = firebase.auth();
 
 
+/** ------------------DATABASE-------------------  */
+const DB = new DBController(db, _store);
+DB.init();
+
+
 function singInWithGoogle() {
 	firebase.auth().signInWithPopup(provider).catch(function(error) {
 		//TODO: Handle Errors here.
@@ -30,43 +37,10 @@ firebase.auth().onAuthStateChanged(function (user) {
 	if(user) {
 		const { displayName, email, uid, photoURL } = user;
 		_user = { displayName, email, uid, photoURL }
-		_getRooms();
+		DB.getRooms();
 	}
 	_store.dispatch({ type: 'AUTH_CHANGE', user: _user })
 });
-
-_store.on('CREATE_NEW_GAME', (action) => {
-	const { data } = action;
-	const { user } = _store.getState();
-	db.collection('/rooms/').doc(user.uid).set({
-		isActive: true,
-		name: data.name,
-		owner: user.displayName,
-		password: data.password,
-		winnigScore: data.winnigScore
-	}).then(() => {
-		console.log('document added')
-		_store.dispatch({ type: 'LOADING_OFF' });
-		_store.dispatch({ type: 'JOIN_GAME', matchId: user.uid })
-	})
-	.catch((err) => {
-		console.error('fail:', err)
-	})
-})
-
-function _getRooms () {
-	let ref = db.collection('/rooms/');
-	ref.get().then((coll) => {
-		let list = {};
-		coll.forEach((doc) => {
-			list[doc.id] = doc.data();
-		});
-		_store.dispatch({ type: 'ROOMS_LIST', list })
-	})
-	.catch(err => {
-		console.error('Error. Lobby list:', err)
-	})
-}
 
 _store.on('LOGOUT', () => {
 	firebase.auth().signOut();

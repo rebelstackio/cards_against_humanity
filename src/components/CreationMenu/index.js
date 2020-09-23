@@ -18,7 +18,7 @@ const CreationMenu = () =>(
 );
 
 function createNew() {
-	const data = { name: _name.value, max: _max.value, password: _pass.value };
+	const data = { name: _name.value, winningScore: _max.value, password: _pass.value };
 	if (data.name !== '' && data.max !== '') {
 		global.storage.dispatch({ type:'LOADING_ON' })
 		// TODO: call API
