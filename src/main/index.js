@@ -3,17 +3,7 @@ import '@fortawesome/fontawesome-free/js/fontawesome';
 import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
-import '../css/general.css';
-import '../css/table-top.scss';
-import '../css/cat-banner.scss';
-import '../css/draw-card-popup.scss';
-import '../css/hand.scss';
-import '../css/card.scss';
-import '../css/score-board.scss';
-import '../css/corner-menu.scss';
-import '../css/czar-indicator.scss';
-import '../css/cah-popup.scss';
-import '../css/lobby.scss';
+import '../css/index.scss';
 import '../handlers';
 import { Div } from '@rebelstack-io/metaflux';
 import { TableTop } from '../containers/table-top';
@@ -23,7 +13,9 @@ import '../controllers';
 
 import Router from  '../router';
 
-window.router = new Router();
+global.router = new Router();
+
+global.router.go('/lobby/');
 
 console.log('main', process.env);
 document.addEventListener('DOMContentLoaded', () => {

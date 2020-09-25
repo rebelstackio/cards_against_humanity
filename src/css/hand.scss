@@ -37,8 +37,8 @@ cah-hand {
 				position: absolute;
 				border-radius: 2px;
 				padding: 5px 10px 5px 10px;
-				background-color: var(--cah-light);
-				color: var(--cah-lightest);
+				background-color: $cah-light;
+				color: $cah-lightest;
 				top: -25px;
 			}
 		}

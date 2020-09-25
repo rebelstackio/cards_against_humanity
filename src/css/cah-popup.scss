@@ -19,8 +19,8 @@ cah-popup {
 			align-self: center;
 
 			> div {
-				width: calc(var(--cah-card-width) * 2);
-				height: calc(var(--cah-card-height) * 2);
+				width: calc(#{$cah-card-width} * 2);
+				height: calc(#{$cah-card-height} * 2);
 			}
 		}
 	}

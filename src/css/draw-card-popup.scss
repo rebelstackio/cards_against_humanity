@@ -3,8 +3,8 @@
 		border-radius: 2px;
 		padding: 2px 4px 2px 4px;
 		margin: 0 2px 0 2px;
-		background-color: var(--cah-light);
-		color: var(--cah-lightest);
+		background-color: $cah-light;
+		color: $cah-lightest;
 	}
 }
 @for $i from 1 to 3 {
@@ -40,12 +40,12 @@
 		}
 
 		div:nth-child(1) {
-			background-color: var(--cah-light);
+			background-color: $cah-light;
 			filter: hue-rotate(100deg);
 		}
 
 		div:nth-child(2) {
-			background-color: var(--cah-red);
+			background-color: $cah-red;
 		}
 
 		span {
