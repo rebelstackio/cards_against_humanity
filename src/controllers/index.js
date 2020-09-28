@@ -1,17 +1,7 @@
 import { DBController } from './db';
+import { initFirebase } from '../lib/backend/firebase';
 
-var firebaseConfig = {
-	apiKey: process.env.APIKEY,
-	authDomain: process.env.AUTHDOMAIN,
-	databaseURL: process.env.DATABASEURL,
-	projectId: process.env.PROJECTID,
-	storageBucket: process.env.STORAGEBUCKET,
-	messagingSenderId: process.env.MESSAGINGSENDERID,
-	appId: process.env.APPID,
-	measurementId: process.env.MEASUREMENTID
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase = initFirebase();
 let db = firebase.firestore();
 firebase.analytics();
 let provider = new firebase.auth.GoogleAuthProvider();
