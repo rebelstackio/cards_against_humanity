@@ -43,8 +43,8 @@ const singInWithGoogle = function _singInWithGoogle () {
 /**
  * Event when the auth state changed
  */
-const onAuthStateChanged = function _onAuthStateChanged () {
-	return firebase.auth().onAuthStateChanged;
+const onAuthStateChanged = function _onAuthStateChanged (next) {
+	return firebase.auth().onAuthStateChanged(next);
 };
 
 export default {
