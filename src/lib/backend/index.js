@@ -1,6 +1,12 @@
-/* src/lib/firebaseFacade/index.js */
+/* src/lib/backend/index.js */
 
-const FIREBASE_CONFIG = {
+import { init, auth} from './firebase';
+
+const FIREBASE_BACKEND = 'FIREBASE';
+
+let _backendRef = null;
+
+const CONFIG = {
 	apiKey: process.env.APIKEY,
 	authDomain: process.env.AUTHDOMAIN,
 	databaseURL: process.env.DATABASEURL,
@@ -12,14 +18,20 @@ const FIREBASE_CONFIG = {
 };
 
 /**
- * Get firebase reference
+ * Get the backend reference for future use
+ * @param {string} _type Backend type. Default to FIREBASE
  */
-const initFirebase = function _initFirebase(){
-	firebase.initFirebaseializeApp(FIREBASE_CONFIG);
-	return firebase;
+const getBackend = function _getBackend(_type=FIREBASE_BACKEND) {
+	// TODO: Add more backend if required
+	if ( !_backendRef ) {
+		_backendRef= init(CONFIG);
+	}
+
+	return { auth };
 };
 
 
-module.exports = {
-	initFirebase
+
+export {
+	getBackend
 };
