@@ -1,6 +1,6 @@
 /* src/lib/backend/index.js */
 
-import { init, auth} from './firebase';
+import { init, auth } from './firebase';
 
 const FIREBASE_BACKEND = 'FIREBASE';
 
@@ -21,16 +21,14 @@ const CONFIG = {
  * Get the backend reference for future use
  * @param {string} _type Backend type. Default to FIREBASE
  */
-const getBackend = function _getBackend(_type=FIREBASE_BACKEND) {
+const getBackend = function _getBackend (_type = FIREBASE_BACKEND) {
 	// TODO: Add more backend if required
-	if ( !_backendRef ) {
-		_backendRef= init(CONFIG);
+	if (!_backendRef) {
+		_backendRef = init(CONFIG);
 	}
 
 	return { auth };
 };
-
-
 
 export {
 	getBackend

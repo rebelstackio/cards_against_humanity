@@ -5,7 +5,7 @@ import Auth from './auth';
 /**
  * Get firebase reference
  */
-export const init = function _init( CONFIG ){
+export const init = function _init (CONFIG) {
 	return firebase.initializeApp(CONFIG);
 };
 
