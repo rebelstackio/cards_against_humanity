@@ -6,7 +6,7 @@ const GOOGLE_PROVIDER = 'GOOGLE_PROVIDER';
  * SignIn with a target provider
  * @param {object} provider Firebase Auth Provider
  */
-const signInWithPopup = function _signInWithPopup (provider, firebase) {
+const signInWithPopup = function _signInWithPopup (provider) {
 	return firebase.auth().signInWithPopup(provider)
 };
 
