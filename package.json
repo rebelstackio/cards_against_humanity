@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "./node_modules/.bin/webpack-dev-server  --mode development --watch",
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "NODE_ENV=testing NODE_PATH=src jest src --watch",
 		"build": "NODE_MODE=build ./node_modules/.bin/webpack --mode development; cp -a ./public/. ./build/;"
 	},
 	"contributors": [
@@ -24,27 +24,6 @@
 	],
 	"author": "",
 	"license": "ISC",
-	"babel": {
-		"presets": [
-			"@babel/preset-env"
-		],
-		"plugins": [
-			"@babel/plugin-syntax-dynamic-import",
-			"@babel/plugin-syntax-import-meta",
-			"@babel/plugin-proposal-class-properties",
-			"@babel/plugin-proposal-json-strings",
-			[
-				"@babel/plugin-proposal-decorators",
-				{
-					"legacy": true
-				}
-			],
-			"@babel/plugin-proposal-function-sent",
-			"@babel/plugin-proposal-export-namespace-from",
-			"@babel/plugin-proposal-numeric-separator",
-			"@babel/plugin-proposal-throw-expressions"
-		]
-	},
 	"devDependencies": {
 		"@babel/cli": "^7.0.0",
 		"@babel/core": "^7.0.0",
@@ -62,6 +41,7 @@
 		"@babel/preset-env": "^7.11.5",
 		"babel-loader": "^8.1.0",
 		"css-loader": "^4.2.2",
+		"dotenv": "^8.2.0",
 		"eslint": "^7.8.1",
 		"eslint-config-standard": "^14.1.1",
 		"eslint-plugin-import": "^2.22.0",
@@ -70,6 +50,8 @@
 		"eslint-plugin-standard": "^4.0.1",
 		"file-loader": "^6.1.0",
 		"html-webpack-plugin": "^4.4.1",
+		"jest": "^26.4.2",
+		"jest-extended": "^0.11.5",
 		"sass": "^1.26.3",
 		"sass-loader": "^10.0.2",
 		"style-loader": "^1.2.1",
@@ -77,8 +59,7 @@
 		"webpack": "^4.44.1",
 		"webpack-cli": "^3.3.12",
 		"webpack-dev-server": "^3.11.0",
-		"webpack-uglify-js-plugin": "^1.1.9",
-		"dotenv": "^8.2.0"
+		"webpack-uglify-js-plugin": "^1.1.9"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^5.14.0",

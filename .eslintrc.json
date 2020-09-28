@@ -4,5 +4,8 @@
 		"no-tabs": "off",
 		"indent": ["error", "tab"],
 		"semi": "off"
+	},
+	"env": {
+		"jest/globals": true
 	}
 }
