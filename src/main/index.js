@@ -9,16 +9,15 @@ import { Div } from '@rebelstack-io/metaflux';
 import { TableTop } from '../containers/table-top';
 import { Lobby } from '../containers/lobby';
 import { Tests } from '../containers/tests';
+import { WaitingRoom } from '../containers/wating-room';
 import Router from  '../router';
 import '../../src/lib/backend/firebase';
 import { signOut, onAuthStateChanged } from '../../src/lib/backend/firebase/auth';
 
 
 global.router = new Router();
+if (location.hash === '') global.router.go( '/lobby/');
 
-global.router.go('/lobby/');
-
-console.log('main', process.env);
 document.addEventListener('DOMContentLoaded', () => {
 
 	global.router.on(/lobby/, () => {
@@ -38,7 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
 				id: 'tests'
 			}, Tests())
 		);
-	});
+	})
+	.on(/waiting_room/, () => {
+		document.body.innerHTML = '';
+		document.body.appendChild( WaitingRoom() )
+	})
 
 });
 
@@ -60,4 +63,5 @@ onAuthStateChanged( (user) => {
 	}
 	global.storage.dispatch({ type: 'AUTH_CHANGE', user: _user });
 });
+
 

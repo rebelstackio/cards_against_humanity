@@ -26,6 +26,7 @@ $cah-card-height: 200px;
 @import './czar-indicator';
 @import './cah-popup';
 @import './lobby';
+@import './waiting-room';
 
 /*------------------------------------------------------------------------*/
 
@@ -33,7 +34,7 @@ $cah-card-height: 200px;
 	margin: 0;
 	padding: 0;
 	font-family: Lato;
-	color: $cah-lightest;
+	/*color: $cah-lightest;*/
 }
 
 html, body {

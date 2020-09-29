@@ -1,0 +1,28 @@
+.waiting-room {
+	position: relative;
+	> .sidebar {
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		left: 70vw;
+		height: 100vh;
+		background-color: #fff;
+		overflow: auto;
+		> .player-box {
+			margin: 5px 10px;
+			height: 60px;
+			box-sizing: border-box;
+			> .fa-crown {
+				color: yellow !important;
+			}
+			> span {
+				color: #666666;
+			}
+			> img {
+				width: 45px;
+				border-radius: 50%;
+			}
+		}
+	}
+}
