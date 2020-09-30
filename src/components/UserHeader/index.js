@@ -13,7 +13,6 @@ const _opts = _getUserOpt();
 
 function _getHeaderByState() {
 	const { user } = global.storage.getState().Main;
-	console.log(user)
 	return [
 		H3({},user.uid ? user.displayName : 'Sing In'),
 		_opts,
