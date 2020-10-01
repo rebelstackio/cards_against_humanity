@@ -1,4 +1,4 @@
-/* test/src/index.spec.js */
+/* src/lib/backend/firebase/room/index.spec.js */
 'use strict';
 
 import Room from './index';
