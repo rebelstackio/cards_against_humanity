@@ -4,7 +4,7 @@ import '../../components/test';
 const Tests = () => Div({
 	className: 'random'
 }, [
-	HTMLElementCreator('test-suit')
+	HTMLElementCreator('test-suit', {})
 ]);
 
 export {
