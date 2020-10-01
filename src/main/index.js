@@ -7,7 +7,8 @@ import '../css/index.scss';
 import '../handlers';
 import { Div } from '@rebelstack-io/metaflux';
 import { TableTop } from '../containers/table-top';
-import { Lobby } from '../containers/lobby'
+import { Lobby } from '../containers/lobby';
+import { Tests } from '../containers/tests';
 import '../controllers';
 
 
@@ -30,6 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	}).on(/game/, () => {
 		document.body.innerHTML = '';
 		document.body.appendChild( TableTop() );
+	}).on(/tests/, () => {
+		document.body.innerHTML = '';
+		document.body.appendChild(
+			Div({
+				id: 'tests'
+			}, Tests())
+		);
 	});
 
 })
