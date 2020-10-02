@@ -9,7 +9,8 @@ import { Div } from '@rebelstack-io/metaflux';
 import { TableTop } from '../containers/table-top';
 import { Lobby } from '../containers/lobby';
 import { Tests } from '../containers/tests';
-import '../controllers';
+import '../../src/lib/backend/firebase';
+// import '../controllers';
 
 
 import Router from  '../router';

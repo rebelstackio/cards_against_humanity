@@ -1,10 +1,10 @@
 /* src/controllers/index.js */
 
-import { DBController } from './db';
-import { getBackend } from '../lib/backend/';
+// import { DBController } from './db';
+import { init } from '../lib/backend/firebase';
 
-
-const backend = getBackend();
+// const firebase = init();
+// const backend = getBackend();
 
 // TODO: set up analytics
 // firebase.analytics();
@@ -12,22 +12,25 @@ const backend = getBackend();
 const _store = global.storage;
 
 
-const singInWithGoogle = backend.auth.singInWithGoogle;
+const singInWithGoogle = () => {
 
-backend.auth.onAuthStateChanged( (user) => {
-	let _user = {};
-	if(user) {
-		const { displayName, email, uid, photoURL } = user;
-		_user = { displayName, email, uid, photoURL }
-		// TODO: DB.getRooms();
-	}
-	_store.dispatch({ type: 'AUTH_CHANGE', user: _user });
-});
+}
+// const singInWithGoogle = backend.auth.singInWithGoogle;
 
-_store.on('LOGOUT', () => {
-	backend.auth.signOut().catch((error) => {
-		//TODO: Handle Errors here.
-	});
-});
+// backend.auth.onAuthStateChanged( (user) => {
+// 	let _user = {};
+// 	if(user) {
+// 		const { displayName, email, uid, photoURL } = user;
+// 		_user = { displayName, email, uid, photoURL }
+// 		// TODO: DB.getRooms();
+// 	}
+// 	_store.dispatch({ type: 'AUTH_CHANGE', user: _user });
+// });
+
+// _store.on('LOGOUT', () => {
+// 	backend.auth.signOut().catch((error) => {
+// 		//TODO: Handle Errors here.
+// 	});
+// });
 
 export { singInWithGoogle }

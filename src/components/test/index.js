@@ -1,5 +1,5 @@
 import { MetaComponent, Div } from '@rebelstack-io/metaflux';
-import { getDecks } from '../../lib/backend/firebase/deck';
+import DeckApi from '../../lib/backend/firebase/deck';
 
 class TestSuit extends MetaComponent {
 	constructor() {
@@ -7,23 +7,27 @@ class TestSuit extends MetaComponent {
 	}
 
 	render() {
-		// getDecks().then((db) => {
-		// 	console.log('==>', db);
-		// }).catch((err) => {
-		// 	console.error('error', err);
-		// });
-		this.store.dispatch({ type: 'GET_DECKS_TEST' });
+		DeckApi.getDecks().then((snapshot) => {
+			snapshot.forEach(function(doc) {
+				console.log(doc.id, " => ", doc.data());
+			});
+		}).catch((err) => {
+			console.error('error', err);
+		});
 		return Div();
 	}
 
 	handleStoreEvents() {
-		this.store.on('GET_DECKS_TEST', (action) => {
-			getDecks().then((db) => {
-				console.log('==>', db);
-			}).catch((err) => {
-				console.error('error', err);
-			});
-		});
+		return {
+			'GET_DECKS_TEST': (action) => {
+				console.log('===>', DeckApi.getDecks)
+				DeckApi.getDecks().then((db) => {
+						console.log('==>', db);
+				}).catch((err) => {
+						console.error('error', err);
+				});
+			}
+		}
 	}
 }
 

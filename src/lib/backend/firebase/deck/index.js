@@ -5,7 +5,7 @@
  * @param {object} db Firestore reference
  */
 const getDecks = function _getDecks( db = firebase.firestore() ) {
-	return db.collections('decks').get();
+	return db.collection('decks').get();
 };
 
 export default {
