@@ -1,5 +1,5 @@
 import { Div, H3, Img, Button, Span } from '@rebelstack-io/metaflux';
-import { singInWithGoogle } from '../../controllers/';
+import { singInWithGoogle } from '../../lib/backend/firebase/auth/';
 
 const UserHeader = () => (
 	Div({ className: 'user-header' }, _getHeaderByState())
@@ -9,9 +9,7 @@ const UserHeader = () => (
 	})
 );
 
-const _store = global.storage;
 const _opts = _getUserOpt();
-
 
 function _getHeaderByState() {
 	const { user } = global.storage.getState().Main;
