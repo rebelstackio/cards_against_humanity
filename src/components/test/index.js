@@ -20,12 +20,6 @@ class TestSuit extends MetaComponent {
 	handleStoreEvents() {
 		return {
 			'GET_DECKS_TEST': (action) => {
-				console.log('===>', DeckApi.getDecks)
-				DeckApi.getDecks().then((db) => {
-						console.log('==>', db);
-				}).catch((err) => {
-						console.error('error', err);
-				});
 			}
 		}
 	}
