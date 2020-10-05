@@ -32,6 +32,19 @@
 				}
 			}
 		}
+		& .msg-wrapper {
+			display: grid;
+			grid-template-columns: 1fr 50px;
+			width: 50%;
+			color: #fff;
+			align-items: center;
+			background-color: rgba(0,0,0,.5);
+			padding: 5px;
+			> img {
+				height: 45px;
+				border-radius: 50%;
+			}
+		}
 	}
 	> .sidebar {
 		position: absolute;

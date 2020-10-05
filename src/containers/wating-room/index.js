@@ -1,5 +1,9 @@
 import { Div, Span, H3, Img, Input} from '@rebelstack-io/metaflux';
 
+const _storage = global.storage;
+
+_storage.dispatch({ type: 'LISTEN_CHAT' })
+
 const WaitingRoom = () => Div({
 	className: 'waiting-room'
 }, [
@@ -19,7 +23,7 @@ const PlayerSideBar = () => Div({
  * get the match players and listed
  */
 function _getThePeople() {
-	const { match } = global.storage.getState().Main;
+	const { match } = _storage.getState().Main;
 	return Object.keys(match.players).map(_uid => {
 		const pl = match.players[_uid];
 		return Div({className: 'player-box'}, [
@@ -32,10 +36,28 @@ function _getThePeople() {
 /**
  * Message display area
  */
+const msgArea = Div({ className: 'msg-area' });
 const ChatArea = () => Div({ className: 'chat-area' }, [
-	Div({ className: 'msg-area' }),
+	msgArea,
 	ChatInput()
 ]);
+
+_storage.on('MESSAGE_ARRIVE', ( action ) => {
+	const { players } = _storage.getState().Main.match;
+	const from = players[action.payload.uid];
+	from.uid = action.payload.uid;
+	_appendMessage( from, action.payload.message );
+});
+
+function _appendMessage(from, msg) {
+	const { uid } = _storage.getState().Main.user;
+	const el = Div({ className: uid === from.uid ? 'msg-wrapper right' : 'msg-wrapper left' },
+	[
+		Span({}, msg),
+		Img({ src: from.photoURL })
+	]);
+	msgArea.appendChild(el);
+}
 /**
  * Input chat component
  */
@@ -65,7 +87,11 @@ function _touchMessage() {
  */
 function _sendMessage(inp) {
 	if(inp.value !== '') {
-		global.storage.dispatch({ type: 'SEND_MESSAGE', msg: inp.value })
+		_storage.dispatch({ type: 'SEND_MESSAGE', msg: inp.value })
+		// this is mock TODO: delete this.
+		const { uid } = _storage.getState().Main.user;
+		_storage.dispatch({ type: 'MESSAGE_ARRIVE' , payload: { message: inp.value, uid }})
+		// clean input
 		inp.placeholder = _getPlaceholder(inp.placeholder);
 		inp.value = '';
 	}
