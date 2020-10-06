@@ -57,6 +57,7 @@ function _appendMessage(from, msg) {
 		Img({ src: from.photoURL })
 	]);
 	msgArea.appendChild(el);
+	msgArea.scrollTop = msgArea.scrollHeight;
 }
 /**
  * Input chat component

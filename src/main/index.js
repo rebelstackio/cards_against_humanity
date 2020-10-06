@@ -16,10 +16,9 @@ import { signOut, onAuthStateChanged } from '../../src/lib/backend/firebase/auth
 
 
 global.router = new Router();
-if (location.hash === '') global.router.go( '/lobby/');
+if ( location.hash === '' ) global.router.go( '/lobby/' );
 
 document.addEventListener('DOMContentLoaded', () => {
-
 	global.router.on(/lobby/, () => {
 		document.body.innerHTML = '';
 		document.body.appendChild(
