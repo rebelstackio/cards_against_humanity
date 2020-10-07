@@ -15,6 +15,8 @@ const DEFAULT_ROOM = {
 	nplayers: 0
 };
 
+const DEFAULT_PAGE_SIZE = 10;
+
 /**
  * Create a new room. Required props for a room: name, createdBy, deck
  * @param {object} roomProps Room props { name, password, size, status[W|R|E], createdBy, created, deck }
@@ -60,7 +62,7 @@ const deleteRoom = function _deleteRoom( roomId, db = firebase.firestore() ) {
  * @param {object} startAfter Last room from previous page
  * @param {object} db Firestore reference
  */
-const listRooms = function _listRooms(limit = 10, startAfter = null, db = firebase.firestore()) {
+const listRooms = function _listRooms(limit = DEFAULT_PAGE_SIZE, startAfter = null, db = firebase.firestore()) {
 	if ( startAfter ) {
 		return db.collection(COLLECTION).orderBy('nplayers', 'desc').startAfter(startAfter).limit(limit).get();
 	} else {
