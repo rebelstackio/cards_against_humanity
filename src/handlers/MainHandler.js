@@ -67,6 +67,12 @@ export default {
 		'ROOMS_LIST': (action, state) => {
 			state.Main.matchList = action.list;
 			return { newState: state }
+		},
+		'DISPLAY_NOTIFICATION': (action, state) => {
+			state.Main.notificationMessage = action.msg;
+			state.Main.notificationIcon = action.icon;
+			state.Main.notificationAction = action.action;
+			return { newState: state }
 		}
 	}
 };
