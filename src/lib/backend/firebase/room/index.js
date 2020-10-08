@@ -1,49 +1,78 @@
-/* src/lib/backend/firebase/room.js */
+/* src/lib/backend/firebase/room/index.js */
 
-const ROOM_STATUS_WAITING = 'W';
-// const ROOM_STATUS_RUNNING = 'R';
-// const ROOM_STATUS_ENDED = 'E';
+const COLLECTION = 'rooms';
 
-const DEFAULT_ROOM_PAYLOAD = {
+const STATUS = {
+	WAITING: 'W',
+	RUNNING: 'R',
+	ENDED: 'E'
+};
+
+const DEFAULT_ROOM = {
 	password: null,
-	status: ROOM_STATUS_WAITING,
-	size: 5,
-	winningScore: 20,
-	created: null
+	size: 10,
+	status: STATUS.WAITING,
+	nplayers: 0
+};
+
+const DEFAULT_PAGE_SIZE = 10;
+
+/**
+ * Create a new room. Required props for a room: name, createdBy, deck
+ * @param {object} roomProps Room props { name, password, size, status[W|R|E], createdBy, created, deck }
+ * @param {object} db Firestore reference
+ * @param {object} time firebase.firestore.Timestamp reference
+ */
+const createRoom = function _createRoom( roomProps, db = firebase.firestore(), time = firebase.firestore.Timestamp ) {
+
+	let props = { ...DEFAULT_ROOM, ...{ created: time.now() }, ...roomProps };
+	if ( !props.name ) {
+		return  Promise.reject( new TypeError('name is required'));
+	}
+
+	if ( !props.deck ) {
+		return  Promise.reject( new TypeError('deck is required'));
+	}
+
+	if ( !props.createdBy ) {
+		return  Promise.reject( new TypeError('createdBy is required'));
+	}
+
+	return db.collection(COLLECTION).doc().set(props);
 };
 
 /**
- * Create a new document in rooms collections
- * @param {object} payload Room properties: { name, password, size, status, winningScore }.
- * @param {string} createdBy Owner Firebase ID
- * @param {string} deckId Deck used ID
- * @returns Promise( docRef )
+ * Delete a room based on the id
+ * @param {string} roomId string id
+ * * @param {object} db Firestore reference
  */
-const createRoom = function _createRoom (payload = {}, createdBy = null, deckId = null ) {
-	if (!createdBy) {
-		return Promise.reject(new TypeError('Room requires createdBy property'));
+const deleteRoom = function _deleteRoom( roomId, db = firebase.firestore() ) {
+
+	if ( !roomId ) {
+		return  Promise.reject( new TypeError('roomId is required'));
 	}
 
-	if (!deckId) {
-		return Promise.reject(new TypeError('Room requires deckId property'));
-	}
+	return db.collection(COLLECTION).doc(roomId).delete();
+}
 
-	if (!payload.name) {
-		return Promise.reject(new TypeError('Room requires name property'));
+/**
+ * Get the rooms order by room size( # players ). Supports Pagination based on firebase
+ * Check https://firebase.google.com/docs/firestore/query-data/query-cursors#paginate_a_query
+ * @param {number} limit Page size
+ * @param {object} startAfter Last room from previous page
+ * @param {object} db Firestore reference
+ */
+const listRooms = function _listRooms(limit = DEFAULT_PAGE_SIZE, startAfter = null, db = firebase.firestore()) {
+	if ( startAfter ) {
+		return db.collection(COLLECTION).orderBy('nplayers', 'desc').startAfter(startAfter).limit(limit).get();
+	} else {
+		return db.collection(COLLECTION).orderBy('nplayers', 'desc').limit(limit).get();
 	}
-
-	const _payload = {
-		...DEFAULT_ROOM_PAYLOAD,
-		...{
-			createdBy,
-			deckId,
-			created: firebase.firestore.FieldValue.serverTimestamp()
-		},
-		...payload
-	};
-	return firebase.firestore().collection('rooms').add(_payload);
-};
+}
 
 export default {
-	createRoom
+	STATUS,
+	createRoom,
+	deleteRoom,
+	listRooms
 };

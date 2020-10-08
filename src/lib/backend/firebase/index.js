@@ -1,16 +1,18 @@
-/* src/lib/backend/firebase/index.js */
+/* src/lib/firebase/index.js */
 
-import Auth from './auth';
-import Room from './room/index';
-
-/**
- * Get firebase reference
- */
-export const init = function _init (CONFIG, next = null) {
-	// Do more stuff related if required and call callback if init is async
-	return firebase.initializeApp(CONFIG);
+const CONFIG = {
+	apiKey: process.env.APIKEY,
+	authDomain: process.env.AUTHDOMAIN,
+	databaseURL: process.env.DATABASEURL,
+	projectId: process.env.PROJECTID,
+	storageBucket: process.env.STORAGEBUCKET,
+	messagingSenderId: process.env.MESSAGINGSENDERID,
+	appId: process.env.APPID,
+	measurementId: process.env.MEASUREMENTID
 };
 
-// Modules
-export const auth = Auth;
-export const room = Room;
+const init = function _init() {
+	firebase.initializeApp(CONFIG);
+};
+
+init();
