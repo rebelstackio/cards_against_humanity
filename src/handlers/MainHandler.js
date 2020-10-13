@@ -29,7 +29,15 @@ const MainDefaultState = {
 		pick: 2
 	},
 	matchList: {},
-	user: {}
+	user: {},
+	match: {
+		id: '6nhvGCSvfnRJlHQMNHCMShbGbMW2',
+		players: {
+			'6nhvGCSvfnRJlHQMNHCMShbGbMW2': { displayName: 'Osmar Reyes', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' },
+			'jdksdla': { displayName: 'Dummy 1', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' },
+			'oereowi': { displayName: 'Dummy 2', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' }
+		 }
+	}
 };
 
 export default {
@@ -58,6 +66,12 @@ export default {
 		},
 		'ROOMS_LIST': (action, state) => {
 			state.Main.matchList = action.list;
+			return { newState: state }
+		},
+		'DISPLAY_NOTIFICATION': (action, state) => {
+			state.Main.notificationMessage = action.msg;
+			state.Main.notificationIcon = action.icon;
+			state.Main.notificationAction = action.action;
 			return { newState: state }
 		}
 	}

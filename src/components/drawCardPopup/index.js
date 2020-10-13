@@ -8,7 +8,7 @@ function DrawCardPopup () {
 	for (let i = 0; i < selectedCards.length; i++) {
 		fullText = fullText.replace(/_/, `<span>${selectedCards[i]}</span>`);
 	}
-
+	let rawText = fullText.replace(/(<span>|<\/span>)/g, '');
 	return Div({
 		className: "draw-card-body"
 	}, [
@@ -18,7 +18,7 @@ function DrawCardPopup () {
 				e.preventDefault();
 				console.log('help');
 				const speach = new SpeechSynthesisUtterance();
-				speach.text = fullText;
+				speach.text = rawText;
 				window.speechSynthesis.speak(speach)
 			}
 		}, Span({

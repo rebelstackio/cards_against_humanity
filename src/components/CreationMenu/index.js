@@ -24,7 +24,7 @@ function createNew() {
 		// TODO: call API
 		setTimeout(() => {
 			global.storage.dispatch({ type:'LOADING_OFF' })
-			global.router.go("game");
+			global.router.go("waiting_room");
 			global.storage.dispatch({ type: 'CREATE_NEW_GAME', data})
 		}, 2000)
 	} else {
