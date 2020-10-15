@@ -1,5 +1,7 @@
 import { Div, H3, Label, Input, Button, Select, Option} from '@rebelstack-io/metaflux';
+import RoomApi from '../../lib/backend/firebase/room';
 
+const _storage = global.storage;
 const _name = Input({name: 'name', placeholder: 'ej: Stupid Name'});
 const _win = Select({name: 'wining', value: 10}, [
 	Option({value: 10}, '10'),
@@ -7,7 +9,7 @@ const _win = Select({name: 'wining', value: 10}, [
 	Option({value: 10}, '100')
 ]);
 const _deck = Select({name: 'deck', value: 'Base'}, [
-	Option({value: 'Base'}, 'Base')
+	Option({value: 1}, 'Base')
 	//TODO: get deck from database
 ])
 const _pass = Input({name: 'password', placeholder: 'ej: Stupid Password', type: 'password'});
@@ -38,15 +40,23 @@ function _findGame() {
 }
 
 function createNew() {
-	const data = { name: _name.value, winningScore: _win.value, password: _pass.value };
+	const { uid } = _storage.getState().Main.user;
+	const data = {
+		name: _name.value,
+		winningScore: _win.value,
+		password: _pass.value,
+		createdBy: uid,
+		deck: _deck.value
+	};
 	if (data.name !== '') {
-		global.storage.dispatch({ type:'LOADING_ON' })
-		// TODO: call API
-		setTimeout(() => {
+		global.storage.dispatch({ type:'LOADING_ON', msg: `Creating room ${data.name} please wait` })
+		RoomApi.createRoom(data).then((docRef) => {
+			console.log('created room', docRef);
 			global.storage.dispatch({ type:'LOADING_OFF' })
-			global.router.go("waiting_room");
-			global.storage.dispatch({ type: 'CREATE_NEW_GAME', data})
-		}, 2000)
+			global.router.go(`/waiting_room/${uid}`)
+		}).catch((err) => {
+			console.error('error', err);
+		});
 	} else {
 		//TODO: Display mandatory values message
 	}
