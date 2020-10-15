@@ -7,7 +7,7 @@ import '../css/index.scss';
 import '../handlers';
 import { Div } from '@rebelstack-io/metaflux';
 import { TableTop } from '../containers/table-top';
-import { Lobby } from '../containers/lobby';
+import { FindGame } from '../containers/find-game';
 import { Tests } from '../containers/tests';
 import { Host } from '../containers/host-game';
 import { WaitingRoom } from '../containers/wating-room';
@@ -22,9 +22,9 @@ if ( location.hash === '' ) global.router.go( '/lobby/host/' );
 document.addEventListener('DOMContentLoaded', () => {
 	global.router.on(/lobby\/host/, () => {
 		_setContent( Div({ id: 'container' }, Host()) )
-	}).on(/lobby\/find/, () => {
-		_setContent( Lobby() )
-	}).on(/game/, () => {
+	}).on(/lobby\/find_game/, () => {
+		_setContent( FindGame() )
+	}).on(/\/game\//, () => {
 		_setContent( TableTop() )
 	}).on(/tests/, () => {
 		_setContent(Div({ id: 'tests' }, Tests()))
