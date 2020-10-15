@@ -1,61 +1,6 @@
 @import './match-table';
 @import './lobby-header.scss';
-
-.main-lobby {
-	height: 100%;
-	display: grid;
-	grid-template-columns: 1fr .5fr;
-	grid-template-rows: 50px 1fr;
-	/* CREATION MENU */
-	.creation-menu {
-		position: relative;
-		display: grid;
-		align-self: center;
-		height: 90%;
-		background-color: $cah-lightest;
-		transition: all .3s ease-in-out;
-		border-radius: 3px;
-		grid-template-rows: 60px repeat(7, 45px);
-		overflow: hidden;
-		> h3 {
-			background-color: black;
-			text-align: center;
-			padding: 20px 0;
-			color: $cah-lightest;
-		}
-		> label {
-			color: black;
-			align-self: end;
-		}
-		> input {
-			padding: 5px 10px;
-			color: black;
-		}
-		&:hover {
-			box-shadow: 0px 0 8px 5px #1d4943;
-		}
-		> *:not(h3) {
-			margin: 0 15px;
-		}
-		> button {
-			position: absolute;
-			bottom: 15px;
-			width: 90%;
-			font-size: 18px;
-			height: 45px;
-			color: black;
-			border-radius: 4px;
-			border: 1px solid black;
-			outline: none;
-			transition: all .3s ease-in-out;
-			font-weight: bold;
-			&:hover {
-				background-color: black;
-				color: #ffffff;
-			}
-		}
-	}
-}
+@import './host-game.scss';
 
 .modal-wrapper {
 	transition: all .3s ease-in-out;
