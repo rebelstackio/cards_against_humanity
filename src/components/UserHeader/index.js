@@ -1,4 +1,5 @@
 import { Div, H3, Img, Button, Span, Input } from '@rebelstack-io/metaflux';
+import { auth } from '../../lib/backend/firebase';
 import { singInWithGoogle } from '../../lib/backend/firebase/auth/';
 
 const _opts = _getUserOpt();
@@ -13,15 +14,20 @@ const UserHeader = (isFind = false) => (
 		that.append(..._getHeaderByState(isFind))
 	})
 );
-
-const _searInput = Input({ placeholder: 'Find Game', onkeyup: function () {
+/**
+ * Search input, will be disabled if not auth
+ */
+const _searInput = Input({ placeholder: 'Find Game', disabled:true, onkeyup: function () {
 	if (this.value.length > 3) {
 		global.storage.dispatch({ type: 'SEARCH_GAME', data: this.value});
 	}
 	if (this.value === '') _clearSearch()
-}});
+}}).onStoreEvent('AUTH_CHANGE', (state, that) => {
+	const { isAuth } = state.Main;
+	if(isAuth) that.disabled = false;
+})
 /**
- * Search input
+ * Search Box
  */
 const _search = Div({ className: 'search-area' }, [
 	Div({}, [

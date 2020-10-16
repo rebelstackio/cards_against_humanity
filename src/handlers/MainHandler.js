@@ -38,7 +38,8 @@ const MainDefaultState = {
 			'oereowi': { displayName: 'Dummy 2', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' }
 		 }
 	},
-	searchValue: ''
+	searchValue: '',
+	isAuth: false
 };
 
 export default {
@@ -63,6 +64,7 @@ export default {
 		},
 		'AUTH_CHANGE': (action, state) => {
 			state.Main.user = action.user;
+			state.Main.isAuth = action.user.uid !== undefined;
 			return { newState: state }
 		},
 		'ROOMS_LIST': (action, state) => {

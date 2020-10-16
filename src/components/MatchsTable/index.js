@@ -1,6 +1,7 @@
 import { Tr, Td, Th, Div, Img, H3 } from '@rebelstack-io/metaflux';
 import RoomApi from '../../lib/backend/firebase/room';
 import emptyStateImg from '../../css/images/empty_list.svg';
+import Actions from '../../handlers/actions';
 
 const _store = global.storage;
 /**
@@ -52,7 +53,6 @@ let tableHeader = Tr({}, [
  */
 const MatchsTable =
 () => {
-	_getMatchs();
 	return Div({className: 'table-wrapper'}).Table({ className: 'match-table' },[
 		tableHeader,
 		..._getList()
@@ -64,6 +64,7 @@ const MatchsTable =
 		_searchMatch(val)
 	})
 	.onStoreEvent('CLEAR_SEARCH', () => { _getMatchs() })
+	.onStoreEvent('AUTH_CHANGE', () => { _getMatchs() })
 	.baseNode()
 };
 /**
@@ -77,34 +78,40 @@ function _searchMatch(val) {
 			console.log(d.id, d.data())
 			list[d.id] = d.data();
 		})
-		_store.dispatch({ type: 'ROOMS_LIST', list })
+		Actions.roomsList({ list })
 	})
 }
 /**
  * request matchs from API
  */
 function _getMatchs() {
-	_store.dispatch({ type: 'LOADING_ON', msg: 'LOADING MATCHES' })
-	RoomApi.listRooms().then((documentSnapshots) => {
-			let list = {}
-			documentSnapshots.docs.forEach(d => {
-				list[d.id] = d.data();
+	Actions.loadingOn({msg: 'LOADING MATCHES'})
+	const { isAuth } = _store.getState().Main;
+	if ( isAuth ) {
+		RoomApi.listRooms().then((documentSnapshots) => {
+				let list = {}
+				documentSnapshots.docs.forEach(d => {
+					list[d.id] = d.data();
+				});
+				Actions.roomsList({ list });
+				Actions.loadingOff();
+			}).catch((err) => {
+				console.error('error', err);
 			});
-			_store.dispatch({ type: 'ROOMS_LIST', list})
-			_store.dispatch({ type: 'LOADING_OFF' })
-		}).catch((err) => {
-			console.error('error', err);
-		});
+	} else {
+		Actions.roomsList({ list: {} });
+		Actions.loadingOff();
+	}
 }
 /**
  * Request to Join Room
  * @param {Object} match
  */
 function requestToJoin(match, id) {
-	_store.dispatch({ type: 'LOADING_ON', msg: `Joining to ${ match.name }`});
+	Actions.loadingOn({ msg: `Joining to ${ match.name }` });
 	//TODO: Call API
 	setTimeout(() => {
-		_store.dispatch({ type: 'LOADING_OFF' });
+		Actions.loadingOff();
 		global.router.go(`/waiting_room/${id}`);
 		//global.storage.dispatch({ type: 'JOIN_GAME', data: match })
 	},2000)

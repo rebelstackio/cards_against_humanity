@@ -12,7 +12,20 @@
 	align-items: center;
 	transition: all .3s;
 	transform: translate(0,0);
+	padding: 0 10px;
 	&.hidden {
-		transform: translate(100%, 0);
+		transform: translate(105%, 0);
+	}
+	> button {
+		background-color: #ffffff;
+		border: 1px solid #000;
+		border-radius: 4px;
+		transition: all .3s;
+		height: 35px;
+		&:hover {
+			border-color: #ffffff;
+			background-color: #000000;
+			color: #ffffff;
+		}
 	}
 }

@@ -1,5 +1,8 @@
 import { Div, H3, Label, Input, Button, Select, Option} from '@rebelstack-io/metaflux';
+import { SnackBar } from '../SnackBar';
 import RoomApi from '../../lib/backend/firebase/room';
+import Actions from '../../handlers/actions';
+import actions from '../../handlers/actions';
 
 const _storage = global.storage;
 const _name = Input({name: 'name', placeholder: 'ej: Stupid Name'});
@@ -31,7 +34,8 @@ const CreationMenu = () =>(
 		_deck,
 		Label({for: 'password'}, 'Password'),
 		_pass,
-		_Actions
+		_Actions,
+		SnackBar()
 	])
 );
 
@@ -48,11 +52,15 @@ function createNew() {
 		createdBy: { displayName, uid },
 		deck: _deck.value
 	};
+	if(!uid) {
+		Actions.displayNotification({ msg: 'Need To login to create a game' });
+		return;
+	}
 	if (data.name !== '') {
-		global.storage.dispatch({ type:'LOADING_ON', msg: `Creating room ${data.name} please wait` })
+		Actions.loadingOn({msg: `Creating room ${data.name} please wait`})
 		RoomApi.createRoom(data).then((docRef) => {
 			console.log('created room', docRef);
-			global.storage.dispatch({ type:'LOADING_OFF' })
+			Actions.loadingOff();
 			global.router.go(`/waiting_room/${uid}`)
 		}).catch((err) => {
 			console.error('error', err);

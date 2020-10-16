@@ -1,6 +1,5 @@
 /* src/controllers/index.js */
 
-import { DBController } from './db';
 import { getBackend } from '../lib/backend/';
 
 
