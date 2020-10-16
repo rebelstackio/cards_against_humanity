@@ -93,8 +93,29 @@
 					color: #ffffff;
 				}
 			}
-			> input {
-				padding: 0 10px;
+			> div {
+				display: grid;
+				grid-template-columns: 1fr 45px;
+				background-color: #ffffff;
+				border: 1px solid #000000;
+				border-radius: 3px;
+				> input {
+					outline: none;
+					border: none;
+					padding: 0 10px;
+				}
+				> div {
+					place-self: center;
+				}
+				& svg {
+					place-self: center;
+					transition: all .3s;
+					cursor: pointer;
+					font-size: 18px;
+					&:hover {
+						transform: scale(1.1,1.1)
+					}
+				}
 			}
 		}
 	}

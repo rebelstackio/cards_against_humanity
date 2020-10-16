@@ -40,12 +40,12 @@ function _findGame() {
 }
 
 function createNew() {
-	const { uid } = _storage.getState().Main.user;
+	const { displayName, uid } = _storage.getState().Main.user;
 	const data = {
 		name: _name.value,
 		winningScore: _win.value,
 		password: _pass.value,
-		createdBy: uid,
+		createdBy: { displayName, uid },
 		deck: _deck.value
 	};
 	if (data.name !== '') {

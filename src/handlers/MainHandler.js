@@ -37,7 +37,8 @@ const MainDefaultState = {
 			'jdksdla': { displayName: 'Dummy 1', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' },
 			'oereowi': { displayName: 'Dummy 2', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' }
 		 }
-	}
+	},
+	searchValue: ''
 };
 
 export default {
@@ -72,6 +73,14 @@ export default {
 			state.Main.notificationMessage = action.msg;
 			state.Main.notificationIcon = action.icon;
 			state.Main.notificationAction = action.action;
+			return { newState: state }
+		},
+		'SEARCH_GAME': (action, state) => {
+			state.Main.searchValue = action.data
+			return { newState: state }
+		},
+		'CLEAR_SEARCH': (action, state) => {
+			state.Main.searchValue = '';
 			return { newState: state }
 		}
 	}

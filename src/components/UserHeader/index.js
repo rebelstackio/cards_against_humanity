@@ -1,6 +1,11 @@
 import { Div, H3, Img, Button, Span, Input } from '@rebelstack-io/metaflux';
 import { singInWithGoogle } from '../../lib/backend/firebase/auth/';
 
+const _opts = _getUserOpt();
+/**
+ * Header component
+ * @param {Boolean} isFind
+ */
 const UserHeader = (isFind = false) => (
 	Div({ className: 'user-header' }, _getHeaderByState(isFind))
 	.onStoreEvent('AUTH_CHANGE', (state, that) => {
@@ -9,21 +14,41 @@ const UserHeader = (isFind = false) => (
 	})
 );
 
-const _opts = _getUserOpt();
-
+const _searInput = Input({ placeholder: 'Find Game', onkeyup: function () {
+	if (this.value.length > 3) {
+		global.storage.dispatch({ type: 'SEARCH_GAME', data: this.value});
+	}
+	if (this.value === '') _clearSearch()
+}});
+/**
+ * Search input
+ */
 const _search = Div({ className: 'search-area' }, [
-	Input({ placeholder: 'Find Game', onkeyup: function () {
-		if (this.value.length > 3){
-			global.storage.dispatch({ type: 'SEARCH_GAME', data: this.value});
-		}
-	}}),
+	Div({}, [
+		_searInput,
+		Div({ onclick:() => { _clearSearch(); _searInput.value = '';}},
+			Span({className: 'fas fa-times'})
+		)
+	]),
 	Button({ onclick: _hostGame }, 'Host game')
 ]);
+/**
+ * Clean the search value
+ */
+function _clearSearch() {
+	global.storage.dispatch({ type: 'CLEAR_SEARCH' })
+}
 
+/**
+ * handle route
+ */
 function _hostGame() {
 	global.router.go('/lobby/host/');
 }
-
+/**
+ * Display social loging or user loged
+ * @param {Boolean} isFind display search input for room find
+ */
 function _getHeaderByState(isFind) {
 	const { user } = global.storage.getState().Main;
 	return [
@@ -44,14 +69,18 @@ function _getHeaderByState(isFind) {
 		])
 	]
 }
-
+/**
+ * Get the auth option to logout
+ */
 function _getUserOpt() {
 	return Div({ className: 'user-opts hidden' }, [
 		Div({ onclick: () => { global.storage.dispatch({type: 'LOGOUT'}); _toggle(); } },
 			[Span({},'Logout'), Span({className: 'fas fa-sign-out-alt'})])
 	])
 }
-
+/**
+ * toggle hidden class
+ */
 function _toggle() {
 	_opts.classList.toggle('hidden');
 }
