@@ -1,18 +1,16 @@
-import { Div, Span, H3 } from '@rebelstack-io/metaflux';
+import { Div } from '@rebelstack-io/metaflux';
 import { UserHeader } from '../../components/UserHeader';
 import { MatchsTable } from '../../components/MatchsTable';
-import { CreationMenu } from '../../components/CreationMenu';
 import { LoadignModal } from '../../components/LoadingModal';
 
-const Lobby = () => Div({
-	className: 'main-lobby'
+const FindGame = () => Div({
+	className: 'main-lobby find'
 }, [
-	UserHeader(),
+	UserHeader(true),
 	MatchsTable(),
-	CreationMenu(),
 	LoadignModal()
 ]);
 
 export {
-	Lobby
+	FindGame
 }

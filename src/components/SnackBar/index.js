@@ -3,7 +3,9 @@ import { Div, Span, Button } from '@rebelstack-io/metaflux';
 const _TIMEOUT = 8000;
 const _notMessage = Span();
 const _notIcon = Span();
-const _notAction = Button({}, 'Got it');
+const _notAction = Button({ onclick: function () {
+	this.parentElement.classList.add('hidden');
+} }, 'Got it');
 
 const SnackBar = () => Div({ className: 'snackbar hidden' }, [
 	_notIcon,

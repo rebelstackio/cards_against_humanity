@@ -1,17 +1,16 @@
 .user-header {
-	grid-area: 1 / 1 / span 1 / span 2;
+	/*grid-area: 1 / 1 / span 1 / span 2;*/
 	display: grid;
-	place-content: center end;
 	grid-auto-flow: column;
 	padding: 10px;
 	background-color: $cah-lightest;
 	align-items: center;
 	column-gap: 10px;
 	position: relative;
-	> h3 {
+	& h3 {
 		color: black;
 	}
-	> img {
+	& img {
 		border-radius: 50px;
 		cursor: pointer;
 		transition: all .3s ease-in-out;
@@ -52,24 +51,71 @@
 		display: grid;
 		grid-auto-flow: column;
 		column-gap: 10px;
-		> button {
-			border: none;
-			outline: none;
-			box-sizing: border-box;
-			width: 35px;
-			height: 35px;
-			color: $cah-lightest;
-			border-radius: 50%;
-			cursor: pointer;
-			&:hover {
-				box-shadow: 0 0.5em 0.5em -0.4em #4CAF50;
-				transform: translateY(-0.25em);
+		&.auth {
+			place-self: center end;
+			h3 {
+				padding: 5px 0;
 			}
-			&:nth-child(1) {
-				background:linear-gradient(27deg, #4285f4, #34a853, #fbbc05, #ea4335);
+			button {
+				border: none;
+				outline: none;
+				box-sizing: border-box;
+				width: 35px;
+				height: 35px;
+				color: $cah-lightest;
+				border-radius: 50%;
+				margin: 0 5px;
+				cursor: pointer;
+				&:hover {
+					box-shadow: 0 0.5em 0.5em -0.4em #4CAF50;
+					transform: translateY(-0.25em);
+				}
+				&:nth-child(1) {
+					background:linear-gradient(27deg, #4285f4, #34a853, #fbbc05, #ea4335);
+				}
+				&:nth-child(2) {
+					background: linear-gradient(#0063e1, #21aefe);
+				}
 			}
-			&:nth-child(2) {
-				background: linear-gradient(#0063e1, #21aefe);
+		}
+		&.search-area {
+			> button {
+				font-size: 16px;
+				height: 35px;
+				color: black;
+				border-radius: 4px;
+				border: 1px solid black;
+				outline: none;
+				transition: all .3s ease-in-out;
+				font-weight: bold;
+				&:hover {
+					background-color: black;
+					color: #ffffff;
+				}
+			}
+			> div {
+				display: grid;
+				grid-template-columns: 1fr 45px;
+				background-color: #ffffff;
+				border: 1px solid #000000;
+				border-radius: 3px;
+				> input {
+					outline: none;
+					border: none;
+					padding: 0 10px;
+				}
+				> div {
+					place-self: center;
+				}
+				& svg {
+					place-self: center;
+					transition: all .3s;
+					cursor: pointer;
+					font-size: 18px;
+					&:hover {
+						transform: scale(1.1,1.1)
+					}
+				}
 			}
 		}
 	}

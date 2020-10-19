@@ -69,10 +69,33 @@ const listRooms = function _listRooms(limit = DEFAULT_PAGE_SIZE, startAfter = nu
 		return db.collection(COLLECTION).orderBy('nplayers', 'desc').limit(limit).get();
 	}
 }
+/**
+ * List Rooms startting with value string. Supports Pagination based on firebase
+ * @param {String} value Search value
+ * @param {number} limit Page size
+ * @param {object} startAfter Last room from previous page
+ * @param {object} db Firestore reference
+ */
+const searchRoom = function _searchRoom(value,limit = DEFAULT_PAGE_SIZE, startAfter = null, db = firebase.firestore()) {
+	if ( startAfter ) {
+		return db.collection(COLLECTION)
+			.startAfter(startAfter)
+			.where('name', '>=', value)
+			.limit(limit)
+			.get();
+	} else {
+		return db.collection(COLLECTION)
+			.where('name', '>=', value)
+			.where('name', '<', value + 'z') // last char*/
+			.limit(limit)
+			.get();
+	}
+}
 
 export default {
 	STATUS,
 	createRoom,
 	deleteRoom,
-	listRooms
+	listRooms,
+	searchRoom
 };

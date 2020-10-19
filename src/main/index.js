@@ -7,8 +7,9 @@ import '../css/index.scss';
 import '../handlers';
 import { Div } from '@rebelstack-io/metaflux';
 import { TableTop } from '../containers/table-top';
-import { Lobby } from '../containers/lobby';
+import { FindGame } from '../containers/find-game';
 import { Tests } from '../containers/tests';
+import { Host } from '../containers/host-game';
 import { WaitingRoom } from '../containers/wating-room';
 import Router from  '../router';
 import '../../src/lib/backend/firebase';
@@ -16,33 +17,31 @@ import { signOut, onAuthStateChanged } from '../../src/lib/backend/firebase/auth
 
 
 global.router = new Router();
-if ( location.hash === '' ) global.router.go( '/lobby/' );
+if ( location.hash === '' ) global.router.go( '/lobby/host/' );
 
 document.addEventListener('DOMContentLoaded', () => {
-	global.router.on(/lobby/, () => {
-		document.body.innerHTML = '';
-		document.body.appendChild(
-			Div({
-				id: 'container'
-			}, Lobby())
-		);
-	}).on(/game/, () => {
-		document.body.innerHTML = '';
-		document.body.appendChild( TableTop() );
+	global.router.on(/lobby\/host/, () => {
+		_setContent( Div({ id: 'container' }, Host()) )
+	}).on(/lobby\/find_game/, () => {
+		_setContent( FindGame() )
+	}).on(/\/game\//, () => {
+		_setContent( TableTop() )
 	}).on(/tests/, () => {
-		document.body.innerHTML = '';
-		document.body.appendChild(
-			Div({
-				id: 'tests'
-			}, Tests())
-		);
+		_setContent(Div({ id: 'tests' }, Tests()))
 	})
 	.on(/waiting_room/, () => {
-		document.body.innerHTML = '';
-		document.body.appendChild( WaitingRoom() )
+		_setContent( WaitingRoom() )
 	})
 
 });
+/**
+ * Clean the body and append content
+ * @param {HTMLElement} Content HTMLElement to append
+ */
+function _setContent(Content) {
+	document.body.innerHTML = '';
+	document.body.appendChild(Content);
+}
 
 global.storage.on('LOGOUT', () => {
 	signOut().then(() => {
