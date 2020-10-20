@@ -9,7 +9,7 @@ class Hand extends MetaComponent {
 	render () {
 		this.content = document.createElement('div');
 		this.cards = [];
-		const { hand } = this.storage.getState().Main;
+		const { hand } = this.storage.getState().Match;
 		for (let i = 0; i < hand.length; i++) {
 			const cardNode = new cahCard(hand[i], 'white', i);
 			this.cards.push(cardNode);
@@ -18,7 +18,7 @@ class Hand extends MetaComponent {
 		return this.content;
 	}
 	tagCard () {
-		const { selectedCardIds } = this.storage.getState().Main;
+		const { selectedCardIds } = this.storage.getState().Match;
 
 		this.cards.forEach(card => {
 			selectedCardIds.forEach((id, index) => {
@@ -32,7 +32,7 @@ class Hand extends MetaComponent {
 	handleStoreEvents () {
 		return {
 			'INCREASE_SELECTED_CARDS': _ => {
-				const { selectedCards, selectedCardsLimit } = this.storage.getState().Main;
+				const { selectedCards, selectedCardsLimit } = this.storage.getState().Match;
 				if (selectedCards === selectedCardsLimit) {
 					this.content.classList.add('full-hand');
 				} else {
@@ -41,7 +41,7 @@ class Hand extends MetaComponent {
 				this.tagCard();
 			},
 			'DECREASE_SELECTED_CARDS': _ => {
-				const { selectedCards, selectedCardsLimit } = this.storage.getState().Main;
+				const { selectedCards, selectedCardsLimit } = this.storage.getState().Match;
 				if (selectedCards < selectedCardsLimit) {
 					this.content.classList.remove('full-hand');
 				}

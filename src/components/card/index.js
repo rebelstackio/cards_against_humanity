@@ -17,7 +17,7 @@ function cahCard (content = "", className = "white", id = 0) {
 	})
 	if (className === 'white') {
 		card.addEventListener('click', () => {
-			const { selectedCards, selectedCardsLimit } = _storage.getState().Main;
+			const { selectedCards, selectedCardsLimit } = _storage.getState().Match;
 			const isCardSelected = card.classList.contains('selected');
 			if (!isCardSelected && selectedCards < selectedCardsLimit) {
 				card.classList.add('selected');

@@ -15,7 +15,7 @@ class CzarIndicator extends MetaComponent {
 	}
 
 	setUser () {
-		let { iconUrl, username } = this.storage.getState().Main.czarData;
+		let { iconUrl, username } = this.storage.getState().Match.czarData;
 		iconUrl = iconUrl || this.getAvatar(username);
 
 		this.userIcon.setAttribute("src", iconUrl);

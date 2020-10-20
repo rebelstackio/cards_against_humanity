@@ -7,7 +7,7 @@ class Czar extends MetaComponent {
 	}
 
 	render () {
-		let { text } = this.storage.getState().Main.czarCard;
+		let { text } = this.storage.getState().Match.czarCard;
 
 		const content = document.createElement("div");
 
@@ -25,7 +25,7 @@ class Czar extends MetaComponent {
 	}
 
 	replaceBlanks () {
-		const { czarCard, selectedCardIds } = this.storage.getState().Main;
+		const { czarCard, selectedCardIds } = this.storage.getState().Match;
 		let { text } = czarCard;
 
 		for (let i = 0; i < selectedCardIds.length; i++) {

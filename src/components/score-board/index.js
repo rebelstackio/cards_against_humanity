@@ -32,7 +32,7 @@ class ScoreBoard extends MetaComponent {
 	}
 
 	fillCounters () {
-		const { selectedCards, selectedCardsLimit, awesomePoints, isCzar } = this.storage.getState().Main;
+		const { selectedCards, selectedCardsLimit, awesomePoints, isCzar } = this.storage.getState().Match;
 		this.scoreCounter.textContent = `Awesome Points: ${awesomePoints}`;
 		this.pickedCardCounter.textContent = `Cards picked: ${selectedCards}/${selectedCardsLimit}`;
 	}
