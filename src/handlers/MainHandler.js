@@ -12,9 +12,21 @@ const MainDefaultState = {
 const MatchDefaultState = {
 	id: '6nhvGCSvfnRJlHQMNHCMShbGbMW2',
 	players: {
-		'6nhvGCSvfnRJlHQMNHCMShbGbMW2': { displayName: 'Osmar Reyes', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' },
-		'jdksdla': { displayName: 'Dummy 1', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' },
-		'oereowi': { displayName: 'Dummy 2', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' }
+		'6nhvGCSvfnRJlHQMNHCMShbGbMW2': {
+			status: 'P',
+			displayName: 'Osmar Reyes',
+			photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg'
+		},
+		'jdksdla': {
+			status: 'P',
+			displayName: 'Dummy 1',
+			photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg'
+		},
+		'oereowi': {
+			status: 'R',
+			displayName: 'Dummy 2',
+			photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg'
+		}
 	},
 	isCzar: false,
 	czarData: {

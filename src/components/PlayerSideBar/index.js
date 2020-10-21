@@ -14,7 +14,7 @@ const PlayerSideBar = () => Div({
  * get the match players and listed
  */
 function _getThePeople() {
-	const { match } = _storage.getState().Main;
+	const match = _storage.getState().Match;
 	return Object.keys(match.players).map(_uid => {
 		const pl = match.players[_uid];
 		return Div({className: 'player-box'}, [

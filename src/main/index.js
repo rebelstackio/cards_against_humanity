@@ -11,6 +11,7 @@ import { FindGame } from '../containers/find-game';
 import { Tests } from '../containers/tests';
 import { Host } from '../containers/host-game';
 import { WaitingRoom } from '../containers/wating-room';
+import { Czar } from '../containers/czar';
 import Router from  '../router';
 import '../../src/lib/backend/firebase';
 import { signOut, onAuthStateChanged } from '../../src/lib/backend/firebase/auth';
@@ -31,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	})
 	.on(/waiting_room/, () => {
 		_setContent( WaitingRoom() )
+	})
+	.on(/czar/, () => {
+		_setContent( Czar() )
 	})
 
 });

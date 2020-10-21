@@ -51,6 +51,25 @@
 
 }
 
+/* circular */
+.modal-spinner {
+	display: inline-block;
+	width: 150px;
+	height:150px;
+}
+.modal-spinner:after {
+	content: " ";
+	display: block;
+	box-sizing: border-box;
+	width: 150px;
+	height: 150px;
+	margin: 1px;
+	border-radius: 50%;
+	border: 20px solid #666666;
+	border-color: #666666 transparent #666666 transparent;
+	animation: loading-animation 1.2s linear infinite;
+}
+
 @keyframes loading-animation {
 	0% {
 		transform: rotate(0deg);

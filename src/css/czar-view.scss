@@ -1,0 +1,21 @@
+.czar-top {
+	display: grid;
+	grid-template-columns: 180px 1fr;
+	> .turn-viewer {
+		display: grid;
+		grid-auto-flow: column;
+		& img {
+			width: 45px;
+			box-sizing: border-box;
+			border-radius: 50%;
+		}
+	}
+	> .submits {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		> .submit-wrapper {
+			width: $cah-card-width;
+			height: $cah-card-height;
+		}
+	}
+}
