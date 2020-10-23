@@ -1,9 +1,24 @@
 .czar-top {
 	display: grid;
 	grid-template-columns: 180px 1fr;
+	grid-template-rows: 250px 1fr;
+	row-gap: 10px;
+	height: 100%;
 	> .turn-viewer {
 		display: grid;
-		grid-auto-flow: column;
+		height: 60px;
+		padding: 5px;
+		box-sizing: border-box;
+		grid-template-columns: repeat(19, 50px);
+		place-items: center;
+		row-gap: 5px;
+		transition: all .3s;
+		> .s-R {
+			transform: translate(0, 0);
+		}
+		> .s-P {
+			transform: translate(0, 10px);
+		}
 		& img {
 			width: 45px;
 			box-sizing: border-box;
@@ -13,9 +28,35 @@
 	> .submits {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
+		grid-area: 2 / 1 / span 1 / span 2;
+		justify-items: center;
 		> .submit-wrapper {
 			width: $cah-card-width;
 			height: $cah-card-height;
+			position: relative;
+			> div {
+				height: 100%;
+				width: 100%;
+				position: absolute;
+				background: $cah-lightest;
+				border-radius: 4px;
+				display: grid;
+				z-index: 2;
+				box-shadow: 3px 3px 5px #353434;
+				&:nth-child(2) {
+					left: 20px;
+					z-index: 1;
+				}
+			}
+			& .modal-spinner {
+				width: calc(#{$cah-card-width} - 5px);
+				height: calc(#{$cah-card-width} - 5px);
+				place-self: center;
+				&::after {
+					width: calc(#{$cah-card-width} - 5px);
+					height: calc(#{$cah-card-width} - 5px);
+				}
+			}
 		}
 	}
 }

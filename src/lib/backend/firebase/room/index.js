@@ -38,7 +38,7 @@ const createRoom = function _createRoom( roomProps, db = firebase.firestore(), t
 		return  Promise.reject( new TypeError('createdBy is required'));
 	}
 
-	return db.collection(COLLECTION).doc().set(props);
+	return db.collection(COLLECTION).doc(props.createdBy.uid).set(props);
 };
 
 /**
@@ -90,6 +90,21 @@ const searchRoom = function _searchRoom(value,limit = DEFAULT_PAGE_SIZE, startAf
 			.limit(limit)
 			.get();
 	}
+}
+
+/**
+ * Handle Join Room cloud function
+ * @param {String} id room id
+ * @param {String} password
+ * @param {CallableFunction}
+ */
+const joinRoom = function _joinRoom(id, password, callback) {
+	const joinGame = firebase.functions().httpsCallable('joinGame');
+	joinGame({ id, password })
+	.then(res => {
+		console.log(res.data)
+		callback(res.data);
+	})
 }
 
 export default {

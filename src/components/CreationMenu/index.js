@@ -44,13 +44,17 @@ function _findGame() {
 }
 
 function createNew() {
-	const { displayName, uid } = _storage.getState().Main.user;
+	const { displayName, uid, photoURL } = _storage.getState().Main.user;
 	const data = {
 		name: _name.value,
 		winningScore: _win.value,
 		password: _pass.value,
 		createdBy: { displayName, uid },
-		deck: _deck.value
+		deck: _deck.value,
+		nplayers: 1,
+		players: {
+			[uid]: { displayName, photoURL, score: 0, status: 'C' }
+		}
 	};
 	if(!uid) {
 		Actions.displayNotification({ msg: 'Need To login to create a game' });
