@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {String} act
+ * @param {*} props
+ */
 const _dispatch = (act, props = {}) => {
 	if (props.type) throw new TypeError('Actions Error: Property type is restricted and would override the dispatch');
 	global.storage.dispatch(Object.assign({}, { type: act }, props))
@@ -15,5 +20,11 @@ export default {
 	},
 	displayNotification: (props) => {
 		_dispatch('DISPLAY_NOTIFICATION', props)
+	},
+	roomCreated: (props) => {
+		_dispatch('MATCH_CREATED', props)
+	},
+	roomUpdate: (props) => {
+		_dispatch('MATCH_UPDATE', props)
 	}
 }

@@ -15,6 +15,8 @@ import { Czar } from '../containers/czar';
 import Router from  '../router';
 import '../../src/lib/backend/firebase';
 import { signOut, onAuthStateChanged } from '../../src/lib/backend/firebase/auth';
+import RoomApi from '../lib/backend/firebase/room';
+import Actions from '../handlers/actions';
 
 
 global.router = new Router();
@@ -66,4 +68,18 @@ onAuthStateChanged( (user) => {
 	global.storage.dispatch({ type: 'AUTH_CHANGE', user: _user });
 });
 
+global.storage.on('MATCH_CREATED',_listenRoom);
+global.storage.on('MATCH_JOINED',_listenRoom)
 
+function _listenRoom(action) {
+	const state = action.newState;
+	RoomApi.listenRoom(state.Match.id, (snap) => {
+		console.log('got snapshot')
+		Actions.roomUpdate({ data: snap.data() })
+	})
+}
+
+const joined = localStorage.getItem('m_joined');
+if (joined !== null) {
+	_listenRoom({ newState: { Match: { id: joined } }})
+}

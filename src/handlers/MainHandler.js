@@ -10,23 +10,9 @@ const MainDefaultState = {
 };
 
 const MatchDefaultState = {
-	id: '6nhvGCSvfnRJlHQMNHCMShbGbMW2',
+	id: '',
 	players: {
-		'6nhvGCSvfnRJlHQMNHCMShbGbMW2': {
-			status: 'P',
-			displayName: 'Osmar Reyes',
-			photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg'
-		},
-		'jdksdla': {
-			status: 'P',
-			displayName: 'Dummy 1',
-			photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg'
-		},
-		'oereowi': {
-			status: 'R',
-			displayName: 'Dummy 2',
-			photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg'
-		}
+
 	},
 	isCzar: false,
 	czarData: {
@@ -96,6 +82,18 @@ export default {
 		},
 		'CLEAR_SEARCH': (action, state) => {
 			state.Main.searchValue = '';
+			return { newState: state }
+		},
+		'MATCH_CREATED': (action, state) => {
+			const { data } = action;
+			state.Match.isHost = true;
+			state.Match = Object.assign({}, state.Match, data)
+			return { newState: state }
+		},
+		'MATCH_UPDATE': (action, state) => {
+			const { data } = action;
+			state.Match.isHost = data.id === state.Main.user.uid;
+			state.Match = Object.assign({}, state.Match, data)
 			return { newState: state }
 		}
 	}

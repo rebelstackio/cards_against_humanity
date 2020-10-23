@@ -2,7 +2,6 @@ import { Div, H3, Label, Input, Button, Select, Option} from '@rebelstack-io/met
 import { SnackBar } from '../SnackBar';
 import RoomApi from '../../lib/backend/firebase/room';
 import Actions from '../../handlers/actions';
-import actions from '../../handlers/actions';
 
 const _storage = global.storage;
 const _name = Input({name: 'name', placeholder: 'ej: Stupid Name'});
@@ -46,6 +45,7 @@ function _findGame() {
 function createNew() {
 	const { displayName, uid, photoURL } = _storage.getState().Main.user;
 	const data = {
+		id: uid,
 		name: _name.value,
 		winningScore: _win.value,
 		password: _pass.value,
@@ -64,6 +64,8 @@ function createNew() {
 		Actions.loadingOn({msg: `Creating room ${data.name} please wait`})
 		RoomApi.createRoom(data).then((docRef) => {
 			console.log('created room', docRef);
+			Actions.roomCreated({ data });
+			localStorage.setItem('m_joined', uid);
 			Actions.loadingOff();
 			global.router.go(`/waiting_room/${uid}`)
 		}).catch((err) => {

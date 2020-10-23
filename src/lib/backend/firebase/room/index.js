@@ -107,10 +107,16 @@ const joinRoom = function _joinRoom(id, password, callback) {
 	})
 }
 
+const listenRoom = function _listenRoom(id, callback, db = firebase.firestore()) {
+	db.collection(COLLECTION).doc(id).onSnapshot(callback)
+}
+
 export default {
 	STATUS,
 	createRoom,
 	deleteRoom,
 	listRooms,
-	searchRoom
+	searchRoom,
+	joinRoom,
+	listenRoom
 };
