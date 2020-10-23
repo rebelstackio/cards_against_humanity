@@ -9,7 +9,14 @@ const PlayerSideBar = () => Div({
 }, [
 	H3({}, 'The People'),
 	..._getThePeople()
-]);
+])
+.onStoreEvent('MATCH_UPDATE', (state, that) => {
+	that.innerHTML = '';
+	that.append(
+		H3({}, 'The People'),
+		..._getThePeople()
+	);
+})
 /**
  * get the match players and listed
  */

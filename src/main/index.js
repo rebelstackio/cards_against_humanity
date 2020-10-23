@@ -64,6 +64,10 @@ onAuthStateChanged( (user) => {
 		const { displayName, email, uid, photoURL } = user;
 		_user = { displayName, email, uid, photoURL }
 		// TODO: DB.getRooms();
+		const joined = localStorage.getItem('m_joined');
+		if (joined !== null) {
+			_listenRoom({ newState: { Match: { id: joined } }})
+		}
 	}
 	global.storage.dispatch({ type: 'AUTH_CHANGE', user: _user });
 });
@@ -79,7 +83,3 @@ function _listenRoom(action) {
 	})
 }
 
-const joined = localStorage.getItem('m_joined');
-if (joined !== null) {
-	_listenRoom({ newState: { Match: { id: joined } }})
-}

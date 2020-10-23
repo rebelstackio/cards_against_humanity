@@ -102,7 +102,6 @@ const joinRoom = function _joinRoom(id, password, callback) {
 	const joinGame = firebase.functions().httpsCallable('joinGame');
 	joinGame({ id, password })
 	.then(res => {
-		console.log(res.data)
 		callback(res.data);
 	})
 }

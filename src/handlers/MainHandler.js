@@ -95,6 +95,11 @@ export default {
 			state.Match.isHost = data.id === state.Main.user.uid;
 			state.Match = Object.assign({}, state.Match, data)
 			return { newState: state }
+		},
+		'MATCH_JOINED': (action, state) => {
+			const { id } = action
+			state.Match.id = id;
+			return { newState: state }
 		}
 	}
 };

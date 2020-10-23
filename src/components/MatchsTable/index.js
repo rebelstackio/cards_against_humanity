@@ -12,7 +12,7 @@ function _getList() {
 	if(_isEmpty(matchList)) return _getEmptyState();
 	return Object.keys(matchList).map((_k) => {
 			const _m = matchList[_k];
-			return Tr({onclick: () => { requestToJoin(_m, _k) }}, [
+			return Tr({onclick: () => { requestToJoin(_k, _m) }}, [
 				Td({}, _m.name),
 				Td({}, _m.createdBy.displayName),
 				Td({}, `${_m.nplayers}/${_m.size}`),
@@ -107,14 +107,17 @@ function _getMatchs() {
  * Request to Join Room
  * @param {Object} match
  */
-function requestToJoin(match, id) {
+function requestToJoin(id, match) {
+	console.log(id)
 	Actions.loadingOn({ msg: `Joining to ${ match.name }` });
-	//TODO: Call API
-	setTimeout(() => {
+	RoomApi.joinRoom(id,false, (resp) => {
+		if(resp.success) {
+			localStorage.setItem('m_joined', id);
+			Actions.roomJoined({ id })
+			global.router.go(`/waiting_room/${id}`)
+		}
 		Actions.loadingOff();
-		global.router.go(`/waiting_room/${id}`);
-		//global.storage.dispatch({ type: 'JOIN_GAME', data: match })
-	},2000)
+	})
 }
 
 export { MatchsTable }

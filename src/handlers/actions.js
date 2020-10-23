@@ -26,5 +26,8 @@ export default {
 	},
 	roomUpdate: (props) => {
 		_dispatch('MATCH_UPDATE', props)
+	},
+	roomJoined: (props) => {
+		_dispatch('MATCH_JOINED', props)
 	}
 }
