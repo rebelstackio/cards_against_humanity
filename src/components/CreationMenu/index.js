@@ -2,6 +2,8 @@ import { Div, H3, Label, Input, Button, Select, Option} from '@rebelstack-io/met
 import { SnackBar } from '../SnackBar';
 import RoomApi from '../../lib/backend/firebase/room';
 import Actions from '../../handlers/actions';
+import HostApi from "../../lib/backend/firebase/host/index";
+import { getDeck } from '../../util';
 
 const _storage = global.storage;
 const _name = Input({name: 'name', placeholder: 'ej: Stupid Name'});
@@ -11,7 +13,7 @@ const _win = Select({name: 'wining', value: 10}, [
 	Option({value: 10}, '100')
 ]);
 const _deck = Select({name: 'deck', value: 'Base'}, [
-	Option({value: 1}, 'Base')
+	Option({value: 'Base'}, 'Base')
 	//TODO: get deck from database
 ])
 const _pass = Input({name: 'password', placeholder: 'ej: Stupid Password', type: 'password'});
@@ -42,8 +44,9 @@ function _findGame() {
 	global.router.go('/lobby/find_game/');
 }
 
-function createNew() {
+async function createNew() {
 	const { displayName, uid, photoURL } = _storage.getState().Main.user;
+	const fullDeck = await getDeck(_deck.value);
 	const data = {
 		id: uid,
 		name: _name.value,
@@ -53,8 +56,9 @@ function createNew() {
 		deck: _deck.value,
 		nplayers: 1,
 		players: {
-			[uid]: { displayName, photoURL, score: 0, status: 'C' }
-		}
+			[uid]: { displayName, photoURL, score: 0, status: 'C', hand: ''},
+		},
+		pool: HostApi.getFullPool(fullDeck)
 	};
 	if(!uid) {
 		Actions.displayNotification({ msg: 'Need To login to create a game' });
@@ -67,7 +71,7 @@ function createNew() {
 			Actions.roomCreated({ data });
 			localStorage.setItem('m_joined', uid);
 			Actions.loadingOff();
-			global.router.go(`/waiting_room/${uid}`)
+			global.router.go(`/waiting_room/${uid}`);
 		}).catch((err) => {
 			console.error('error', err);
 		});

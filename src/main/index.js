@@ -17,7 +17,7 @@ import '../../src/lib/backend/firebase';
 import { signOut, onAuthStateChanged } from '../../src/lib/backend/firebase/auth';
 import RoomApi from '../lib/backend/firebase/room';
 import Actions from '../handlers/actions';
-
+import { getDeck } from  '../util';
 
 global.router = new Router();
 if ( location.hash === '' ) global.router.go( '/lobby/host/' );
@@ -63,7 +63,6 @@ onAuthStateChanged( (user) => {
 	if(user) {
 		const { displayName, email, uid, photoURL } = user;
 		_user = { displayName, email, uid, photoURL }
-		// TODO: DB.getRooms();
 		const joined = localStorage.getItem('m_joined');
 		if (joined !== null) {
 			_listenRoom({ newState: { Match: { id: joined } }})
@@ -76,10 +75,12 @@ global.storage.on('MATCH_CREATED',_listenRoom);
 global.storage.on('MATCH_JOINED',_listenRoom)
 
 function _listenRoom(action) {
+	console.log(action);
 	const state = action.newState;
-	RoomApi.listenRoom(state.Match.id, (snap) => {
+	RoomApi.listenRoom(state.Match.id, async (snap) => {
 		console.log('got snapshot')
-		Actions.roomUpdate({ data: snap.data() })
+		const data = snap.data();
+		const _deck = await getDeck(data.deck)
+		Actions.roomUpdate({ data, deck:_deck });
 	})
 }
-

@@ -1,7 +1,8 @@
+import HostApi from "../lib/backend/firebase/host/index";
+
 /*
 * DEFAULT HANDLER
 */
-
 const MainDefaultState = {
 	matchList: {},
 	user: {},
@@ -20,16 +21,6 @@ const MatchDefaultState = {
 		username: 'Pablo'
 	},
 	hand: [
-		"People with cake in their mouths talking about how good cake is.",
-		"The Hawaiian goddess Kapo and her flying detachable vagina.",
-		"Piece of shit Christmas cards with no money in them.",
-		"A magical tablet containing a world of unlimited pornography.",
-		"Finding out that Santa isn't real.",
-		"The Grinch's musty, cum-stained pelt.",
-		"Giving money and personal information to strangers on the Internet.",
-		"The shittier, Jewish version of Christmas.",
-		"Rudolph's bright red balls.",
-		"Jizzing into Santa's beard."
 	],
 	selectedCards: 0,
 	selectedCardsLimit: 2,
@@ -94,6 +85,11 @@ export default {
 			const { data } = action;
 			state.Match.isHost = data.id === state.Main.user.uid;
 			state.Match = Object.assign({}, state.Match, data)
+			state.Match.usedDeck = action.deck;
+			if (state.Match.isHost) {
+				/// todo write db
+				HostApi.setHand(state.Match.id,state.Match.players, state.Match.pool)
+			}
 			return { newState: state }
 		},
 		'MATCH_JOINED': (action, state) => {
