@@ -10,16 +10,24 @@ class CzarIndicator extends MetaComponent {
 		const content = Div();
 		this.userIcon = content.Img();
 		this.userName = content.Div();
-		this.setUser();
+		//this.setUser();
 		return content;
 	}
 
 	setUser () {
 		let { iconUrl, username } = this.storage.getState().Match.czarData;
-		iconUrl = iconUrl || this.getAvatar(username);
+		//const { uid } = this.storage.getState().Main.user;
+		const { players } = this.storage.getState().Match;
+		Object.keys(players).forEach(_k => {
+			const player = players[_k];
+			if (player.isCzar) {
 
-		this.userIcon.setAttribute("src", iconUrl);
-		this.userName.textContent = username;
+			}
+		})
+		//iconUrl = iconUrl || this.getAvatar(username);
+
+		this.userIcon.setAttribute("src", player.photoURL);
+		this.userName.textContent = player.displayName;
 	}
 
 	getAvatar(username = '?') {
@@ -49,8 +57,16 @@ class CzarIndicator extends MetaComponent {
 
 	handleStoreEvents () {
 		return {
-			'_': _ => {
-				//
+			'MATCH_UPDATE': (_) => {
+				const { players } = this.storage.getState().Match;
+				Object.keys(players).forEach(_k => {
+					const player = players[_k];
+					if (player.isCzar) {
+						this.userIcon.setAttribute("src", player.photoURL);
+						this.userName.textContent = player.displayName;
+					}
+				})
+				//iconUrl = iconUrl || this.getAvatar(username);
 			}
 		}
 	}

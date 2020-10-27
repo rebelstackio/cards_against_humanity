@@ -81,8 +81,15 @@ function _listenRoom(action) {
 		console.log('got snapshot')
 		const data = snap.data();
 		const _deck = await getDeck(data.deck)
+		let isStatusChange = global.storage.getState().Match.status !== data.status;
 		Actions.roomUpdate({ data, deck:_deck });
-		goByStatus(data.status);
+		const {uid} = global.storage.getState().Main.user;
+		const player = data.players[uid];
+		if (player.isCzar) {
+			global.router.go('/czar/')
+		} else if (isStatusChange) {
+			goByStatus(data.status);
+		}
 	})
 }
 /**

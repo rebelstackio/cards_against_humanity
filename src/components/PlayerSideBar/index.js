@@ -28,8 +28,8 @@ function _getButton() {
 		className: 'btn black',
 		style: `grid-area: ${size + 2}/ 1;`,
 		onclick: () => {
-			const { id } = _storage.getState().Match;
-			hostApi.startMatch(id);
+			const { id, players, pool } = _storage.getState().Match;
+			hostApi.startMatch(id, players, pool);
 		}},
 	`Start with ${nplayers}/${size} players`)
 	: Div();

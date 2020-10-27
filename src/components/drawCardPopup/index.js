@@ -1,12 +1,17 @@
 import { Div, Span, P } from '@rebelstack-io/metaflux';
 
 function DrawCardPopup () {
-	const { czarCard: { text }, usedDeck: { whiteCards }, selectedCardIds} = global.storage.getState().Match;
+	const { czarCard, usedDeck: { whiteCards, blackCards }, selectedCardIds} = global.storage.getState().Match;
 	const selectedCards = selectedCardIds.map(id => whiteCards[id]);
+	let { text, pick } = blackCards[czarCard];
 	let fullText = text;
-
-	for (let i = 0; i < selectedCards.length; i++) {
-		fullText = fullText.replace(/_/, `<span>${selectedCards[i]}</span>`);
+	let isQuestion = (pick < 2) && fullText.match(/___/g) !== null;
+	if (!isQuestion) {
+		for (let i = 0; i < selectedCards.length; i++) {
+			fullText = fullText.replace(/___/, `<span>${selectedCards[i]}</span>`);
+		}
+	} else {
+		fullText += `<span>${selectedCards[i]}</span>`
 	}
 	let rawText = fullText.replace(/(<span>|<\/span>)/g, '');
 	return Div({

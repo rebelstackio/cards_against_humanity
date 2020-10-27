@@ -10,7 +10,6 @@ const setHand = function _setPlayers(id, players, pool, db = firebase.firestore(
 	Object.keys(players).forEach(_k => {
 		let pl = players[_k];
 		let hand = pl.hand;
-		console.log(hand);
 		hand = hand.match(/[0-9]+/g) || [];
 		let wihiteCards = pool.whiteCards.split(',');
 		const left = 10 - hand.length;
@@ -55,11 +54,55 @@ function _shufflePool(pool) {
 	}).join();
 	return pool;
 }
-
-const startMatch = function _startMatch(id, db = firebase.firestore()) {
+/**
+ * Strart the match
+ * @param {String} id RoomID
+ * @param {Object} players player object
+ * @param {Object} pool pool object
+ * @param {*} db Firestore reference
+ */
+const startMatch = function _startMatch(id, players, pool, db = firebase.firestore()) {
+	players = _getCzar(players);
+	pool.blackCards = pool.blackCards.split(',')
+	const czarCard = pool.blackCards.pop();
+	pool.blackCards.join();
 	db.collection(COLLECTION).doc(id).set({
-		status: 'R'
+		status: 'R',
+		rounds: [{ whiteCards: [], winner: {} }],
+		players,
+		czarCard,
+		pool
 	}, { merge: true });
+}
+
+function _getCzar(players) {
+	let isFirst = true;
+	const keys = Object.keys(players);
+	keys.forEach((_k, i) => {
+		const pl = players[_k];
+		players[_k].status = 'P';
+		if (pl.isCzar) {
+			players[_k].isCzar = false;
+			isFirst = false;
+			if ((i + 1) === keys.length) {
+				// is the last, start over
+				players[keys[0]].isCzar = true;
+			} else {
+				players[keys[i + 1]].isCzar = true;
+			}
+		}
+	})
+	if (isFirst) {
+		players[_getRandom(keys)].isCzar = true;
+	}
+	return players;
+}
+/**
+ * get random player key
+ * @param {Array} keys
+ */
+function _getRandom(keys) {
+	return keys[Math.floor(Math.random() * (keys.length - 0)) + 0];
 }
 
 

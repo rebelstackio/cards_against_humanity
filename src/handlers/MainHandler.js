@@ -26,10 +26,7 @@ const MatchDefaultState = {
 	selectedCardsLimit: 2,
 	awesomePoints: 0,
 	selectedCardIds: [],
-	czarCard: {
-		text: "But wait, there's more! If you order _ in the next 15 minutes, we'll throw in _ absolutely free!",
-		pick: 2
-	}
+	czarCard: ''
 }
 export default {
 	MainDefaultState,
@@ -89,6 +86,9 @@ export default {
 			state.Match.hand = state.Match.players[state.Main.user.uid].hand
 			if (state.Match.isHost) {
 				HostApi.setHand(state.Match.id,state.Match.players, state.Match.pool)
+			}
+			if (state.Match.czarCard) {
+				state.Match.selectedCardsLimit = state.Match.usedDeck.blackCards[state.Match.czarCard].pick;
 			}
 			return { newState: state }
 		},
