@@ -1,8 +1,8 @@
 import { Div, Span, P } from '@rebelstack-io/metaflux';
 
 function DrawCardPopup () {
-	const { czarCard: { text }, hand, selectedCardIds} = global.storage.getState().Match;
-	const selectedCards = selectedCardIds.map(id => hand[id]);
+	const { czarCard: { text }, usedDeck: { whiteCards }, selectedCardIds} = global.storage.getState().Match;
+	const selectedCards = selectedCardIds.map(id => whiteCards[id]);
 	let fullText = text;
 
 	for (let i = 0; i < selectedCards.length; i++) {

@@ -86,8 +86,8 @@ export default {
 			state.Match.isHost = data.id === state.Main.user.uid;
 			state.Match = Object.assign({}, state.Match, data)
 			state.Match.usedDeck = action.deck;
+			state.Match.hand = state.Match.players[state.Main.user.uid].hand
 			if (state.Match.isHost) {
-				/// todo write db
 				HostApi.setHand(state.Match.id,state.Match.players, state.Match.pool)
 			}
 			return { newState: state }

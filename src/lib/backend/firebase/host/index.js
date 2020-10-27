@@ -1,5 +1,11 @@
 const COLLECTION = 'rooms';
-
+/**
+ * Set the hand for every player
+ * @param {String} id Room id
+ * @param {Object} players Players object
+ * @param {Object} pool object of available cards
+ * @param {*} db firebase reference
+ */
 const setHand = function _setPlayers(id, players, pool, db = firebase.firestore()) {
 	Object.keys(players).forEach(_k => {
 		let pl = players[_k];
@@ -21,9 +27,6 @@ const setHand = function _setPlayers(id, players, pool, db = firebase.firestore(
 		},
 		{ merge: true } // update instead of overwrite
 	);
-}
-function _getLastFromPool(pool) {
-	return pool.whiteCards.pl
 }
 /**
  * Get initial pool with all cards
@@ -53,8 +56,15 @@ function _shufflePool(pool) {
 	return pool;
 }
 
+const startMatch = function _startMatch(id, db = firebase.firestore()) {
+	db.collection(COLLECTION).doc(id).set({
+		status: 'R'
+	}, { merge: true });
+}
+
 
 export default {
 	getFullPool,
-	setHand
+	setHand,
+	startMatch
 }

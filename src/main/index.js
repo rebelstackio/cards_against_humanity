@@ -82,5 +82,23 @@ function _listenRoom(action) {
 		const data = snap.data();
 		const _deck = await getDeck(data.deck)
 		Actions.roomUpdate({ data, deck:_deck });
+		goByStatus(data.status);
 	})
+}
+/**
+ * change dir by the match status
+ * @param {String} status
+ */
+function goByStatus(status) {
+	switch (status) {
+		case 'R':
+			global.router.go('/game/')
+			break;
+		case 'E':
+			global.router.go('/summary/');
+			break;
+		default:
+			global.router.go('/waiting_room/');
+			break;
+	}
 }

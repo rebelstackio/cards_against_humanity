@@ -1,21 +1,27 @@
-import { MetaComponent } from '@rebelstack-io/metaflux';
+import { MetaComponent, Div } from '@rebelstack-io/metaflux';
 import cahCard from '../../components/card';
 import '../../handlers';
+
+const UPDATE_EV = 'MATCH_UPDATE';
 
 class Hand extends MetaComponent {
 	constructor () {
 		super(global.storage);
 	}
 	render () {
-		this.content = document.createElement('div');
+		this.content = Div({});
 		this.cards = [];
-		const { hand } = this.storage.getState().Match;
-		for (let i = 0; i < hand.length; i++) {
-			const cardNode = new cahCard(hand[i], 'white', i);
-			this.cards.push(cardNode);
-			this.content.appendChild(cardNode);
-		}
-		return this.content;
+		return this.content
+		.onStoreEvent(UPDATE_EV, (state, that) => {
+			let hand  = state.Match.hand.split(',');
+			const { whiteCards } = state.Match.usedDeck;
+			//console.log(state.Match);
+			for (let i = 0; i < hand.length; i++) {
+				const cardNode = new cahCard(whiteCards[hand[i]], 'white', hand[i]);
+				this.cards.push(cardNode);
+				this.content.appendChild(cardNode);
+			}
+		})
 	}
 	tagCard () {
 		const { selectedCardIds } = this.storage.getState().Match;
