@@ -11,18 +11,25 @@ class Hand extends MetaComponent {
 	render () {
 		this.content = Div({});
 		this.cards = [];
+		this._getContent()
 		return this.content
-		.onStoreEvent(UPDATE_EV, (state, that) => {
-			let hand  = state.Match.hand.split(',');
-			const { whiteCards } = state.Match.usedDeck;
-			//console.log(state.Match);
-			for (let i = 0; i < hand.length; i++) {
-				const cardNode = new cahCard(whiteCards[hand[i]], 'white', hand[i]);
-				this.cards.push(cardNode);
-				this.content.appendChild(cardNode);
-			}
+		.onStoreEvent(UPDATE_EV, () => {
+			this._getContent();
 		})
 	}
+
+	_getContent() {
+		let hand = this.storage.getState().Match.hand.split(',');
+		const { whiteCards } = this.storage.getState().Match.usedDeck;
+		this.content.innerHTML = '';
+		//console.log(state.Match);
+		for (let i = 0; i < hand.length; i++) {
+			const cardNode = new cahCard(whiteCards[hand[i]], 'white', hand[i]);
+			this.cards.push(cardNode);
+			this.content.appendChild(cardNode);
+		}
+	}
+
 	tagCard () {
 		const { selectedCardIds } = this.storage.getState().Match;
 

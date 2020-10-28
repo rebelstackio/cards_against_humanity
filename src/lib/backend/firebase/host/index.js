@@ -68,7 +68,7 @@ const startMatch = function _startMatch(id, players, pool, db = firebase.firesto
 	pool.blackCards.join();
 	db.collection(COLLECTION).doc(id).set({
 		status: 'R',
-		rounds: [{ whiteCards: [], winner: {} }],
+		rounds: [{ whiteCards: {}, winner: {} }],
 		players,
 		czarCard,
 		pool

@@ -29,5 +29,8 @@ export default {
 	},
 	roomJoined: (props) => {
 		_dispatch('MATCH_JOINED', props)
+	},
+	closePopUp: () => {
+		_dispatch('CLOSE_POPUP');
 	}
 }

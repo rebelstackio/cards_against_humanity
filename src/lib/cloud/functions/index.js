@@ -20,20 +20,25 @@ exports.submitTurn = functions.https.onCall(async (data, context) => {
 	if (doc.exists) {
 		let _data = doc.data();
 		_data.players[user.uid].status = 'R';// set Ready
-		const defaultRound = { whiteCards: [], winner: {} }
-		const lastRound = _data.rounds[_data.rounds.lenght - 1] || Array().push(defaultRound)
+		let hand = _data.players[user.uid].hand
+		for (let i=0; i < submits.length; i++) {
+			hand = hand.replace(new RegExp(`(,${submits[i]},)-|(${submits[i]},)|(,${submits[i]}$)`,'g'), '');
+		}
+		const defaultRound = { whiteCards: {}, winner: {} }
+		const lastRound = _data.rounds[Object.keys(_data.rounds).pop()];
 		if(!isCzar) {
-			lastRound.whiteCards.push({[user.uid]: submits});
+			lastRound.whiteCards[user.uid] = submits;
 		} else {
 			lastRound.winner = { [winnerId]: submits }
 			_data.rounds.push(defaultRound)
 		}
+		_data.players[user.uid].hand = hand;
 		await ref.set(_data)
 		return { success: 'Submited turn' }
 	} else {
 		return { error: 'Unexpected Error, in match id: ' + id }
 	}
-})
+});
 /**
  * Join Game Enpoint
  * @param {Object} data { id: 'room_id', password: 'non-mandatory' }

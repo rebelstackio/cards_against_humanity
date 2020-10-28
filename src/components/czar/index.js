@@ -16,7 +16,7 @@ class Czar extends MetaComponent {
 
 		content.append(this.blackCard);
 		content.append(scoreBoard);
-
+		this.updateContent();
 		return content;
 	}
 
@@ -34,6 +34,16 @@ class Czar extends MetaComponent {
 		this.blackCard.innerHTML = `<div>${newText}</div>`;
 	}
 
+	updateContent () {
+		const { usedDeck, czarCard } = this.storage.getState().Match;
+		if(usedDeck.blackCards[czarCard]) {
+			const { text } = usedDeck.blackCards[czarCard];
+			this.blackCard.innerHTML = `<div>${text}</div>`;
+		} else {
+			this.blackCard.innerHTML = `<div></div>`;
+		}
+	}
+
 	handleStoreEvents () {
 		return {
 			'INCREASE_SELECTED_CARDS': _ => {
@@ -46,9 +56,7 @@ class Czar extends MetaComponent {
 				this.onSelectedCardsChange();
 			},
 			'MATCH_UPDATE': _ => {
-				const { usedDeck, czarCard } = this.storage.getState().Match;
-				const { text } = usedDeck.blackCards[czarCard];
-				this.blackCard.innerHTML = `<div>${text}</div>`;
+				this.updateContent();
 			}
 		}
 	}

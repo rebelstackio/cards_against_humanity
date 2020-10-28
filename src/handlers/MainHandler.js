@@ -20,13 +20,13 @@ const MatchDefaultState = {
 		iconUrl: false,
 		username: 'Pablo'
 	},
-	hand: [
-	],
+	hand: '',
 	selectedCards: 0,
 	selectedCardsLimit: 2,
 	awesomePoints: 0,
 	selectedCardIds: [],
-	czarCard: ''
+	czarCard: '',
+	usedDeck: { whiteCards: [], blackCards: {} }
 }
 export default {
 	MainDefaultState,

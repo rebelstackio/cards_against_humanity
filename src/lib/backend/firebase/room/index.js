@@ -105,9 +105,26 @@ const joinRoom = function _joinRoom(id, password, callback) {
 		callback(res.data);
 	})
 }
-
+/**
+ * Listen to the room changes
+ * @param {String} id RoomID
+ * @param {CallableFunction} callback handler callback
+ * @param {*} db Firestore reference
+ */
 const listenRoom = function _listenRoom(id, callback, db = firebase.firestore()) {
 	db.collection(COLLECTION).doc(id).onSnapshot(callback)
+}
+/**
+ * Submit turn to cloud function
+ * @param {String} id RoomID
+ * @param {Boolean} isCzar is czar turn
+ * @param {Array} submits Array of white cards
+ * @param {String} winnerId Id for the winner of the round (czar only)
+ * @param {*} db Firestore Reference
+ */
+const submitTurn = function _submitTurn(id, isCzar, submits, winnerId, db = firebase.firestore()) {
+	const submitTurn = firebase.functions().httpsCallable('submitTurn');
+	return submitTurn({ id, isCzar, submits, winnerId })
 }
 
 export default {
@@ -117,5 +134,6 @@ export default {
 	listRooms,
 	searchRoom,
 	joinRoom,
-	listenRoom
+	listenRoom,
+	submitTurn
 };
