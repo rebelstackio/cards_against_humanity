@@ -16,17 +16,14 @@ const MatchDefaultState = {
 
 	},
 	isCzar: false,
-	czarData: {
-		iconUrl: false,
-		username: 'Pablo'
-	},
 	hand: '',
 	selectedCards: 0,
 	selectedCardsLimit: 2,
 	awesomePoints: 0,
 	selectedCardIds: [],
 	czarCard: '',
-	usedDeck: { whiteCards: [], blackCards: {} }
+	usedDeck: { whiteCards: [], blackCards: {} },
+	rounds: []
 }
 export default {
 	MainDefaultState,

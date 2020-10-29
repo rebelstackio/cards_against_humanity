@@ -33,6 +33,12 @@ $cah-card-height: 200px;
 	}
 }
 
+.hidden {
+	opacity: 0;
+	visibility: hidden;
+	display: none;
+}
+
 /*--------IMPORT SCSS COMPONENT-----------------------------------------*/
 @import './table-top';
 @import './cat-banner';
@@ -47,6 +53,7 @@ $cah-card-height: 200px;
 @import './waiting-room';
 @import './snackbar';
 @import './czar-view.scss';
+@import './submits-popup.scss';
 
 /*------------------------------------------------------------------------*/
 
