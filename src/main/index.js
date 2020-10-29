@@ -18,6 +18,7 @@ import { signOut, onAuthStateChanged } from '../../src/lib/backend/firebase/auth
 import RoomApi from '../lib/backend/firebase/room';
 import Actions from '../handlers/actions';
 import { getDeck } from  '../util';
+import { NextRound } from '../components/NextRound';
 
 global.router = new Router();
 if ( location.hash === '' ) global.router.go( '/lobby/host/' );
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function _setContent(Content) {
 	document.body.innerHTML = '';
-	document.body.appendChild(Content);
+	document.body.append(Content, NextRound());
 }
 
 global.storage.on('LOGOUT', () => {

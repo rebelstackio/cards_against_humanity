@@ -65,7 +65,8 @@ const startMatch = function _startMatch(id, players, pool, db = firebase.firesto
 	players = _getCzar(players);
 	pool.blackCards = pool.blackCards.split(',')
 	const czarCard = pool.blackCards.pop();
-	pool.blackCards.join();
+	pool.blackCards = pool.blackCards.join();
+	console.log(pool);
 	db.collection(COLLECTION).doc(id).set({
 		status: 'R',
 		rounds: [{ whiteCards: {}, winner: {} }],
@@ -105,9 +106,30 @@ function _getRandom(keys) {
 	return keys[Math.floor(Math.random() * (keys.length - 0)) + 0];
 }
 
+/**
+ * Set next round
+ * @param {String} id RoomID
+ * @param {Array} rounds current rounds
+ * @param {Object} players players Objet
+ * @param {*} db Firestore reference
+ */
+const NextRound = function _nextRound(id, rounds, players, pool, db = firebase.firestore()) {
+	players = _getCzar(players);
+	rounds.push({ whiteCards: {}, winner: {} });
+	pool.blackCards = pool.blackCards.split(',')
+	const czarCard = pool.blackCards.pop();
+	pool.blackCards = pool.blackCards.join();
+	db.collection(COLLECTION).doc(id).set({
+		players,
+		rounds,
+		pool,
+		czarCard
+	}, { merge: true }) // update and not overwrite
+}
 
 export default {
 	getFullPool,
 	setHand,
-	startMatch
+	startMatch,
+	NextRound,
 }

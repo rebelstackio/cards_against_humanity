@@ -24,13 +24,12 @@ exports.submitTurn = functions.https.onCall(async (data, context) => {
 		for (let i=0; i < submits.length; i++) {
 			hand = hand.replace(new RegExp(`(,${submits[i]},)-|(${submits[i]},)|(,${submits[i]}$)`,'g'), '');
 		}
-		const defaultRound = { whiteCards: {}, winner: {} }
 		const lastRound = _data.rounds[Object.keys(_data.rounds).pop()];
 		if(!isCzar) {
 			lastRound.whiteCards[user.uid] = submits;
 		} else {
+			_data.players[winnerId].score++;
 			lastRound.winner = { [winnerId]: submits }
-			_data.rounds.push(defaultRound)
 		}
 		_data.players[user.uid].hand = hand;
 		await ref.set(_data)

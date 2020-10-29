@@ -14,7 +14,7 @@ $cah-lightest: #FBF6E5;
 $cah-card-width: 130px;
 $cah-card-height: 200px;
 /*----------------------------------------------*/
-
+/*--------------------COMMONDS----------------------------------------*/
 .btn.black {
 	font-size: 18px;
 	height: 45px;
@@ -37,6 +37,28 @@ $cah-card-height: 200px;
 	opacity: 0;
 	visibility: hidden;
 	display: none;
+}
+
+.next-turn {
+	position: fixed;
+	top: 10px;
+	right: 0;
+	z-index: 1001;
+	background-color: #fff;
+	width: 200px;
+	display: grid;
+	grid-auto-flow: column;
+	color: black;
+	align-items: center;
+	padding: 10px 0;
+	padding-left: 10px;
+	border-radius: 4px 0 0 4px;
+	box-shadow: 0 0 4px 2px black;
+	transition: all .5s ease-in-out;
+	transform: translate(0%, 0%);
+	&.away {
+		transform: translate(100%,0);
+	}
 }
 
 /*--------IMPORT SCSS COMPONENT-----------------------------------------*/

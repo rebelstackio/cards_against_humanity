@@ -1,7 +1,7 @@
 import { Div, Span, P } from '@rebelstack-io/metaflux';
 
 const PreviewSubmit = (props) => {
-	const { fullText, footer } = props;
+	const { fullText, footer, isWinner } = props;
 	let rawText = fullText.replace(/(<span>|<\/span>)/g, '');
 	return Div({
 		className: "draw-card-body"
@@ -23,7 +23,8 @@ const PreviewSubmit = (props) => {
 			className: 'draw-card-popup',
 			style: 'font-size: 20px;'
 		}, fullText),
-		_getFooter(footer)
+		_getFooter(footer),
+		isWinner ? Span({ className: 'fas fa-star' }) : ''
 	]);
 }
 
@@ -35,9 +36,11 @@ function _getFooter(footer) {
 		Div({
 			onclick: footer.submitHandler,
 		}, [Span({className: "fa fa-check-circle"}), Span(false, footer.submit)]),
-		Div({
+		footer.cancel
+		? Div({
 			onclick: footer.cancelHandler,
 		}, [Span({className: "fa fa-times-circle"}), Span(false, footer.cancel)])
+		: ''
 	])
 }
 

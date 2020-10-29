@@ -49,7 +49,7 @@ function _getSubmits() {
 		const wc = lastRound.whiteCards[_k];
 		if(isReady || _k === uid) {
 			return Div({ className: 'submits-wrapper' }, () => {
-				return wc.map((id) => _getTextCard(id))
+				return _getTextCard(wc,_k)//wc.map((id) => _getTextCard(id, _k))
 			})
 		} else {
 			return Div({ className: 'submits-wrapper' }, () => {
@@ -70,7 +70,7 @@ function _getLoadingCard(id, i) {
  * Get a preview for a card
  * @param {Array} submits Array of played cards
  */
-function _getTextCard(submits) {
+function _getTextCard(submits, pid) {
 	const { usedDeck: { whiteCards, blackCards }, czarCard } = _storage.getState().Match;
 	let { text, pick } = blackCards[czarCard];
 	let fullText = text;
@@ -83,7 +83,13 @@ function _getTextCard(submits) {
 	} else {
 		fullText += `<span>${whiteCards[submits[0]]}</span>`
 	}
-	return PreviewSubmit({ fullText });
+	return PreviewSubmit({ fullText, isWinner: _checkWinner(pid) });
+}
+
+function _checkWinner(pid) {
+	const { rounds } = _storage.getState().Match;
+	const lastRound = rounds[rounds.length - 1];
+	return lastRound.winner[pid] !== undefined;
 }
 /**
  * Check if every non czar player is ready
