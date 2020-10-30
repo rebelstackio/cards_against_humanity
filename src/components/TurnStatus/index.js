@@ -5,6 +5,7 @@ const UPDATE_EV = 'MATCH_UPDATE';
 
 const TurnStatus = () => Div({ className: 'turn-viewer' }, _getTurnContent())
 	.onStoreEvent(UPDATE_EV, (_, that) => {
+		that.innerHTML = '';
 		that.append(..._getTurnContent())
 	})
 

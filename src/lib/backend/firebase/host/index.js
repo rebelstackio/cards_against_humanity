@@ -75,25 +75,36 @@ const startMatch = function _startMatch(id, players, pool, db = firebase.firesto
 		pool
 	}, { merge: true });
 }
-
+/**
+ * get next czar, if there is no czar get random one
+ * Due to this is call at the end of the round also reset the status for each player to picking
+ * @param {Object} players
+ */
 function _getCzar(players) {
 	let isFirst = true;
 	const keys = Object.keys(players);
-	keys.forEach((_k, i) => {
+	for (let i in keys) {
+		i = parseInt(i);
+		let _k = keys[i];
 		const pl = players[_k];
+		//reset status
 		players[_k].status = 'P';
 		if (pl.isCzar) {
+			console.log('isCzar ', pl.displayName);
 			players[_k].isCzar = false;
 			isFirst = false;
 			if ((i + 1) === keys.length) {
 				// is the last, start over
 				players[keys[0]].isCzar = true;
 			} else {
+				console.log(i + 1, keys.length);
 				players[keys[i + 1]].isCzar = true;
 			}
 		}
-	})
+		i++;
+	}
 	if (isFirst) {
+		console.log('random czar');
 		players[_getRandom(keys)].isCzar = true;
 	}
 	return players;

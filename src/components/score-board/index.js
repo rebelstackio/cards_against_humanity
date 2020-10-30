@@ -32,8 +32,10 @@ class ScoreBoard extends MetaComponent {
 	}
 
 	fillCounters () {
-		const { selectedCards, selectedCardsLimit, awesomePoints, isCzar } = this.storage.getState().Match;
-		this.scoreCounter.textContent = `Awesome Points: ${awesomePoints}`;
+		const { user: { uid } } = this.storage.getState().Main;
+		const { selectedCards, selectedCardsLimit, players } = this.storage.getState().Match;
+		const score = players[uid] ? players[uid].score : 0;
+		this.scoreCounter.textContent = `Awesome Points: ${ score }`;
 		this.pickedCardCounter.textContent = `Cards picked: ${selectedCards}/${selectedCardsLimit}`;
 	}
 
@@ -46,6 +48,9 @@ class ScoreBoard extends MetaComponent {
 				this.fillCounters();
 			},
 			'CANCEL_SELECTION': _ => {
+				this.fillCounters();
+			},
+			'MATCH_UPDATE': () => {
 				this.fillCounters();
 			}
 		};

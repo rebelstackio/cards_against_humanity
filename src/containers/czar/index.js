@@ -9,6 +9,11 @@ import RoomApi from '../../lib/backend/firebase/room';
 const _storage = global.storage;
 const UPDATE_EV = 'MATCH_UPDATE';
 
+_storage.on(UPDATE_EV, () => {
+	const { isCzar } = _storage.getState().Match
+	if(!isCzar) global.router.go('/game/');
+})
+
 const Czar = () => Div({
 	className: 'czar-top'
 }, [
@@ -19,12 +24,16 @@ const Czar = () => Div({
 ]);
 
 function _getBlackCard() {
-	const card = new Card('', 'black', 0)
+	const card = new Card(_getBlackCardText(), 'black', 0)
 	return card.onStoreEvent(UPDATE_EV, (_, that) => {
-		let { czarCard, usedDeck} = _storage.getState().Match;
-		let { text } = usedDeck.blackCards[czarCard];
-		that.querySelector('div').innerHTML = text
+		that.querySelector('div').innerHTML = _getBlackCardText();
 	});
+}
+
+function _getBlackCardText() {
+	let { czarCard, usedDeck} = _storage.getState().Match;
+	let text = usedDeck.blackCards[czarCard] ? usedDeck.blackCards[czarCard].text : '';
+	return text;
 }
 /*----------------------------------------------------------------------------------- */
 const WhiteSubmits = () => Div({ className: 'submits' }, () => {

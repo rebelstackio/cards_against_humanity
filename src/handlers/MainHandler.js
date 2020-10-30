@@ -77,10 +77,12 @@ export default {
 		},
 		'MATCH_UPDATE': (action, state) => {
 			const { data } = action;
-			state.Match.isHost = data.id === state.Main.user.uid;
+			const { uid } = state.Main.user
+			state.Match.isHost = data.id === uid;
 			state.Match = Object.assign({}, state.Match, data)
 			state.Match.usedDeck = action.deck;
-			state.Match.hand = state.Match.players[state.Main.user.uid].hand
+			state.Match.hand = state.Match.players[uid].hand;
+			state.Match.isCzar = state.Match.players[uid].isCzar;
 			if (state.Match.isHost) {
 				HostApi.setHand(state.Match.id,state.Match.players, state.Match.pool)
 			}

@@ -58,7 +58,9 @@ global.storage.on('LOGOUT', () => {
 		console.error('Logout', error);
 	});
 });
-
+/**
+ *
+ */
 onAuthStateChanged( (user) => {
 	let _user = {};
 	if(user) {
@@ -74,7 +76,10 @@ onAuthStateChanged( (user) => {
 
 global.storage.on('MATCH_CREATED',_listenRoom);
 global.storage.on('MATCH_JOINED',_listenRoom)
-
+/**
+ * Listen to room changes
+ * @param {*} action
+ */
 function _listenRoom(action) {
 	console.log(action);
 	const state = action.newState;
