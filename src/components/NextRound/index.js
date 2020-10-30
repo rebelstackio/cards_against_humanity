@@ -8,8 +8,8 @@ const NextRound = () => Div({className: 'next-turn away'},[
 	Button({
 		className: 'btn black',
 		onclick: () => {
-			const { id, rounds, players, pool } = _storage.getState().Match;
-			HostApi.NextRound(id, rounds, players, pool)
+			const { id, rounds, players, pool, winningScore } = _storage.getState().Match;
+			HostApi.NextRound(id, rounds, players, pool, winningScore)
 		}
 	}, 'GO!')
 ]).onStoreEvent('MATCH_UPDATE', (state, that) => {

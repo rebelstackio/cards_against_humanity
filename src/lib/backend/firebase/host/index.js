@@ -124,7 +124,7 @@ function _getRandom(keys) {
  * @param {Object} players players Objet
  * @param {*} db Firestore reference
  */
-const NextRound = function _nextRound(id, rounds, players, pool, db = firebase.firestore()) {
+const NextRound = function _nextRound(id, rounds, players, pool, winningScore, db = firebase.firestore()) {
 	players = _getCzar(players);
 	rounds.push({ whiteCards: {}, winner: {} });
 	pool.blackCards = pool.blackCards.split(',')
@@ -134,8 +134,22 @@ const NextRound = function _nextRound(id, rounds, players, pool, db = firebase.f
 		players,
 		rounds,
 		pool,
-		czarCard
+		czarCard,
+		status: _checkEndOfMatch(players, winningScore) ? 'E' : 'R'
 	}, { merge: true }) // update and not overwrite
+}
+/**
+ * Return true if a player have the score limit
+ * @param {Object} players Players object
+ * @param {Number} scoreLimit limit the score can get
+ */
+function _checkEndOfMatch(players, scoreLimit) {
+	const keys = Object.keys(players);
+	for(let i=0; i < keys.length; i++) {
+		const pl = players[keys[i]];
+		if (pl.score >= scoreLimit) return true;
+	}
+	return false;
 }
 
 export default {

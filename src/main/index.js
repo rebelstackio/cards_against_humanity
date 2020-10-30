@@ -19,6 +19,8 @@ import RoomApi from '../lib/backend/firebase/room';
 import Actions from '../handlers/actions';
 import { getDeck } from  '../util';
 import { NextRound } from '../components/NextRound';
+import { LoadignModal } from '../components/LoadingModal';
+import { SnackBar } from '../components/SnackBar';
 
 global.router = new Router();
 if ( location.hash === '' ) global.router.go( '/lobby/host/' );
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function _setContent(Content) {
 	document.body.innerHTML = '';
-	document.body.append(Content, NextRound());
+	document.body.append(Content, NextRound(), LoadignModal(), SnackBar());
 }
 
 global.storage.on('LOGOUT', () => {

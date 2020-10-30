@@ -32,5 +32,8 @@ export default {
 	},
 	closePopUp: () => {
 		_dispatch('CLOSE_POPUP');
+	},
+	cancelSelection: () => {
+		_dispatch('CANCEL_SELECTION');
 	}
 }

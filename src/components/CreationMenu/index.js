@@ -1,5 +1,4 @@
 import { Div, H3, Label, Input, Button, Select, Option} from '@rebelstack-io/metaflux';
-import { SnackBar } from '../SnackBar';
 import RoomApi from '../../lib/backend/firebase/room';
 import Actions from '../../handlers/actions';
 import HostApi from "../../lib/backend/firebase/host/index";
@@ -36,7 +35,6 @@ const CreationMenu = () =>(
 		Label({for: 'password'}, 'Password'),
 		_pass,
 		_Actions,
-		SnackBar()
 	])
 );
 

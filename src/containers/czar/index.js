@@ -1,8 +1,7 @@
-import { Div, Img, Span } from '@rebelstack-io/metaflux';
+import { Div, Span, H3 } from '@rebelstack-io/metaflux';
 import Card from '../../components/card';
 import { TurnStatus } from '../../components/TurnStatus';
 import { PreviewSubmit } from '../../components/PreviewSubmit';
-import { LoadignModal } from '../../components/LoadingModal';
 import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
 
@@ -10,17 +9,17 @@ const _storage = global.storage;
 const UPDATE_EV = 'MATCH_UPDATE';
 
 _storage.on(UPDATE_EV, () => {
-	const { isCzar } = _storage.getState().Match
+	const { isCzar, status } = _storage.getState().Match
 	if(!isCzar) global.router.go('/game/');
+	if (status === 'E') global.router.go('/summary/');
 })
 
 const Czar = () => Div({
 	className: 'czar-top'
 }, [
 	_getBlackCard(),
-	TurnStatus(),
-	WhiteSubmits(),
-	LoadignModal()
+	CzarHeader(),
+	WhiteSubmits()
 ]);
 
 function _getBlackCard() {
@@ -35,6 +34,12 @@ function _getBlackCardText() {
 	let text = usedDeck.blackCards[czarCard] ? usedDeck.blackCards[czarCard].text : '';
 	return text;
 }
+
+const CzarHeader = () => Div({ className: 'czar-header' }, [
+	H3({}, `You're the czar`),
+	TurnStatus()
+])
+
 /*----------------------------------------------------------------------------------- */
 const WhiteSubmits = () => Div({ className: 'submits' }, () => {
 	let isReadyToShow = _chekcReady();
@@ -80,7 +85,7 @@ function _getTextCard(submits, pid) {
 	const { usedDeck: { whiteCards, blackCards }, czarCard, id } = _storage.getState().Match;
 	let { text, pick } = blackCards[czarCard];
 	let fullText = text;
-	let isQuestion = (pick < 2) && fullText.match(/___/g) === null;
+	let isQuestion = fullText.match(/___/g) === null;
 	let isRoundOver = _checkIsWinner();
 	if (!isQuestion) {
 		for (let i = 0; i < submits.length; i++) {
@@ -88,8 +93,10 @@ function _getTextCard(submits, pid) {
 			fullText = fullText.replace(/___/, `<span>${whiteCards[subm]}</span>`);
 		}
 	} else {
-		console.log(submits)
-		fullText += `<span>${whiteCards[submits[0]]}</span>`
+		for (let i = 0; i < submits.length; i++) {
+			let subm = submits[i];
+			fullText += `<span>${whiteCards[subm]}</span>`
+		}
 	}
 	return PreviewSubmit({
 		fullText,

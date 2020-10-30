@@ -74,14 +74,17 @@ function _getTextCard(submits, pid) {
 	const { usedDeck: { whiteCards, blackCards }, czarCard } = _storage.getState().Match;
 	let { text, pick } = blackCards[czarCard];
 	let fullText = text;
-	let isQuestion = (pick < 2) && fullText.match(/___/g) === null;
+	let isQuestion = fullText.match(/___/g) === null;
 	if (!isQuestion) {
 		for (let i = 0; i < submits.length; i++) {
 			let subm = submits[i];
 			fullText = fullText.replace(/___/, `<span>${whiteCards[subm]}</span>`);
 		}
 	} else {
-		fullText += `<span>${whiteCards[submits[0]]}</span>`
+		for (let i = 0; i < submits.length; i++) {
+			let subm = submits[i];
+			fullText += `<span>${whiteCards[subm]}</span>`
+		}
 	}
 	return PreviewSubmit({ fullText, isWinner: _checkWinner(pid) });
 }

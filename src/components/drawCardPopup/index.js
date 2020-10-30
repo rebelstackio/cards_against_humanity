@@ -1,6 +1,7 @@
 import { Div, Span, P } from '@rebelstack-io/metaflux';
 import RoomApi from '../../lib/backend/firebase/room';
 import Actions from '../../handlers/actions';
+import actions from '../../handlers/actions';
 
 const _storage = global.storage;
 
@@ -9,13 +10,15 @@ function DrawCardPopup () {
 	const selectedCards = selectedCardIds.map(id => whiteCards[id]);
 	let { text, pick } = blackCards[czarCard];
 	let fullText = text;
-	let isQuestion = (pick < 2) && fullText.match(/___/g) === null;
+	let isQuestion = fullText.match(/___/g) === null;
 	if (!isQuestion) {
 		for (let i = 0; i < selectedCards.length; i++) {
 			fullText = fullText.replace(/___/, `<span>${selectedCards[i]}</span>`);
 		}
 	} else {
-		fullText += `<span>${selectedCards[0]}</span>`
+		for (let i = 0; i < selectedCards.length; i++) {
+			fullText += `<span>${selectedCards[i]}</span>`
+		}
 	}
 	let rawText = fullText.replace(/(<span>|<\/span>)/g, '');
 	return Div({
@@ -44,10 +47,13 @@ function DrawCardPopup () {
 			Div({
 				onclick: () => {
 					const { id, selectedCardIds } = _storage.getState().Match;
+					Actions.loadingOn({ msg: 'submitting your stupid card' })
 					RoomApi.submitTurn(id, false, selectedCardIds)
 					.then(res => {
 						console.log(res.data);
+						Actions.cancelSelection();
 						Actions.closePopUp();
+						Actions.loadingOff();
 					})
 				}
 			}, [Span({className: "fa fa-check-circle"}), Span(false, "Play Card")]),
