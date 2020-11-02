@@ -21,6 +21,7 @@ import { getDeck } from  '../util';
 import { NextRound } from '../components/NextRound';
 import { LoadignModal } from '../components/LoadingModal';
 import { SnackBar } from '../components/SnackBar';
+import { Summary } from '../containers/summary';
 
 global.router = new Router();
 if ( location.hash === '' ) global.router.go( '/lobby/host/' );
@@ -40,6 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	})
 	.on(/czar/, () => {
 		_setContent( Czar() )
+	})
+	.on(/summary/, () => {
+		_setContent( Summary() )
 	})
 
 });
@@ -93,7 +97,7 @@ function _listenRoom(action) {
 		Actions.roomUpdate({ data, deck:_deck });
 		const {uid} = global.storage.getState().Main.user;
 		const player = data.players[uid];
-		if (player.isCzar) {
+		if (player.isCzar && data.status !== 'E') {
 			global.router.go('/czar/')
 		} else if (isStatusChange) {
 			goByStatus(data.status);

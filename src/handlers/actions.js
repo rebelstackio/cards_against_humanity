@@ -35,5 +35,8 @@ export default {
 	},
 	cancelSelection: () => {
 		_dispatch('CANCEL_SELECTION');
+	},
+	leaveRoom: () => {
+		_dispatch('LEAVE_ROOM')
 	}
 }

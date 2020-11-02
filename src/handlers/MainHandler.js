@@ -95,6 +95,12 @@ export default {
 			const { id } = action
 			state.Match.id = id;
 			return { newState: state }
+		},
+		'LEAVE_ROOM': (_, state) => {
+			localStorage.removeItem('m_joined');
+			global.router.go('/lobby/host/');
+			location.reload();
+			return { newState: state }
 		}
 	}
 };

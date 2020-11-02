@@ -126,6 +126,14 @@ const submitTurn = function _submitTurn(id, isCzar, submits, winnerId, db = fire
 	const submitTurn = firebase.functions().httpsCallable('submitTurn');
 	return submitTurn({ id, isCzar, submits, winnerId })
 }
+/**
+ * leave room API
+ * @param {String} id RoomID
+ */
+const leaveRoom = function _leaveRoom(id) {
+	const leaveMatch = firebase.functions().httpsCallable('leaveMatch');
+	return leaveMatch({ id })
+}
 
 export default {
 	STATUS,
@@ -135,5 +143,6 @@ export default {
 	searchRoom,
 	joinRoom,
 	listenRoom,
-	submitTurn
+	submitTurn,
+	leaveRoom
 };

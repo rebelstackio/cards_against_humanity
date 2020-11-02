@@ -9,9 +9,8 @@ const _storage = global.storage;
 const UPDATE_EV = 'MATCH_UPDATE';
 
 _storage.on(UPDATE_EV, () => {
-	const { isCzar, status } = _storage.getState().Match
+	const { isCzar } = _storage.getState().Match
 	if(!isCzar) global.router.go('/game/');
-	if (status === 'E') global.router.go('/summary/');
 })
 
 const Czar = () => Div({

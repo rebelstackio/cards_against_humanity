@@ -57,7 +57,7 @@ $cah-card-height: 200px;
 	transition: all .5s ease-in-out;
 	transform: translate(0%, 0%);
 	&.away {
-		transform: translate(100%,0);
+		transform: translate(103%,0);
 	}
 }
 
@@ -76,6 +76,7 @@ $cah-card-height: 200px;
 @import './snackbar';
 @import './czar-view.scss';
 @import './submits-popup.scss';
+@import './summary.scss';
 
 /*------------------------------------------------------------------------*/
 

@@ -61,6 +61,26 @@ exports.joinGame = functions.https.onCall(async (data, context) => {
 	}
 });
 /**
+ * Leave match API
+ * @param {Object} data { id: 'room-id' }
+ */
+exports.leaveMatch = functions.https.onCall(async (data, context) => {
+	const { id } = data;
+	const ref = _DB.collection('rooms').doc(id);
+	const doc = await ref.get();
+	if (!context) return { error: 'Need to be loged in' }
+	const user = _getUserFromContext(context)
+	if (doc.exists) {
+		let _data = doc.data();
+		_data.players[user.uid].status = 'D';
+		_data.nplayers--;
+		await ref.set(_data)
+		return { success: 'leave room' }
+	} else {
+		return { error: 'no match with the id: ' + id }
+	}
+})
+/**
  * get a nice object from the firebase auth context
  * @param {*} context Firebase auth context
  */

@@ -69,7 +69,7 @@ const startMatch = function _startMatch(id, players, pool, db = firebase.firesto
 	console.log(pool);
 	db.collection(COLLECTION).doc(id).set({
 		status: 'R',
-		rounds: [{ whiteCards: {}, winner: {} }],
+		rounds: [{ whiteCards: {}, winner: {}, czarCard }],
 		players,
 		czarCard,
 		pool
@@ -126,9 +126,9 @@ function _getRandom(keys) {
  */
 const NextRound = function _nextRound(id, rounds, players, pool, winningScore, db = firebase.firestore()) {
 	players = _getCzar(players);
-	rounds.push({ whiteCards: {}, winner: {} });
 	pool.blackCards = pool.blackCards.split(',')
 	const czarCard = pool.blackCards.pop();
+	rounds.push({ whiteCards: {}, winner: {}, czarCard });
 	pool.blackCards = pool.blackCards.join();
 	db.collection(COLLECTION).doc(id).set({
 		players,
@@ -151,10 +151,31 @@ function _checkEndOfMatch(players, scoreLimit) {
 	}
 	return false;
 }
+/**
+ * start the match over
+ * @param {String} id RoomID
+ * @param {Object} deck Deck object
+ * @param {*} db Firestore reference
+ */
+const startOver = async function _startOver(id, deck, db = firebase.firestore()) {
+	const ref = db.collection(COLLECTION).doc(id)
+	const doc = await ref.get();
+	let data = doc.data();
+	data.pool = getFullPool(deck);
+	const keys = Object.keys(data.players);
+	data.rounds = [];
+	data.status = 'W';
+	for (let i=0; i < keys.length; i++) {
+		data.players[keys[i]].score = 0;
+		data.players[keys[i]].hand = '';
+	}
+	return ref.set(data);
+}
 
 export default {
 	getFullPool,
 	setHand,
 	startMatch,
 	NextRound,
+	startOver
 }
