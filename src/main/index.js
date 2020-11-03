@@ -96,7 +96,7 @@ function _listenRoom(action) {
 		Actions.roomUpdate({ data, deck:_deck });
 		const {uid} = global.storage.getState().Main.user;
 		const player = data.players[uid];
-		if (player.isCzar && data.status !== 'E') {
+		if (player.isCzar && data.status === 'R') {
 			global.router.go('/czar/')
 		} else {
 			goByStatus(data.status);

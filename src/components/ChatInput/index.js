@@ -1,4 +1,5 @@
 import { Div, Span, Input} from '@rebelstack-io/metaflux';
+import MessagingApi from '../../lib/backend/firebase/messaging';
 
 const _storage = global.storage;
 /**
@@ -30,10 +31,13 @@ function _touchMessage() {
  */
 function _sendMessage(inp) {
 	if(inp.value !== '') {
-		_storage.dispatch({ type: 'SEND_MESSAGE', msg: inp.value })
-		// this is mock TODO: delete this.
+		//_storage.dispatch({ type: 'SEND_MESSAGE', msg: inp.value })
 		const { uid } = _storage.getState().Main.user;
-		_storage.dispatch({ type: 'MESSAGE_ARRIVE' , payload: { message: inp.value, uid }})
+		const { id } = _storage.getState().Match;
+		MessagingApi.sendMessage({ msg: inp.value, uid, id })
+		.then(() => {
+			console.log('message sent');
+		})
 		// clean input
 		inp.placeholder = _getPlaceholder(inp.placeholder);
 		inp.value = '';

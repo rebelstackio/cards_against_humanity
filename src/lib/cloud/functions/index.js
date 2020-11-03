@@ -60,6 +60,25 @@ exports.joinGame = functions.https.onCall(async (data, context) => {
 		return { error: 'No room with that id: ' + id }
 	}
 });
+
+exports.sendMessage = functions.https.onCall(async (data, context) => {
+	const { id, msg } = data;
+	const ref = _DB.collection('rooms').doc(id);
+	const doc = await ref.get();
+	if (!context) return { error: 'Need to be loged in' }
+	const user = _getUserFromContext(context)
+	if(doc.exists) {
+		let _data = doc.data();
+		if (_data.messaging) {
+			_data.messaging[new Date().getTime()] = { msg, uid: user.uid }
+		}
+		await ref.set(_data)
+		return { success: 'Message posted'}
+	} else {
+		return { error: 'No room with that id: ' + id }
+	}
+})
+
 /**
  * Leave match API
  * @param {Object} data { id: 'room-id' }
