@@ -114,7 +114,6 @@ function requestToJoin(id, match) {
 		if(resp.success) {
 			localStorage.setItem('m_joined', id);
 			Actions.roomJoined({ id, deck: match.deck })
-			global.router.go(`/waiting_room/${id}`)
 		}
 		Actions.loadingOff();
 	})

@@ -69,7 +69,6 @@ async function createNew() {
 			Actions.roomCreated({ data });
 			localStorage.setItem('m_joined', uid);
 			Actions.loadingOff();
-			global.router.go(`/waiting_room/${uid}`);
 		}).catch((err) => {
 			console.error('error', err);
 		});

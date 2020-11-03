@@ -63,10 +63,10 @@ function _shufflePool(pool) {
  */
 const startMatch = function _startMatch(id, players, pool, db = firebase.firestore()) {
 	players = _getCzar(players);
+	players = _resetStatus(players);
 	pool.blackCards = pool.blackCards.split(',')
 	const czarCard = pool.blackCards.pop();
 	pool.blackCards = pool.blackCards.join();
-	console.log(pool);
 	db.collection(COLLECTION).doc(id).set({
 		status: 'R',
 		rounds: [{ whiteCards: {}, winner: {}, czarCard }],
@@ -87,8 +87,6 @@ function _getCzar(players) {
 		i = parseInt(i);
 		let _k = keys[i];
 		const pl = players[_k];
-		//reset status
-		players[_k].status = 'P';
 		if (pl.isCzar) {
 			console.log('isCzar ', pl.displayName);
 			players[_k].isCzar = false;
@@ -96,16 +94,29 @@ function _getCzar(players) {
 			if ((i + 1) === keys.length) {
 				// is the last, start over
 				players[keys[0]].isCzar = true;
+				console.log('new czar', players[keys[0]].displayName);
 			} else {
-				console.log(i + 1, keys.length);
+				console.log('new czar', players[keys[i + 1]].displayName);
 				players[keys[i + 1]].isCzar = true;
 			}
+			break;
 		}
 		i++;
 	}
 	if (isFirst) {
 		console.log('random czar');
 		players[_getRandom(keys)].isCzar = true;
+	}
+	return players;
+}
+/**
+ * Reset player to Picking status
+ * @param {Object} players Players object
+ */
+function _resetStatus(players) {
+	const keys = Object.keys(players);
+	for(let i=0; i < keys.length; i++) {
+		players[keys[i]].status = 'P';
 	}
 	return players;
 }
@@ -126,6 +137,7 @@ function _getRandom(keys) {
  */
 const NextRound = function _nextRound(id, rounds, players, pool, winningScore, db = firebase.firestore()) {
 	players = _getCzar(players);
+	players = _resetStatus(players);
 	pool.blackCards = pool.blackCards.split(',')
 	const czarCard = pool.blackCards.pop();
 	rounds.push({ whiteCards: {}, winner: {}, czarCard });

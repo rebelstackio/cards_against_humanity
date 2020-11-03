@@ -87,19 +87,18 @@ global.storage.on('MATCH_JOINED',_listenRoom)
  * @param {*} action
  */
 function _listenRoom(action) {
-	console.log(action);
 	const state = action.newState;
 	RoomApi.listenRoom(state.Match.id, async (snap) => {
 		console.log('got snapshot')
 		const data = snap.data();
+		if (!data) return;
 		const _deck = await getDeck(data.deck)
-		let isStatusChange = global.storage.getState().Match.status !== data.status;
 		Actions.roomUpdate({ data, deck:_deck });
 		const {uid} = global.storage.getState().Main.user;
 		const player = data.players[uid];
 		if (player.isCzar && data.status !== 'E') {
 			global.router.go('/czar/')
-		} else if (isStatusChange) {
+		} else {
 			goByStatus(data.status);
 		}
 	})
@@ -109,6 +108,7 @@ function _listenRoom(action) {
  * @param {String} status
  */
 function goByStatus(status) {
+	console.log(status);
 	switch (status) {
 		case 'R':
 			global.router.go('/game/')

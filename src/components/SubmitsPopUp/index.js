@@ -15,10 +15,8 @@ const SubmitPopUp = () => Div({ className: 'popup-wrapper hidden' }, [
 		const { user: { uid } } = state.Main;
 		const { status } = state.Match.players[uid];
 		if(status === 'R') {
-			console.log('status ready')
 			that.parentElement.classList.remove('hidden');
 		} else if (status === 'P') {
-			console.log('status picking');
 			that.parentElement.classList.add('hidden');
 		}
 		that.append(..._getContent());
