@@ -9,7 +9,6 @@ const NextRound = () => Div({className: 'next-turn away'},[
 		className: 'btn black',
 		onclick: () => {
 			const { id, rounds, players, pool, winningScore } = _storage.getState().Match;
-			console.log('click next turn');
 			HostApi.NextRound(id, rounds, players, pool, winningScore)
 		}
 	}, 'GO!')

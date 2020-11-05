@@ -22,7 +22,6 @@ const ChatInput = () => Div({ className: 'chat-input' },
  */
 function _touchMessage() {
 	const inp = this.previousElementSibling;
-	console.log(inp);
 	_sendMessage(inp)
 }
 /**

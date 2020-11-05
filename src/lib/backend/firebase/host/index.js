@@ -1,4 +1,5 @@
 const COLLECTION = 'rooms';
+const WCOLLECTION = 'waiting_room';
 /**
  * Set the hand for every player
  * @param {String} id Room id
@@ -74,6 +75,8 @@ const startMatch = function _startMatch(id, players, pool, db = firebase.firesto
 		czarCard,
 		pool
 	}, { merge: true });
+	// clean the waiting room data
+	db.collection(WCOLLECTION).doc(id).delete();
 }
 /**
  * get next czar, if there is no czar get random one

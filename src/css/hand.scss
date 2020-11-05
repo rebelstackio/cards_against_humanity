@@ -1,12 +1,13 @@
 cah-hand {
 	width: 100vw;
-	height: 320px;
+	/*height: 320px;*/
 	display: block;
 	padding: 0 20px 0 20px;
-
+	box-sizing: border-box;
 	> div {
 		position: relative;
 		height: 100%;
+		overflow: auto;
 		> cah-card {
 			position: absolute;
 			z-index: 0;
@@ -31,8 +32,13 @@ cah-hand {
 
 		> cah-card.selected {
 			z-index: 12;
-			transform: translateY(-35px) scale(1.2, 1.2);
-
+			transform: translateY(-35px) scale(1.1, 1.1);
+			&:nth-child(1) {
+				transform: translate(20px,-35px) scale(1.1, 1.1);
+			}
+			&:nth-child(10) {
+				transform: translate(-20px,-35px) scale(1.1, 1.1);
+			}
 			span {
 				position: absolute;
 				border-radius: 2px;

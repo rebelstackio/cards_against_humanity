@@ -75,7 +75,6 @@ function _searchMatch(val) {
 	RoomApi.searchRoom(val).then((docSnap) => {
 		let list = {}
 		docSnap.docs.forEach(d => {
-			console.log(d.id, d.data())
 			list[d.id] = d.data();
 		})
 		Actions.roomsList({ list })

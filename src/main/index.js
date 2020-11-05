@@ -108,7 +108,7 @@ function _listenRoom(action) {
  * @param {String} status
  */
 function goByStatus(status) {
-	console.log(status);
+	console.log('#> Match status: ',status);
 	switch (status) {
 		case 'R':
 			global.router.go('/game/')

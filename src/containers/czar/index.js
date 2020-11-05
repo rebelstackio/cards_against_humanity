@@ -49,7 +49,6 @@ const WhiteSubmits = () => Div({ className: 'submits' }, () => {
 	return isReadyToShow ? _getPreview() : _getWaitingSubmits()
 }).onStoreEvent(UPDATE_EV, (state, that) => {
 	let isReadyToShow = _chekcReady();
-	console.log(isReadyToShow, _chekcReady())
 	that.innerHTML = '';
 	let content = isReadyToShow ? _getPreview() : _getWaitingSubmits();
 	that.append(...content);
@@ -60,10 +59,10 @@ function _chekcReady() {
 	for(let k in players) {
 		const p = players[k];
 		if(!p.isCzar) {
-			console.log(p.status, p.status === 'R');
 			if (p.status !== 'R') return false;
 		}
 	}
+	console.log('#> Every one is ready');
 	return true
 }
 
@@ -109,8 +108,8 @@ function _getTextCard(submits, pid) {
 			submitHandler: () => {
 				Actions.loadingOn({ msg: 'Choosing round winner' })
 				RoomApi.submitTurn(id, true, submits, pid)
-				.then(res => {
-					console.log(res)
+				.then(() => {
+					console.log('#> Czar submited winner');
 					Actions.loadingOff();
 				})
 			}

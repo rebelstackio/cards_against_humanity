@@ -49,8 +49,8 @@ function DrawCardPopup () {
 					const { id, selectedCardIds } = _storage.getState().Match;
 					Actions.loadingOn({ msg: 'submitting your stupid card' })
 					RoomApi.submitTurn(id, false, selectedCardIds)
-					.then(res => {
-						console.log(res.data);
+					.then(() => {
+						console.log('#> Card Submited');
 						Actions.cancelSelection();
 						Actions.closePopUp();
 						Actions.loadingOff();
