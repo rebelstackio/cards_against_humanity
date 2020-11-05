@@ -32,13 +32,21 @@ _store.on('LOGOUT', () => {
 /*----------------------------------MESSAGIN----------------------------------------------*/
 _store.on('SEND_MESSAGE', ( action ) => {
 	const { uid } = _store.getState().Main.user;
-	backend.messaging.sendMessage({ uid, message: action.msg })
+	const { id } = _store.getState().Match;
+	console.log('ain\'t happening')
+	backend.messaging.sendMessage({ uid, msg: action.msg, id })
+	.then(resp => {
+		console.log('done')
+	})
+	.catch(err => {
+		console.error(err)
+	})
 });
 /**
  * Subscribe to the chat in waiting room
  */
 _store.on('LISTEN_CHAT', () => {
-	const { id } = _store.getState().Main.match;
+	const { id } = _store.getState().Match;
 	backend.messaging.joinChat(id)
 	.then(() => {
 		console.log('Joined')

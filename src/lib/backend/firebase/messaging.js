@@ -1,18 +1,23 @@
 /* src/lib/backend/firebase/messaging.js */
+const COLLECTION = 'waiting_room';
 
-// TODO: Messaging
-
-const sendMessage = function _sendMessage(payload) {
-	//TODO: handle send message
-	console.log('sendMessage: ', payload);
+const sendMessage = function _sendMessage(payload, db=firebase.firestore()) {
+	const { id, uid, msg } = payload;
+	const ref = db.collection(COLLECTION).doc(id);
+	return ref.set({
+		[new Date().getTime()]: { msg, uid }
+	}, { merge: true });
 }
-
-const onMessage = function _onMessage(next) {
-	//TODO:
-	const payload = { uid: 'jdksdla', message: 'Hello there' }
-	setTimeout(() => { next(payload) }, 3000)
+/**
+ * Listen to changes in db
+ * @param {CallableFunction} next callback
+ */
+const onMessage = function _onMessage(id, next, db = firebase.firestore()) {
+	return db.collection(COLLECTION).doc(id).onSnapshot(next)
 }
-
+/**
+ *
+ */
 const offMessage = function _offMessage() {
 	// TODO: kill chat listener on game
 	console.log('off chat Listener');

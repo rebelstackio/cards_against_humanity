@@ -1,24 +1,37 @@
-import { MetaComponent } from '@rebelstack-io/metaflux';
+import { MetaComponent, Div } from '@rebelstack-io/metaflux';
 import cahCard from '../../components/card';
 import '../../handlers';
+
+const UPDATE_EV = 'MATCH_UPDATE';
 
 class Hand extends MetaComponent {
 	constructor () {
 		super(global.storage);
 	}
 	render () {
-		this.content = document.createElement('div');
+		this.content = Div({});
 		this.cards = [];
-		const { hand } = this.storage.getState().Main;
+		this._getContent()
+		return this.content
+		.onStoreEvent(UPDATE_EV, () => {
+			this._getContent();
+		})
+	}
+
+	_getContent() {
+		let hand = this.storage.getState().Match.hand.split(',');
+		const { whiteCards } = this.storage.getState().Match.usedDeck;
+		this.content.innerHTML = '';
+		//console.log(state.Match);
 		for (let i = 0; i < hand.length; i++) {
-			const cardNode = new cahCard(hand[i], 'white', i);
+			const cardNode = new cahCard(whiteCards[hand[i]], 'white', hand[i]);
 			this.cards.push(cardNode);
 			this.content.appendChild(cardNode);
 		}
-		return this.content;
 	}
+
 	tagCard () {
-		const { selectedCardIds } = this.storage.getState().Main;
+		const { selectedCardIds } = this.storage.getState().Match;
 
 		this.cards.forEach(card => {
 			selectedCardIds.forEach((id, index) => {
@@ -32,7 +45,7 @@ class Hand extends MetaComponent {
 	handleStoreEvents () {
 		return {
 			'INCREASE_SELECTED_CARDS': _ => {
-				const { selectedCards, selectedCardsLimit } = this.storage.getState().Main;
+				const { selectedCards, selectedCardsLimit } = this.storage.getState().Match;
 				if (selectedCards === selectedCardsLimit) {
 					this.content.classList.add('full-hand');
 				} else {
@@ -41,7 +54,7 @@ class Hand extends MetaComponent {
 				this.tagCard();
 			},
 			'DECREASE_SELECTED_CARDS': _ => {
-				const { selectedCards, selectedCardsLimit } = this.storage.getState().Main;
+				const { selectedCards, selectedCardsLimit } = this.storage.getState().Match;
 				if (selectedCards < selectedCardsLimit) {
 					this.content.classList.remove('full-hand');
 				}

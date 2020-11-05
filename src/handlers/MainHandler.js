@@ -1,65 +1,50 @@
+import HostApi from "../lib/backend/firebase/host/index";
+
 /*
 * DEFAULT HANDLER
 */
-
 const MainDefaultState = {
-	selectedCards: 0,
-	selectedCardsLimit: 2,
-	awesomePoints: 0,
-	isCzar: false,
-	czarData: {
-		iconUrl: false,
-		username: 'Pablo'
-	},
-	hand: [
-		"People with cake in their mouths talking about how good cake is.",
-		"The Hawaiian goddess Kapo and her flying detachable vagina.",
-		"Piece of shit Christmas cards with no money in them.",
-		"A magical tablet containing a world of unlimited pornography.",
-		"Finding out that Santa isn't real.",
-		"The Grinch's musty, cum-stained pelt.",
-		"Giving money and personal information to strangers on the Internet.",
-		"The shittier, Jewish version of Christmas.",
-		"Rudolph's bright red balls.",
-		"Jizzing into Santa's beard."
-	],
-	selectedCardIds: [],
-	czarCard: {
-		text: "But wait, there's more! If you order _ in the next 15 minutes, we'll throw in _ absolutely free!",
-		pick: 2
-	},
 	matchList: {},
 	user: {},
-	match: {
-		id: '6nhvGCSvfnRJlHQMNHCMShbGbMW2',
-		players: {
-			'6nhvGCSvfnRJlHQMNHCMShbGbMW2': { displayName: 'Osmar Reyes', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' },
-			'jdksdla': { displayName: 'Dummy 1', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' },
-			'oereowi': { displayName: 'Dummy 2', photoURL: 'https://lh6.googleusercontent.com/-TmLVSeQnjg8/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJO-bkkb7zSsQ_dhyIE_8NYlPTOpWg/photo.jpg' }
-		 }
-	},
 	searchValue: '',
 	isAuth: false
 };
 
+const MatchDefaultState = {
+	id: '',
+	players: {
+
+	},
+	isCzar: false,
+	hand: '',
+	selectedCards: 0,
+	selectedCardsLimit: 2,
+	awesomePoints: 0,
+	selectedCardIds: [],
+	czarCard: '',
+	usedDeck: { whiteCards: [], blackCards: {} },
+	rounds: [],
+	status: 'W'
+}
 export default {
 	MainDefaultState,
+	MatchDefaultState,
 	MainHandler: {
 		'INCREASE_SELECTED_CARDS': (action, state) => {
 			const { id } = action;
-			state.Main.selectedCards += 1;
-			state.Main.selectedCardIds.push(id);
+			state.Match.selectedCards += 1;
+			state.Match.selectedCardIds.push(id);
 			return { newState: state };
 		},
 		'DECREASE_SELECTED_CARDS': (action, state) => {
 			const { id } = action;
-			state.Main.selectedCards -= 1;
-			state.Main.selectedCardIds = state.Main.selectedCardIds.filter(_id => _id !== id);
+			state.Match.selectedCards -= 1;
+			state.Match.selectedCardIds = state.Match.selectedCardIds.filter(_id => _id !== id);
 			return { newState: state };
 		},
 		'CANCEL_SELECTION': (_, state) => {
-			state.Main.selectedCards = 0;
-			state.Main.selectedCardIds = [];
+			state.Match.selectedCards = 0;
+			state.Match.selectedCardIds = [];
 			return { newState: state };
 		},
 		'AUTH_CHANGE': (action, state) => {
@@ -83,6 +68,39 @@ export default {
 		},
 		'CLEAR_SEARCH': (action, state) => {
 			state.Main.searchValue = '';
+			return { newState: state }
+		},
+		'MATCH_CREATED': (action, state) => {
+			const { data } = action;
+			state.Match.isHost = true;
+			state.Match = Object.assign({}, state.Match, data)
+			return { newState: state }
+		},
+		'MATCH_UPDATE': (action, state) => {
+			const { data } = action;
+			const { uid } = state.Main.user
+			state.Match.isHost = data.id === uid;
+			state.Match = Object.assign({}, state.Match, data)
+			state.Match.usedDeck = action.deck;
+			if(state.Match.players[uid].hand) state.Match.hand = state.Match.players[uid].hand;
+			state.Match.isCzar = state.Match.players[uid].isCzar;
+			if (state.Match.isHost) {
+				HostApi.setHand(state.Match.id,state.Match.players, state.Match.pool)
+			}
+			if (state.Match.czarCard) {
+				state.Match.selectedCardsLimit = state.Match.usedDeck.blackCards[state.Match.czarCard].pick;
+			}
+			return { newState: state }
+		},
+		'MATCH_JOINED': (action, state) => {
+			const { id } = action
+			state.Match.id = id;
+			return { newState: state }
+		},
+		'LEAVE_ROOM': (_, state) => {
+			localStorage.removeItem('m_joined');
+			global.router.go('/lobby/host/');
+			location.reload();
 			return { newState: state }
 		}
 	}

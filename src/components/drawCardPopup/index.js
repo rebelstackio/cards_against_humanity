@@ -1,12 +1,24 @@
 import { Div, Span, P } from '@rebelstack-io/metaflux';
+import RoomApi from '../../lib/backend/firebase/room';
+import Actions from '../../handlers/actions';
+import actions from '../../handlers/actions';
+
+const _storage = global.storage;
 
 function DrawCardPopup () {
-	const { czarCard: { text }, hand, selectedCardIds} = global.storage.getState().Main;
-	const selectedCards = selectedCardIds.map(id => hand[id]);
+	const { czarCard, usedDeck: { whiteCards, blackCards }, selectedCardIds} = global.storage.getState().Match;
+	const selectedCards = selectedCardIds.map(id => whiteCards[id]);
+	let { text, pick } = blackCards[czarCard];
 	let fullText = text;
-
-	for (let i = 0; i < selectedCards.length; i++) {
-		fullText = fullText.replace(/_/, `<span>${selectedCards[i]}</span>`);
+	let isQuestion = fullText.match(/___/g) === null;
+	if (!isQuestion) {
+		for (let i = 0; i < selectedCards.length; i++) {
+			fullText = fullText.replace(/___/, `<span>${selectedCards[i]}</span>`);
+		}
+	} else {
+		for (let i = 0; i < selectedCards.length; i++) {
+			fullText += `<span>${selectedCards[i]}</span>`
+		}
 	}
 	let rawText = fullText.replace(/(<span>|<\/span>)/g, '');
 	return Div({
@@ -34,16 +46,20 @@ function DrawCardPopup () {
 		}, [
 			Div({
 				onclick: () => {
-					global.storage.dispatch({
-						type: 'CLOSE_POPUP'
-					});
+					const { id, selectedCardIds } = _storage.getState().Match;
+					Actions.loadingOn({ msg: 'submitting your stupid card' })
+					RoomApi.submitTurn(id, false, selectedCardIds)
+					.then(res => {
+						console.log(res.data);
+						Actions.cancelSelection();
+						Actions.closePopUp();
+						Actions.loadingOff();
+					})
 				}
 			}, [Span({className: "fa fa-check-circle"}), Span(false, "Play Card")]),
 			Div({
 				onclick: () => {
-					global.storage.dispatch({
-						type: 'CLOSE_POPUP'
-					});
+					Actions.closePopUp();
 				}
 			}, [Span({className: "fa fa-times-circle"}), Span(false, "Cancel")])
 		])

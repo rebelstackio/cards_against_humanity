@@ -38,7 +38,7 @@ const createRoom = function _createRoom( roomProps, db = firebase.firestore(), t
 		return  Promise.reject( new TypeError('createdBy is required'));
 	}
 
-	return db.collection(COLLECTION).doc().set(props);
+	return db.collection(COLLECTION).doc(props.createdBy.uid).set(props);
 };
 
 /**
@@ -92,10 +92,57 @@ const searchRoom = function _searchRoom(value,limit = DEFAULT_PAGE_SIZE, startAf
 	}
 }
 
+/**
+ * Handle Join Room cloud function
+ * @param {String} id room id
+ * @param {String} password
+ * @param {CallableFunction}
+ */
+const joinRoom = function _joinRoom(id, password, callback) {
+	const joinGame = firebase.functions().httpsCallable('joinGame');
+	joinGame({ id, password })
+	.then(res => {
+		callback(res.data);
+	})
+}
+/**
+ * Listen to the room changes
+ * @param {String} id RoomID
+ * @param {CallableFunction} callback handler callback
+ * @param {*} db Firestore reference
+ */
+const listenRoom = function _listenRoom(id, callback, db = firebase.firestore()) {
+	db.collection(COLLECTION).doc(id).onSnapshot(callback)
+}
+/**
+ * Submit turn to cloud function
+ * @param {String} id RoomID
+ * @param {Boolean} isCzar is czar turn
+ * @param {Array} submits Array of white cards
+ * @param {String} winnerId Id for the winner of the round (czar only)
+ * @param {*} db Firestore Reference
+ */
+const submitTurn = function _submitTurn(id, isCzar, submits, winnerId, db = firebase.firestore()) {
+	const submitTurn = firebase.functions().httpsCallable('submitTurn');
+	return submitTurn({ id, isCzar, submits, winnerId })
+}
+/**
+ * leave room API
+ * @param {String} id RoomID
+ */
+const leaveRoom = function _leaveRoom(id) {
+	const leaveMatch = firebase.functions().httpsCallable('leaveMatch');
+	return leaveMatch({ id })
+}
+
 export default {
 	STATUS,
 	createRoom,
 	deleteRoom,
 	listRooms,
-	searchRoom
+	searchRoom,
+	joinRoom,
+	listenRoom,
+	submitTurn,
+	leaveRoom
 };

@@ -25,12 +25,12 @@ function CardBanner () {
 			}, "Cancel")
 		])
 	]).onStoreEvent('INCREASE_SELECTED_CARDS', (state, elem) => {
-		const { selectedCards, selectedCardsLimit } = state.Main;
+		const { selectedCards, selectedCardsLimit } = state.Match;
 		if ( selectedCards >= selectedCardsLimit ) {
 			elem.classList.add('open');
 		}
 	}).onStoreEvent('DECREASE_SELECTED_CARDS', (state, elem) => {
-		const { selectedCards, selectedCardsLimit } = state.Main;
+		const { selectedCards, selectedCardsLimit } = state.Match;
 		if ( selectedCards < selectedCardsLimit ) {
 			elem.classList.remove('open');
 		}

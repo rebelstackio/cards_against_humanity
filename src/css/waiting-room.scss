@@ -68,7 +68,7 @@
 				}
 			}
 		}
-		
+
 	}
 	> .sidebar {
 		position: absolute;
@@ -79,6 +79,8 @@
 		height: 100vh;
 		background-color: #fff;
 		overflow: auto;
+		display: grid;
+		grid-template-rows: 45px repeat(11, 1fr);
 		> h3 {
 			text-align: center;
 			padding: 10px 0;

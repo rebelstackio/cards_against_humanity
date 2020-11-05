@@ -14,6 +14,52 @@ $cah-lightest: #FBF6E5;
 $cah-card-width: 130px;
 $cah-card-height: 200px;
 /*----------------------------------------------*/
+/*--------------------COMMONDS----------------------------------------*/
+.btn.black {
+	font-size: 18px;
+	height: 45px;
+	color: black;
+	background-color: #ffffff;
+	border-radius: 4px;
+	border: 1px solid black;
+	outline: none;
+	transition: all .3s ease-in-out;
+	font-weight: bold;
+	padding: 0 10px;
+	cursor: pointer;
+	&:hover {
+		background-color: black;
+		color: #ffffff;
+	}
+}
+
+.hidden {
+	opacity: 0;
+	visibility: hidden;
+	display: none;
+}
+
+.next-turn {
+	position: fixed;
+	top: 10px;
+	right: 0;
+	z-index: 1001;
+	background-color: #fff;
+	width: 200px;
+	display: grid;
+	grid-auto-flow: column;
+	color: black;
+	align-items: center;
+	padding: 10px 0;
+	padding-left: 10px;
+	border-radius: 4px 0 0 4px;
+	box-shadow: 0 0 4px 2px black;
+	transition: all .5s ease-in-out;
+	transform: translate(0%, 0%);
+	&.away {
+		transform: translate(103%,0);
+	}
+}
 
 /*--------IMPORT SCSS COMPONENT-----------------------------------------*/
 @import './table-top';
@@ -28,6 +74,9 @@ $cah-card-height: 200px;
 @import './lobby';
 @import './waiting-room';
 @import './snackbar';
+@import './czar-view.scss';
+@import './submits-popup.scss';
+@import './summary.scss';
 
 /*------------------------------------------------------------------------*/
 
