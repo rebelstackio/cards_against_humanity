@@ -1,6 +1,5 @@
 import { Div, H3, Img, Button, Span, Input } from '@rebelstack-io/metaflux';
-import { auth } from '../../lib/backend/firebase';
-import { singInWithGoogle } from '../../lib/backend/firebase/auth/';
+import { singInWithGoogle, singInWithFacebook } from '../../lib/backend/firebase/auth/';
 
 const _opts = _getUserOpt();
 /**
@@ -69,7 +68,7 @@ function _getHeaderByState(isFind) {
 						singInWithGoogle();
 					}},Span({className: 'fab fa-google'})),
 					Button({ onclick: () => {
-						singInWithGoogle();
+						singInWithFacebook();
 					}}, Span({className: 'fab fa-facebook-f'}))
 			])
 		])

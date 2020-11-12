@@ -1,6 +1,7 @@
 import { Div, Span, H3 } from '@rebelstack-io/metaflux';
 import { PreviewSubmit } from '../PreviewSubmit';
 import { TurnStatus } from '../TurnStatus';
+import { checkReady } from '../../util';
 
 
 const _storage = global.storage;
@@ -26,7 +27,7 @@ const SubmitPopUp = () => Div({ className: 'popup-wrapper hidden' }, [
  * get popup content
  */
 function _getContent() {
-	const isReady = _chekcReady();
+	const isReady = checkReady();
 	return [
 		H3({ className: 'submit-title' }, isReady ? 'Wating for the Czar' : 'Players are picking'),
 		TurnStatus(),
@@ -41,7 +42,7 @@ function _getSubmits() {
 	const { rounds } = _storage.getState().Match;
 	const { user: { uid } } =_storage.getState().Main
 	const lastRound = rounds[rounds.length - 1];
-	const isReady = _chekcReady();
+	const isReady = checkReady();
 	if(!lastRound) return [];
 	return Object.keys(lastRound.whiteCards).map((_k) => {
 		const wc = lastRound.whiteCards[_k];
@@ -91,19 +92,6 @@ function _checkWinner(pid) {
 	const { rounds } = _storage.getState().Match;
 	const lastRound = rounds[rounds.length - 1];
 	return lastRound.winner[pid] !== undefined;
-}
-/**
- * Check if every non czar player is ready
- */
-function _chekcReady() {
-	const { players } = _storage.getState().Match;
-	Object.keys(players).forEach(k => {
-		const p = players[k];
-		if(!p.isCzar) {
-			if (p.status !== 'R') return false;
-		}
-	})
-	return true
 }
 
 export { SubmitPopUp };

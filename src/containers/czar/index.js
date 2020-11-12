@@ -4,6 +4,7 @@ import { TurnStatus } from '../../components/TurnStatus';
 import { PreviewSubmit } from '../../components/PreviewSubmit';
 import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
+import { checkReady } from '../../util';
 
 const _storage = global.storage;
 const UPDATE_EV = 'MATCH_UPDATE';
@@ -45,10 +46,10 @@ const CzarHeader = () => Div({ className: 'czar-header' }, [
 
 /*----------------------------------------------------------------------------------- */
 const WhiteSubmits = () => Div({ className: 'submits' }, () => {
-	let isReadyToShow = _chekcReady();
+	let isReadyToShow = checkReady();
 	return isReadyToShow ? _getPreview() : _getWaitingSubmits()
 }).onStoreEvent(UPDATE_EV, (state, that) => {
-	let isReadyToShow = _chekcReady();
+	let isReadyToShow = checkReady();
 	that.innerHTML = '';
 	let content = isReadyToShow ? _getPreview() : _getWaitingSubmits();
 	that.append(...content);
@@ -62,7 +63,6 @@ function _chekcReady() {
 			if (p.status !== 'R') return false;
 		}
 	}
-	console.log('#> Every one is ready');
 	return true
 }
 

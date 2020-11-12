@@ -35,6 +35,7 @@ function _listentMessages(id) {
 	listener = MessaginApi.onMessage(id, (snap) => {
 		const data = snap.data();
 		const { players } = _storage.getState().Match;
+		if(!data || data === null) return;
 		// clean the old DOM
 		msgArea.innerHTML = '';
 		Object.keys(data)
