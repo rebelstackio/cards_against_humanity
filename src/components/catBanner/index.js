@@ -1,5 +1,7 @@
 import { Img, Div } from '@rebelstack-io/metaflux';
-import catImage from  '../../css/images/mollejas.png'
+import catImage from  '../../css/images/mollejas.png';
+
+const _gameSounds = global.gameSounds;
 
 function CardBanner () {
 	return Div({
@@ -36,6 +38,7 @@ function CardBanner () {
 		}
 	}).onStoreEvent('CANCEL_SELECTION', (state, elem) => {
 		elem.classList.remove('open');
+		gameSounds.Play();
 	});
 }
 

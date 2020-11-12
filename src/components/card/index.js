@@ -6,8 +6,10 @@ import { Div, Span, HTMLElementCreator } from '@rebelstack-io/metaflux';
  * @param {string} className black or white style of card
  * @param {string} id id of card
  */
-function cahCard (content = "", className = "white", id = 0) {
 
+
+function cahCard (content = "", className = "white", id = 0) {
+	const _gameSounds = global.gameSounds;
 	this.id = id;// It's referenced from hand
 	const _storage = global.storage;
 	const card = HTMLElementCreator('cah-card', {
@@ -20,12 +22,14 @@ function cahCard (content = "", className = "white", id = 0) {
 			const { selectedCards, selectedCardsLimit } = _storage.getState().Match;
 			const isCardSelected = card.classList.contains('selected');
 			if (!isCardSelected && selectedCards < selectedCardsLimit) {
+				_gameSounds.Play('SELECT');
 				card.classList.add('selected');
 				_storage.dispatch({
 					type: 'INCREASE_SELECTED_CARDS',
 					id
 				});
 			} else if (isCardSelected) {
+				_gameSounds.Play(/* default not sound */);
 				card.classList.remove('selected');
 				_storage.dispatch({
 					type: 'DECREASE_SELECTED_CARDS',

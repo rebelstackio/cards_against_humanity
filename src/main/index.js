@@ -22,8 +22,10 @@ import { NextRound } from '../components/NextRound';
 import { LoadignModal } from '../components/LoadingModal';
 import { SnackBar } from '../components/SnackBar';
 import { Summary } from '../containers/summary';
+import { GameSounds } from '../audio'
 
 global.router = new Router();
+global.gameSounds = new GameSounds();
 if ( location.hash === '' ) global.router.go( '/lobby/host/' );
 
 document.addEventListener('DOMContentLoaded', () => {
