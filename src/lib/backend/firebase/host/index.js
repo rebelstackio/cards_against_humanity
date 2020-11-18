@@ -92,16 +92,8 @@ function _getCzar(players) {
 		const pl = players[_k];
 		if (pl.isCzar) {
 			console.log('isCzar ', pl.displayName);
-			players[_k].isCzar = false;
+			players = getNext(players, i)
 			isFirst = false;
-			if ((i + 1) === keys.length) {
-				// is the last, start over
-				players[keys[0]].isCzar = true;
-				console.log('new czar', players[keys[0]].displayName);
-			} else {
-				console.log('new czar', players[keys[i + 1]].displayName);
-				players[keys[i + 1]].isCzar = true;
-			}
 			break;
 		}
 		i++;
@@ -112,6 +104,25 @@ function _getCzar(players) {
 	}
 	return players;
 }
+
+function getNext(plys, i) {
+	const keys = Object.keys(plys);
+	plys[keys[i]].isCzar = false;
+	i++;
+	let pl = plys[keys[i]];
+	if ( pl ) {
+			// is not the last
+		 pl.isCzar = true
+	} else {
+			// is the last
+			i = 0;
+			pl = plys[keys[i]];
+			pl.isCzar = true;
+	}
+	if (pl.status === 'D') return getNext(plys, i);
+	return plys;
+}
+
 /**
  * Reset player to Picking status
  * @param {Object} players Players object

@@ -5,6 +5,7 @@ import { PreviewSubmit } from '../../components/PreviewSubmit';
 import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
 import { checkReady } from '../../util';
+import { Settings } from '../../components/Settings';
 
 const _storage = global.storage;
 const UPDATE_EV = 'MATCH_UPDATE';
@@ -23,7 +24,8 @@ const Czar = () => Div({
 }, [
 	_getBlackCard(),
 	CzarHeader(),
-	WhiteSubmits()
+	WhiteSubmits(),
+	Settings()
 ]);
 
 function _getBlackCard() {

@@ -22,7 +22,8 @@ import { NextRound } from '../components/NextRound';
 import { LoadignModal } from '../components/LoadingModal';
 import { SnackBar } from '../components/SnackBar';
 import { Summary } from '../containers/summary';
-import { GameSounds } from '../audio'
+import { GameSounds } from '../audio';
+import { ConfirmationPopUp } from '../components/ConfirmationPopup';
 
 global.router = new Router();
 global.gameSounds = new GameSounds();
@@ -55,7 +56,16 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function _setContent(Content) {
 	document.body.innerHTML = '';
-	document.body.append(Content, NextRound(), LoadignModal(), SnackBar());
+	document.body.append(Content, ..._getCommondComponents());
+}
+
+function _getCommondComponents() {
+	return [
+		NextRound(),
+		LoadignModal(),
+		SnackBar(),
+		ConfirmationPopUp()
+	]
 }
 
 global.storage.on('LOGOUT', () => {

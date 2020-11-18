@@ -7,14 +7,13 @@ const MainDefaultState = {
 	matchList: {},
 	user: {},
 	searchValue: '',
-	isAuth: false
+	isAuth: false,
+	confirmation: {}
 };
 
 const MatchDefaultState = {
 	id: '',
-	players: {
-
-	},
+	players: { },
 	isCzar: false,
 	hand: '',
 	selectedCards: 0,
@@ -60,6 +59,10 @@ export default {
 			state.Main.notificationMessage = action.msg;
 			state.Main.notificationIcon = action.icon;
 			state.Main.notificationAction = action.action;
+			return { newState: state }
+		},
+		'DISPLAY_CONFIRMATION': (action, state) => {
+			state.Main.confirmation = action.data;
 			return { newState: state }
 		},
 		'SEARCH_GAME': (action, state) => {

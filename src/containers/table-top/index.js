@@ -4,6 +4,7 @@ import '../../components/czar';
 import '../../components/popup';
 import { CardBanner } from '../../components/catBanner';
 import { SubmitPopUp } from '../../components/SubmitsPopUp';
+import { Settings } from '../../components/Settings';
 
 const TableTop = () => Div({
 	className: 'table-top'
@@ -14,7 +15,8 @@ const TableTop = () => Div({
 	HTMLElementCreator('cah-popup', {
 		className: 'hidden'
 	}),
-	SubmitPopUp()
+	SubmitPopUp(),
+	Settings()
 ]);
 
 export {
