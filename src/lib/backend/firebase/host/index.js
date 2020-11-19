@@ -104,7 +104,11 @@ function _getCzar(players) {
 	}
 	return players;
 }
-
+/**
+ * get next czar recursive
+ * @param {*} plys
+ * @param {*} i
+ */
 function getNext(plys, i) {
 	const keys = Object.keys(plys);
 	plys[keys[i]].isCzar = false;
@@ -197,11 +201,26 @@ const startOver = async function _startOver(id, deck, db = firebase.firestore())
 	}
 	return ref.set(data);
 }
+/**
+ * Kick player API
+ * @param {String} id Match id
+ * @param {String} pid Player ID
+ * @param {*} db
+ */
+const kickPLayer = async function _kickPlayer(id, pid, db = firebase.firestore()) {
+	const ref = db.collection(COLLECTION).doc(id);
+	const doc = await ref.get();
+	let data = doc.data();
+	data.nplayers--;
+	data.players[pid].status = 'D';
+	return ref.set(data);
+}
 
 export default {
 	getFullPool,
 	setHand,
 	startMatch,
 	NextRound,
-	startOver
+	startOver,
+	kickPLayer
 }

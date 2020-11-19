@@ -52,8 +52,8 @@ exports.joinGame = functions.https.onCall(async (data, context) => {
 	if(doc.exists) {
 		let _data = doc.data();
 		const newPlayers = _addPlayer(_data.players, user);
-		_data.nplayers = newPlayers ? (_data.nplayers + 1) : _data.nplayers;
-		_data.players = newPlayers ? newPlayers : _data.players;
+		_data.nplayers = _data.nplayers + 1;
+		_data.players = newPlayers;
 		await ref.set(_data)
 		return { success: 'Joined to the game'}
 	} else {
@@ -121,10 +121,11 @@ function _addPlayer(pl = {}, user) {
 			displayName: user.displayName,
 			photoURL: user.photoURL,
 			score: 0,
-			status: 'C',
+			status: 'P',
 			hand: ''
 		}
-		return pl
+	} else {
+		pl[user.uid].status = 'P';
 	}
-	return false
+	return pl
 }
