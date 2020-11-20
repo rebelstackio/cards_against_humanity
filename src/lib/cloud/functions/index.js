@@ -92,7 +92,7 @@ exports.leaveMatch = functions.https.onCall(async (data, context) => {
 	if (doc.exists) {
 		let _data = doc.data();
 		_data.players[user.uid].status = 'D';
-		_data.nplayers--;
+		_data.nplayers = _data.nplayers - 1;
 		await ref.set(_data)
 		return { success: 'leave room' }
 	} else {

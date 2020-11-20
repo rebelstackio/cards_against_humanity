@@ -1,5 +1,4 @@
-const _storage = global.storage;
-const _getState = _storage.getState;
+const _getState = global.storage.getState;
 /**
  * Map player from firebase response to a nice array
  * @param {Boolean} isMySelfRequired normally your user is exclude from the lists

@@ -101,7 +101,6 @@ global.storage.on('MATCH_JOINED',_listenRoom)
 function _listenRoom(action) {
 	const state = action.newState;
 	RoomApi.listenRoom(state.Match.id, async (snap) => {
-		console.log('got snapshot')
 		const data = snap.data();
 		if (!data) return;
 		const _deck = await getDeck(data.deck)
