@@ -108,6 +108,7 @@ function _getTextCard(submits, pid) {
 		? {
 			submit: 'Pick this',
 			submitHandler: () => {
+				global.gameSounds.Play('PICK');
 				Actions.loadingOn({ msg: 'Choosing round winner' })
 				RoomApi.submitTurn(id, true, submits, pid)
 				.then(() => {
