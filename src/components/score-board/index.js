@@ -1,5 +1,4 @@
 import { MetaComponent, Div, H2, HTMLElementCreator } from '@rebelstack-io/metaflux';
-import '../corner-menu';
 import '../czar-indicator';
 
 class ScoreBoard extends MetaComponent {
@@ -14,7 +13,6 @@ class ScoreBoard extends MetaComponent {
 		this.pickedCardCounter = document.createElement("div");
 
 		const content = Div(false, [
-			HTMLElementCreator("corner-menu", {}),
 			Div({
 				className: "board"
 			}, Div(false, [

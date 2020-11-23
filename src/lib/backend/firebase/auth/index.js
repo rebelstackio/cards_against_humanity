@@ -9,6 +9,11 @@ const singInWithGoogle = function _singInWithGoogle( auth = firebase.auth() ) {
 	return auth.signInWithPopup(provider);
 };
 
+const singInWithFacebook = function _signInWithFacebook( auth = firebase.auth() ) {
+	const provider = new firebase.auth.FacebookAuthProvider();
+	return auth.signInWithPopup(provider);
+}
+
 /**
  * SignOut
  * @param {object} auth Auth object
@@ -29,5 +34,6 @@ const onAuthStateChanged = function _onAuthStateChanged( next,  auth = firebase.
 export {
 	singInWithGoogle,
 	signOut,
-	onAuthStateChanged
+	onAuthStateChanged,
+	singInWithFacebook
 };

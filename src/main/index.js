@@ -22,8 +22,11 @@ import { NextRound } from '../components/NextRound';
 import { LoadignModal } from '../components/LoadingModal';
 import { SnackBar } from '../components/SnackBar';
 import { Summary } from '../containers/summary';
+import { GameSounds } from '../audio';
+import { ConfirmationPopUp } from '../components/ConfirmationPopup';
 
 global.router = new Router();
+global.gameSounds = new GameSounds();
 if ( location.hash === '' ) global.router.go( '/lobby/host/' );
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -53,7 +56,16 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function _setContent(Content) {
 	document.body.innerHTML = '';
-	document.body.append(Content, NextRound(), LoadignModal(), SnackBar());
+	document.body.append(Content, ..._getCommondComponents());
+}
+
+function _getCommondComponents() {
+	return [
+		NextRound(),
+		LoadignModal(),
+		SnackBar(),
+		ConfirmationPopUp()
+	]
 }
 
 global.storage.on('LOGOUT', () => {
@@ -89,7 +101,6 @@ global.storage.on('MATCH_JOINED',_listenRoom)
 function _listenRoom(action) {
 	const state = action.newState;
 	RoomApi.listenRoom(state.Match.id, async (snap) => {
-		console.log('got snapshot')
 		const data = snap.data();
 		if (!data) return;
 		const _deck = await getDeck(data.deck)

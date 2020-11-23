@@ -8,12 +8,14 @@ const TurnStatus = () => Div({ className: 'turn-viewer' }, _getTurnContent())
 		that.innerHTML = '';
 		that.append(..._getTurnContent())
 	})
-
+/**
+ * Get List content
+ */
 function _getTurnContent() {
 	const { players } = _storage.getState().Match;
 	return Object.keys(players).map((key) => {
 		const pl = players[key];
-		if(!pl.isCzar) {
+		if(!pl.isCzar && pl.status !== 'D') {
 			return Div({
 				className: `user-icon s-${pl.status}`, id: `trn-${key}`
 			}, Img( { src: pl.photoURL } ))

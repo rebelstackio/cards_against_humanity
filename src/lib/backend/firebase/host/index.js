@@ -92,16 +92,8 @@ function _getCzar(players) {
 		const pl = players[_k];
 		if (pl.isCzar) {
 			console.log('isCzar ', pl.displayName);
-			players[_k].isCzar = false;
+			players = getNext(players, i)
 			isFirst = false;
-			if ((i + 1) === keys.length) {
-				// is the last, start over
-				players[keys[0]].isCzar = true;
-				console.log('new czar', players[keys[0]].displayName);
-			} else {
-				console.log('new czar', players[keys[i + 1]].displayName);
-				players[keys[i + 1]].isCzar = true;
-			}
 			break;
 		}
 		i++;
@@ -113,13 +105,36 @@ function _getCzar(players) {
 	return players;
 }
 /**
+ * get next czar recursive
+ * @param {*} plys
+ * @param {*} i
+ */
+function getNext(plys, i) {
+	const keys = Object.keys(plys);
+	plys[keys[i]].isCzar = false;
+	i++;
+	let pl = plys[keys[i]];
+	if ( pl ) {
+			// is not the last
+		 pl.isCzar = true
+	} else {
+			// is the last
+			i = 0;
+			pl = plys[keys[i]];
+			pl.isCzar = true;
+	}
+	if (pl.status === 'D') return getNext(plys, i);
+	return plys;
+}
+
+/**
  * Reset player to Picking status
  * @param {Object} players Players object
  */
 function _resetStatus(players) {
 	const keys = Object.keys(players);
 	for(let i=0; i < keys.length; i++) {
-		players[keys[i]].status = 'P';
+		if(players[keys[i]].status !== 'D') players[keys[i]].status = 'P';
 	}
 	return players;
 }
@@ -186,11 +201,26 @@ const startOver = async function _startOver(id, deck, db = firebase.firestore())
 	}
 	return ref.set(data);
 }
+/**
+ * Kick player API
+ * @param {String} id Match id
+ * @param {String} pid Player ID
+ * @param {*} db
+ */
+const kickPLayer = async function _kickPlayer(id, pid, db = firebase.firestore()) {
+	const ref = db.collection(COLLECTION).doc(id);
+	const doc = await ref.get();
+	let data = doc.data();
+	data.nplayers--;
+	data.players[pid].status = 'D';
+	return ref.set(data);
+}
 
 export default {
 	getFullPool,
 	setHand,
 	startMatch,
 	NextRound,
-	startOver
+	startOver,
+	kickPLayer
 }

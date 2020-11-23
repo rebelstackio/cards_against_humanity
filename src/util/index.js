@@ -14,7 +14,11 @@ const getDeck = async function _getDeck(id) {
 	}
 	return res;
 }
-
+/**
+ *
+ * @param {*} text
+ * @param {*} selectedCards
+ */
 const getFullText = function _getFullText (text, selectedCards) {
 	const { usedDeck: { whiteCards } } = _storage.getState().Match;
 	let fullText = text;
@@ -29,8 +33,24 @@ const getFullText = function _getFullText (text, selectedCards) {
 	}
 	return fullText;
 }
+/**
+* Check if every non czar player is ready
+*/
+const checkReady = function _chekcReady() {
+	const { players } = _storage.getState().Match;
+	Object.keys(players).forEach(k => {
+		const p = players[k];
+		if(!p.isCzar && p.status !== 'D') {
+			if (p.status !== 'R') return false;
+		}
+	})
+	console.log('#> Every one is ready');
+	return true
+}
+
 
 export {
 	getDeck,
-	getFullText
+	getFullText,
+	checkReady
 }

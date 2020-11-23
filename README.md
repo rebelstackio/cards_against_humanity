@@ -1,20 +1,16 @@
-# Metaflux Boilerplate
+# Cards Against Humanity WebGame
+Best Online Cards Game. for the game rules check here.
+- Supports online player up to 10 per match
+- deck select
+- speech synthesis
+- Narrated by Morgan Freeman
+- Positronic Capasitors
+- 2020 Award winning as the game of the milleniun
 
-A Metaflux project Boilerplate
+# Testimonials
+- "superb" -Arnold schwarzenegger
+- "Best Game of the human race" -Stephen Hawking
+- "Most good looking developers ever" -Emma Stone
+- "Is even better than my voice" -Morgan Freeman
 
-## Usage:
-
-* clone:
-git clone https://github.com/rebelstackio/metaflux-boilerplate.git
-
-* go to folder:
-cd metaflux-boilerplate/
-
-* install dependencies:
-npm install
-
-* start webpack-dev-server:
-npm start
-
-And that's it! Metaflux documentation can be found at:
-https://www.npmjs.com/package/@rebelstack-io/metaflux
+## Powered by Metaflux

@@ -38,5 +38,8 @@ export default {
 	},
 	leaveRoom: () => {
 		_dispatch('LEAVE_ROOM')
+	},
+	displayConfirmation: (props) => {
+		_dispatch('DISPLAY_CONFIRMATION', props)
 	}
 }

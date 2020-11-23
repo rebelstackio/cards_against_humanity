@@ -46,12 +46,12 @@ function DrawCardPopup () {
 		}, [
 			Div({
 				onclick: () => {
+					global.gameSounds.Play('PICK');
 					const { id, selectedCardIds } = _storage.getState().Match;
 					Actions.loadingOn({ msg: 'submitting your stupid card' })
 					RoomApi.submitTurn(id, false, selectedCardIds)
 					.then(() => {
 						console.log('#> Card Submited');
-						Actions.cancelSelection();
 						Actions.closePopUp();
 						Actions.loadingOff();
 					})
@@ -60,6 +60,7 @@ function DrawCardPopup () {
 			Div({
 				onclick: () => {
 					Actions.closePopUp();
+					Actions.cancelSelection();
 				}
 			}, [Span({className: "fa fa-times-circle"}), Span(false, "Cancel")])
 		])
