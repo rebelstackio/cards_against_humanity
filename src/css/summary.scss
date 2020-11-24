@@ -5,6 +5,7 @@
 	justify-items: center;
 	background-color: #ffffff;
 	position: relative;
+	height: 30vh;
 	> img {
 		width: 100px;
 		border-radius: 50%;
@@ -16,7 +17,7 @@
 .rouns-played {
 	display: grid;
 	overflow: auto;
-	height: -webkit-fill-available;
+	height: 70vh;
 	> div {
 		display: grid;
 		> span {
