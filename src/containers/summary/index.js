@@ -11,6 +11,7 @@ const _storage = global.storage;
 const Summary = () => Div({}, () => {
 	const { players, winningScore } = _storage.getState().Match;
 	const winner = _getWinner(players, winningScore);
+	if (!winner) return [];
 	return [
 		Div({ className:'winner-wrapper' }, [
 			H1({}, 'The stupid Winner'),
@@ -21,7 +22,22 @@ const Summary = () => Div({}, () => {
 		Div({ className: 'rouns-played' }, _getPlayedRounds()),
 		_getActions(),
 	]
-});
+}).onStoreEvent('MATCH_UPDATE', (state, that) => {
+	const { players, winningScore } = _storage.getState().Match;
+	const winner = _getWinner(players, winningScore);
+	that.innerHTML = '';
+	if (!winner) return;
+	that.append(
+		Div({ className:'winner-wrapper' }, [
+			H1({}, 'The stupid Winner'),
+			Img({ src: winner.photoURL, alt: 'winner-picture' }),
+			H2({}, winner.displayName),
+			ScoreInfo()
+		]),
+		Div({ className: 'rouns-played' }, _getPlayedRounds()),
+		_getActions(),
+	)
+})
 
 function _getPlayedRounds() {
 	const { rounds, players } = _storage.getState().Match;
@@ -71,6 +87,7 @@ function _startOver() {
 	HostApi.startOver(id, usedDeck)
 	.then(() => {
 		console.log('yeeeey start again');
+		document.location.reload();
 	})
 }
 

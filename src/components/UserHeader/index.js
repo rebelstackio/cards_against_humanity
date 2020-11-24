@@ -59,7 +59,7 @@ function _getHeaderByState(isFind) {
 	return [
 		isFind ? _search : Span(),
 		Div({className: 'auth'}, [
-			H3({},user.uid ? user.displayName : 'Sing In'),
+			H3({},user.uid ? user.displayName : 'Sign In'),
 			_opts,
 			user.uid
 			? Img({src: user.photoURL, onclick: () => { _toggle() }})

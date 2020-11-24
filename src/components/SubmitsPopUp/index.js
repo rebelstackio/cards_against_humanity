@@ -52,7 +52,7 @@ function _getSubmits() {
 			})
 		} else {
 			return Div({ className: 'submits-wrapper' }, () => {
-				return wc.map((_,i) => _getLoadingCard(_k, i))
+				return _getLoadingCard()
 			})
 		}
 	})
@@ -62,8 +62,8 @@ function _getSubmits() {
  * @param {String} id
  * @param {Number} i
  */
-function _getLoadingCard(id, i) {
-	return Div({ id: `subm-${ id }-${i}` },Span({ className: 'modal-spinner' }))
+function _getLoadingCard() {
+	return Div({ className: 'Loading-submit' },Span({ className: 'modal-spinner' }))
 }
 /**
  * Get a preview for a card

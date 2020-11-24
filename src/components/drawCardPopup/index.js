@@ -53,6 +53,7 @@ function DrawCardPopup () {
 					.then(() => {
 						console.log('#> Card Submited');
 						Actions.closePopUp();
+						Actions.cancelSelection();
 						Actions.loadingOff();
 					})
 				}

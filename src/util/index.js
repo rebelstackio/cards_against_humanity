@@ -1,4 +1,5 @@
 import DeckApi from '../lib/backend/firebase/deck';
+import MatchData from '../controllers/MatchDataManager';
 
 const _storage = global.storage;
 
@@ -37,13 +38,13 @@ const getFullText = function _getFullText (text, selectedCards) {
 * Check if every non czar player is ready
 */
 const checkReady = function _chekcReady() {
-	const { players } = _storage.getState().Match;
-	Object.keys(players).forEach(k => {
-		const p = players[k];
+	let players = MatchData.getPlayers(true);
+	for (let i=0; i < players.length; i++) {
+		let p = players[i];
 		if(!p.isCzar && p.status !== 'D') {
 			if (p.status !== 'R') return false;
 		}
-	})
+	}
 	console.log('#> Every one is ready');
 	return true
 }
