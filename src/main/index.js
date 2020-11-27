@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	}).on(/lobby\/find_game/, () => {
 		_setContent( FindGame() )
 	}).on(/\/game\//, () => {
+		console.log('load game view')
 		_setContent( TableTop() )
 	}).on(/tests/, () => {
 		_setContent(Div({ id: 'tests' }, Tests()))
