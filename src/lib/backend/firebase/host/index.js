@@ -8,6 +8,7 @@ const WCOLLECTION = 'waiting_room';
  * @param {*} db firebase reference
  */
 const setHand = function _setPlayers(id, players, pool, db = firebase.firestore()) {
+	let isChange = false;
 	Object.keys(players).forEach(_k => {
 		let pl = players[_k];
 		let hand = pl.hand;
@@ -16,17 +17,21 @@ const setHand = function _setPlayers(id, players, pool, db = firebase.firestore(
 		const left = 10 - hand.length;
 		for (let i = 0; i < left; i++){
 			hand.push(wihiteCards.pop());
+			isChange = true;
 		}
 		pool.whiteCards = wihiteCards.join();
 		players[_k].hand = hand.join();
 	});
-	// write playes and pool in database
-	db.collection(COLLECTION).doc(id).set({
+	if(isChange) {
+			// write playes and pool in database
+			console.log('write hands into database');
+			db.collection(COLLECTION).doc(id).set({
 			players,
 			pool
 		},
-		{ merge: true } // update instead of overwrite
-	);
+				{ merge: true } // update instead of overwrite
+			);
+		}
 }
 /**
  * Get initial pool with all cards
