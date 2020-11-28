@@ -6,6 +6,7 @@ import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
 import { checkReady } from '../../util';
 import { Settings } from '../../components/Settings';
+import MatchData from '../../controllers/MatchDataManager';
 
 const _storage = global.storage;
 const UPDATE_EV = 'MATCH_UPDATE';
@@ -69,13 +70,10 @@ function _chekcReady() {
 }
 
 function _getPreview() {
-	const { rounds } = _storage.getState().Match;
-	const lastRound = rounds[rounds.length - 1];
-	if(!lastRound) return [];
-	return Object.keys(lastRound.whiteCards).map((_k) => {
-		const wc = lastRound.whiteCards[_k];
+	const submits = MatchData.getSubmits();
+	return submits.map((sbm) => {
 		return Div({ className: 'submits-wrapper' }, () => {
-			return _getTextCard(wc, _k)
+			return _getTextCard(sbm.submits, sbm.uid)
 		})
 	})
 }
@@ -86,20 +84,20 @@ function _getPreview() {
  * @param {String} pid Player id
  */
 function _getTextCard(submits, pid) {
-	const { usedDeck: { whiteCards, blackCards }, czarCard, id } = _storage.getState().Match;
-	let { text, pick } = blackCards[czarCard];
+	const { usedDeck: { blackCards }, czarCard, id } = _storage.getState().Match;
+	let { text } = blackCards[czarCard];
 	let fullText = text;
 	let isQuestion = fullText.match(/___/g) === null;
 	let isRoundOver = _checkIsWinner();
 	if (!isQuestion) {
 		for (let i = 0; i < submits.length; i++) {
 			let subm = submits[i];
-			fullText = fullText.replace(/___/, `<span>${whiteCards[subm]}</span>`);
+			fullText = fullText.replace(/___/, `<span>${subm}</span>`);
 		}
 	} else {
 		for (let i = 0; i < submits.length; i++) {
 			let subm = submits[i];
-			fullText += `<span>${whiteCards[subm]}</span>`
+			fullText += `<span>${subm}</span>`
 		}
 	}
 	return PreviewSubmit({

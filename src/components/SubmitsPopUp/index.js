@@ -2,6 +2,7 @@ import { Div, Span, H3 } from '@rebelstack-io/metaflux';
 import { PreviewSubmit } from '../PreviewSubmit';
 import { TurnStatus } from '../TurnStatus';
 import { checkReady } from '../../util';
+import MatchData from '../../controllers/MatchDataManager';
 
 
 const _storage = global.storage;
@@ -34,21 +35,17 @@ function _getContent() {
 		Div({className: 'all-submits'}, _getSubmits())
 	]
 }
-
 /**
  * Get non-czar players submits
  */
 function _getSubmits() {
-	const { rounds } = _storage.getState().Match;
 	const { user: { uid } } =_storage.getState().Main
-	const lastRound = rounds[rounds.length - 1];
-	const isReady = checkReady();
-	if(!lastRound) return [];
-	return Object.keys(lastRound.whiteCards).map((_k) => {
-		const wc = lastRound.whiteCards[_k];
-		if(isReady || _k === uid) {
+	const submits = MatchData.getSubmits();
+	let isReady = checkReady();
+	return submits.map(sbm => {
+		if(isReady || sbm.uid === uid) {
 			return Div({ className: 'submits-wrapper' }, () => {
-				return _getTextCard(wc,_k)//wc.map((id) => _getTextCard(id, _k))
+				return _getTextCard(sbm.submits, sbm.uid)
 			})
 		} else {
 			return Div({ className: 'submits-wrapper' }, () => {
@@ -71,18 +68,18 @@ function _getLoadingCard() {
  */
 function _getTextCard(submits, pid) {
 	const { usedDeck: { whiteCards, blackCards }, czarCard } = _storage.getState().Match;
-	let { text, pick } = blackCards[czarCard];
+	let { text } = blackCards[czarCard];
 	let fullText = text;
 	let isQuestion = fullText.match(/___/g) === null;
 	if (!isQuestion) {
 		for (let i = 0; i < submits.length; i++) {
 			let subm = submits[i];
-			fullText = fullText.replace(/___/, `<span>${whiteCards[subm]}</span>`);
+			fullText = fullText.replace(/___/, `<span>${subm}</span>`);
 		}
 	} else {
 		for (let i = 0; i < submits.length; i++) {
 			let subm = submits[i];
-			fullText += `<span>${whiteCards[subm]}</span>`
+			fullText += `<span>${subm}</span>`
 		}
 	}
 	return PreviewSubmit({ fullText, isWinner: _checkWinner(pid) });
