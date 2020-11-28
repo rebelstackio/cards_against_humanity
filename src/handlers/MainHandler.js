@@ -1,5 +1,3 @@
-import HostApi from "../lib/backend/firebase/host/index";
-
 /*
 * DEFAULT HANDLER
 */
@@ -107,9 +105,6 @@ function updateEvent (action, state) {
 		state.Match.hand = state.Match.players[uid].hand;
 	}
 	state.Match.isCzar = state.Match.players[uid].isCzar;
-	if (state.Match.isHost) {
-		HostApi.setHand(state.Match.id,state.Match.players, state.Match.pool)
-	}
 	if (state.Match.czarCard) {
 		state.Match.selectedCardsLimit = state.Match.usedDeck.blackCards[state.Match.czarCard].pick;
 	}

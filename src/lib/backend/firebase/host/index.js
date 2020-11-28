@@ -7,8 +7,7 @@ const WCOLLECTION = 'waiting_room';
  * @param {Object} pool object of available cards
  * @param {*} db firebase reference
  */
-const setHand = function _setPlayers(id, players, pool, db = firebase.firestore()) {
-	let isChange = false;
+function _setHands(players, pool, db = firebase.firestore()) {
 	Object.keys(players).forEach(_k => {
 		let pl = players[_k];
 		let hand = pl.hand;
@@ -17,21 +16,12 @@ const setHand = function _setPlayers(id, players, pool, db = firebase.firestore(
 		const left = 10 - hand.length;
 		for (let i = 0; i < left; i++){
 			hand.push(wihiteCards.pop());
-			isChange = true;
 		}
 		pool.whiteCards = wihiteCards.join();
 		players[_k].hand = hand.join();
 	});
-	if(isChange) {
-			// write playes and pool in database
-			console.log('write hands into database');
-			db.collection(COLLECTION).doc(id).set({
-			players,
-			pool
-		},
-				{ merge: true } // update instead of overwrite
-			);
-		}
+	console.log('hands updated');
+	return players;
 }
 /**
  * Get initial pool with all cards
@@ -159,12 +149,20 @@ function _getRandom(keys) {
  * @param {*} db Firestore reference
  */
 const NextRound = function _nextRound(id, rounds, players, pool, winningScore, db = firebase.firestore()) {
+	// get next czar
 	players = _getCzar(players);
+	// reset players status
 	players = _resetStatus(players);
+	// set hands
+	players = _setHands(players, pool)
+	// get last black card from the pool;
 	pool.blackCards = pool.blackCards.split(',')
 	const czarCard = pool.blackCards.pop();
-	rounds.push({ whiteCards: {}, winner: {}, czarCard });
+	// set it back to pool to avoid runing out
+	pool.blackCards.unshift(czarCard);
 	pool.blackCards = pool.blackCards.join();
+	// set next empty round
+	rounds.push({ whiteCards: {}, winner: {}, czarCard });
 	db.collection(COLLECTION).doc(id).set({
 		players,
 		rounds,
@@ -173,6 +171,7 @@ const NextRound = function _nextRound(id, rounds, players, pool, winningScore, d
 		status: _checkEndOfMatch(players, winningScore) ? 'E' : 'R'
 	}, { merge: true }) // update and not overwrite
 }
+
 /**
  * Return true if a player have the score limit
  * @param {Object} players Players object
@@ -223,7 +222,6 @@ const kickPLayer = async function _kickPlayer(id, pid, db = firebase.firestore()
 
 export default {
 	getFullPool,
-	setHand,
 	startMatch,
 	NextRound,
 	startOver,
