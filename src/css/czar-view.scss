@@ -2,13 +2,22 @@
 	display: grid;
 	grid-template-columns: 180px 1fr;
 	grid-template-rows: 150px 1fr;
+	column-gap: 10px;
 	row-gap: 10px;
 	height: 100%;
 	> .submits {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
+		column-gap: 10px;
 		/*grid-area: 2 / 1 / span 1 / span 2*/;
 		justify-items: center;
+		> .waiting-for-players {
+			grid-area: 1 / 1 / span 1 / span 4;
+			display: grid;
+			justify-items: center;
+			height: 50vh;
+			color: #fff;
+		}
 		> .submit-wrapper {
 			width: $cah-card-width;
 			height: $cah-card-height;
@@ -25,15 +34,6 @@
 				&:nth-child(2) {
 					left: 20px;
 					z-index: 1;
-				}
-			}
-			& .modal-spinner {
-				width: calc(#{$cah-card-width} - 5px);
-				height: calc(#{$cah-card-width} - 5px);
-				place-self: center;
-				&::after {
-					width: calc(#{$cah-card-width} - 5px);
-					height: calc(#{$cah-card-width} - 5px);
 				}
 			}
 		}

@@ -48,27 +48,27 @@ const CzarHeader = () => Div({ className: 'czar-header' }, [
 ])
 
 /*----------------------------------------------------------------------------------- */
+/**
+ *
+ */
 const WhiteSubmits = () => Div({ className: 'submits' }, () => {
 	let isReadyToShow = checkReady();
+	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
 	return isReadyToShow ? _getPreview() : _getWaitingSubmits()
 }).onStoreEvent(UPDATE_EV, (state, that) => {
 	let isReadyToShow = checkReady();
-	that.innerHTML = '';
-	let content = isReadyToShow ? _getPreview() : _getWaitingSubmits();
-	that.append(...content);
-})
-
-function _chekcReady() {
-	const { players } = _storage.getState().Match;
-	for(let k in players) {
-		const p = players[k];
-		if(!p.isCzar) {
-			if (p.status !== 'R') return false;
-		}
+	let isEmpty =  that.innerHTML === '';
+	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
+	if (isReadyToShow || isEmpty) {
+		that.innerHTML = '';
+		console.log(isReadyToShow ? '#>Czar Ready to see the submits' : 'init submits components');
+		let content = isReadyToShow ? _getPreview() : _getWaitingSubmits()
+		that.append(...content);
 	}
-	return true
-}
-
+})
+/**
+ * Get the black cards with the payers submits
+ */
 function _getPreview() {
 	const submits = MatchData.getSubmits();
 	return submits.map((sbm) => {
@@ -120,8 +120,8 @@ function _getTextCard(submits, pid) {
 }
 
 function _getWaitingSubmits() {
-	const { players, selectedCardsLimit } = _storage.getState().Match;
-	return Object.keys(players).map(key => {
+	//const { players, selectedCardsLimit } = _storage.getState().Match;
+	/* return Object.keys(players).map(key => {
 		const pl = players[key]
 		let content = [];
 		if (!pl.isCzar) {
@@ -132,7 +132,13 @@ function _getWaitingSubmits() {
 			}
 		}
 		return Div({ className: 'submit-wrapper' }, content);
-	})
+	}) */
+	return [
+		Div({ className: 'waiting-for-players' }, [
+			H3({}, 'Waiting for your dumb friends to pick'),
+			Span({ className: 'modal-spinner' })
+		])
+	]
 }
 /**
  * Check if the round have a winner

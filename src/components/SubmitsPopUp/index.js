@@ -29,6 +29,7 @@ const SubmitPopUp = () => Div({ className: 'popup-wrapper hidden' }, [
  */
 function _getContent() {
 	const isReady = checkReady();
+	console.log(isReady ? '#> Every one is ready' : 'not Ready');
 	return [
 		H3({ className: 'submit-title' }, isReady ? 'Wating for the Czar' : 'Players are picking'),
 		TurnStatus(),
@@ -42,6 +43,7 @@ function _getSubmits() {
 	const { user: { uid } } =_storage.getState().Main
 	const submits = MatchData.getSubmits();
 	let isReady = checkReady();
+	console.log(isReady ? '#> Every one is ready' : 'not Ready');
 	return submits.map(sbm => {
 		if(isReady || sbm.uid === uid) {
 			return Div({ className: 'submits-wrapper' }, () => {
