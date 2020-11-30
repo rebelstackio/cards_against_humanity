@@ -106,7 +106,8 @@ function updateEvent (action, state) {
 	}
 	state.Match.isCzar = state.Match.players[uid].isCzar;
 	if (state.Match.czarCard) {
-		state.Match.selectedCardsLimit = state.Match.usedDeck.blackCards[state.Match.czarCard].pick;
+		const bc = state.Match.usedDeck.blackCards[parseInt(state.Match.czarCard)];
+		state.Match.selectedCardsLimit = bc.pick;
 	}
 	return { newState: state }
 }

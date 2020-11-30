@@ -24,10 +24,26 @@ import { SnackBar } from '../components/SnackBar';
 import { Summary } from '../containers/summary';
 import { GameSounds } from '../audio';
 import { ConfirmationPopUp } from '../components/ConfirmationPopup';
+import { DebugCounter } from '../debug';
 
 global.router = new Router();
 global.gameSounds = new GameSounds();
+global.debugCount = new DebugCounter();
+
 if ( location.hash === '' ) global.router.go( '/lobby/host/' );
+
+HTMLElement.prototype.onStoreEvent = function (event, callback, stName = false) {
+	const storageName = stName ? stName : 'storage'
+	if (!global[storageName]){
+		throw new TypeError(`CustomElements.onStoreEvent: ${storageName} is not defined, this must be defined <global | window>.${storageName} level`);
+	}
+	global[storageName].on(event, () => {
+		if (this.baseNode() instanceof HTMLHtmlElement) {
+			callback(global[storageName].getState(), this);
+		}
+	});
+	return this;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 	global.router.on(/lobby\/host/, () => {
@@ -101,11 +117,13 @@ global.storage.on('MATCH_JOINED',_listenRoom)
  */
 function _listenRoom(action) {
 	const state = action.newState;
+	global.debugCount.count('req_to_listen')
 	RoomApi.listenRoom(state.Match.id, async (snap) => {
 		const data = snap.data();
 		if (!data) return;
 		const _deck = await getDeck(data.deck)
 		Actions.roomUpdate({ data, deck:_deck });
+		global.debugCount.count('dispacth_update_ev')
 		const {uid} = global.storage.getState().Main.user;
 		const player = data.players[uid];
 		if (player.isCzar && data.status === 'R') {
@@ -133,3 +151,8 @@ function goByStatus(status) {
 			break;
 	}
 }
+
+
+window.addEventListener('beforeunload', () => {
+	global._matchListener()
+})

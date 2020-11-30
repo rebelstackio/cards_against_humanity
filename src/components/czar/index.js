@@ -56,6 +56,7 @@ class Czar extends MetaComponent {
 				this.onSelectedCardsChange();
 			},
 			'MATCH_UPDATE': _ => {
+				global.debugCount.count('scoreboar-wrapper-ue')
 				this.updateContent();
 			}
 		}

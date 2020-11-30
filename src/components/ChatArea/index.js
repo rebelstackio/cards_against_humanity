@@ -14,6 +14,7 @@ if(id) {
 
 _storage.on('MATCH_UPDATE', () => {
 	const { id } = _storage.getState().Match;
+	global.debugCount.count('waiting-room-global-ue')
 	if(!isListen && id) {
 		_listentMessages(id);
 		isListen = true;

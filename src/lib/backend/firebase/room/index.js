@@ -112,7 +112,7 @@ const joinRoom = function _joinRoom(id, password, callback) {
  * @param {*} db Firestore reference
  */
 const listenRoom = function _listenRoom(id, callback, db = firebase.firestore()) {
-	return db.collection(COLLECTION).doc(id).onSnapshot(callback)
+	global._matchListener = db.collection(COLLECTION).doc(id).onSnapshot(callback)
 }
 /**
  * Submit turn to cloud function
