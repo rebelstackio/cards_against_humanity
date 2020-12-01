@@ -13,7 +13,6 @@ const UPDATE_EV = 'MATCH_UPDATE';
 
 _storage.on(UPDATE_EV, () => {
 	const { isCzar, status } = _storage.getState().Match
-	global.debugCount.count('czar-global-ue');
 	if(!isCzar && status !== 'E') {
 		global.router.go('/game/');
 	} else if(status === 'E') {
@@ -33,7 +32,6 @@ const Czar = () => Div({
 function _getBlackCard() {
 	const card = new Card(_getBlackCardText(), 'black', 0)
 	return card.onStoreEvent(UPDATE_EV, (_, that) => {
-		global.debugCount.count('czar-blackcard-ue')
 		that.querySelector('div').innerHTML = _getBlackCardText();
 	});
 }
@@ -58,7 +56,6 @@ const WhiteSubmits = () => Div({ className: 'submits' }, () => {
 	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
 	return isReadyToShow ? _getPreview() : _getWaitingSubmits()
 }).onStoreEvent(UPDATE_EV, (state, that) => {
-	global.debugCount.count('czar-players-submit-ue')
 	let isReadyToShow = checkReady();
 	let isEmpty =  that.innerHTML === '';
 	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
