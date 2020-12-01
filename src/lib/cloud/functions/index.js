@@ -51,9 +51,15 @@ exports.joinGame = functions.https.onCall(async (data, context) => {
 	const user = _getUserFromContext(context)
 	if(doc.exists) {
 		let _data = doc.data();
+		let wc = _data.pool.whiteCards.split(',');
+		let hand = wc.splice(Math.max(wc.length - 10, 0));
+		hand = hand.join();
+		wc = wc.join();
+		_data.pool.whiteCards = hand + ',' + wc;
 		const newPlayers = _addPlayer(_data.players, user);
 		_data.nplayers = _data.nplayers + 1;
 		_data.players = newPlayers;
+		_data.players[user.uid].hand = hand;
 		await ref.set(_data)
 		return { success: 'Joined to the game'}
 	} else {

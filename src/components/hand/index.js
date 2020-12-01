@@ -7,19 +7,24 @@ const UPDATE_EV = 'MATCH_UPDATE';
 class Hand extends MetaComponent {
 	constructor () {
 		super(global.storage);
+		this.hand = '';
 	}
 	render () {
 		this.content = Div({});
 		this.cards = [];
 		this._getContent()
 		return this.content
-		.onStoreEvent(UPDATE_EV, () => {
-			this._getContent();
+		.onStoreEvent(UPDATE_EV, (state) => {
+			if (this.hand !== state.Match.hand) {
+				console.log('#> update hand component');
+				this._getContent();
+			}
 		})
 	}
 
 	_getContent() {
-		let hand = this.storage.getState().Match.hand.split(',');
+		this.hand = this.storage.getState().Match.hand;
+		let hand = this.hand.split(',');
 		const { whiteCards } = this.storage.getState().Match.usedDeck;
 		this.content.innerHTML = '';
 		for (let i = 0; i < hand.length; i++) {

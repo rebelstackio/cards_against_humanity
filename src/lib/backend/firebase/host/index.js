@@ -7,7 +7,7 @@ const WCOLLECTION = 'waiting_room';
  * @param {Object} pool object of available cards
  * @param {*} db firebase reference
  */
-const setHand = function _setPlayers(id, players, pool, db = firebase.firestore()) {
+function _setHands(players, pool, db = firebase.firestore()) {
 	Object.keys(players).forEach(_k => {
 		let pl = players[_k];
 		let hand = pl.hand;
@@ -20,13 +20,8 @@ const setHand = function _setPlayers(id, players, pool, db = firebase.firestore(
 		pool.whiteCards = wihiteCards.join();
 		players[_k].hand = hand.join();
 	});
-	// write playes and pool in database
-	db.collection(COLLECTION).doc(id).set({
-			players,
-			pool
-		},
-		{ merge: true } // update instead of overwrite
-	);
+	console.log('hands updated');
+	return {players, pool};
 }
 /**
  * Get initial pool with all cards
@@ -47,14 +42,24 @@ const getFullPool = function _getPool(deck) {
  * @param {String} pool
  */
 function _shufflePool(pool) {
-	pool.whiteCards = pool.whiteCards.split(',').sort(() => {
-		return Math.random() - 0.5
-	}).join();
-	pool.blackCards = pool.blackCards.split(',').sort(() => {
-		return Math.random() - 0.5
-	}).join();
+	pool.whiteCards = _shuffleArray(pool.whiteCards.split(',')).join();
+	pool.blackCards = _shuffleArray(pool.blackCards.split(',')).join();
 	return pool;
 }
+/**
+ * shuffle array radom
+ * @param {Array} arr Arrary
+ */
+function _shuffleArray(arr) {
+	for(let i = arr.length - 1; i > 0; i--){
+		const j = Math.floor(Math.random() * i)
+		const temp = arr[i]
+		arr[i] = arr[j]
+		arr[j] = temp
+	}
+	return arr;
+}
+
 /**
  * Strart the match
  * @param {String} id RoomID
@@ -63,8 +68,15 @@ function _shufflePool(pool) {
  * @param {*} db Firestore reference
  */
 const startMatch = function _startMatch(id, players, pool, db = firebase.firestore()) {
+	// get first czar
 	players = _getCzar(players);
+	// reset status to picking
 	players = _resetStatus(players);
+	// set the hands for each player
+	let res = _setHands(players,pool)
+	players = res.players;
+	pool = res.pool;
+	// get last black card from the pool
 	pool.blackCards = pool.blackCards.split(',')
 	const czarCard = pool.blackCards.pop();
 	pool.blackCards = pool.blackCards.join();
@@ -80,7 +92,6 @@ const startMatch = function _startMatch(id, players, pool, db = firebase.firesto
 }
 /**
  * get next czar, if there is no czar get random one
- * Due to this is call at the end of the round also reset the status for each player to picking
  * @param {Object} players
  */
 function _getCzar(players) {
@@ -154,12 +165,22 @@ function _getRandom(keys) {
  * @param {*} db Firestore reference
  */
 const NextRound = function _nextRound(id, rounds, players, pool, winningScore, db = firebase.firestore()) {
+	// get next czar
 	players = _getCzar(players);
+	// reset players status
 	players = _resetStatus(players);
+	// set hands
+	const res = _setHands(players, pool)
+	players = res.players;
+	pool = res.pool;
+	// get last black card from the pool;
 	pool.blackCards = pool.blackCards.split(',')
 	const czarCard = pool.blackCards.pop();
-	rounds.push({ whiteCards: {}, winner: {}, czarCard });
+	// set it back to pool to avoid runing out
+	pool.blackCards.unshift(czarCard);
 	pool.blackCards = pool.blackCards.join();
+	// set next empty round
+	rounds.push({ whiteCards: {}, winner: {}, czarCard });
 	db.collection(COLLECTION).doc(id).set({
 		players,
 		rounds,
@@ -168,6 +189,7 @@ const NextRound = function _nextRound(id, rounds, players, pool, winningScore, d
 		status: _checkEndOfMatch(players, winningScore) ? 'E' : 'R'
 	}, { merge: true }) // update and not overwrite
 }
+
 /**
  * Return true if a player have the score limit
  * @param {Object} players Players object
@@ -218,7 +240,6 @@ const kickPLayer = async function _kickPlayer(id, pid, db = firebase.firestore()
 
 export default {
 	getFullPool,
-	setHand,
 	startMatch,
 	NextRound,
 	startOver,

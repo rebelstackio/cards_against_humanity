@@ -24,6 +24,42 @@ const getPlayers = function _getPlayers(isMySelfRequired) {
 	});
 }
 
+function _getLastRound() {
+	const { rounds } = _getState().Match;
+	return rounds.pop();
+}
+/**
+ * get submits formated and orderd to avoid changing order in the view
+ */
+const getSubmits = function _getSubmits() {
+	const thisRound = _getLastRound();
+	if(!thisRound) return [];
+	const { players } = _getState().Match;
+	let ret = [];
+	Object.keys(thisRound.whiteCards).forEach(_k => {
+		ret.push({
+			uid: _k,
+			submits: _getSubmitText(thisRound.whiteCards[_k]),
+			displayName: players[_k].displayName
+		})
+	})
+	return ret.sort((a, b) => {
+		if (a.displayName > b.displayName) {
+			return 1
+		} else {
+			return -1
+		}
+	});
+}
+
+function _getSubmitText(submits) {
+	const { whiteCards } = _getState().Match.usedDeck;
+	return submits.map(s => {
+		return whiteCards[s];
+	});
+}
+
 export default {
-	getPlayers
+	getPlayers,
+	getSubmits
 }

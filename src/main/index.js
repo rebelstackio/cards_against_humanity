@@ -27,7 +27,30 @@ import { ConfirmationPopUp } from '../components/ConfirmationPopup';
 
 global.router = new Router();
 global.gameSounds = new GameSounds();
+
 if ( location.hash === '' ) global.router.go( '/lobby/host/' );
+/**
+ * Temporal fix to the onStoreEvent 
+ * @param {*} event 
+ * @param {*} callback 
+ * @param {*} stName 
+ */
+HTMLElement.prototype.onStoreEvent = function (event, callback, stName = false) {
+	const storageName = stName ? stName : 'storage'
+	if (!global[storageName]){
+		throw new TypeError(`CustomElements.onStoreEvent: ${storageName} is not defined, this must be defined <global | window>.${storageName} level`);
+	}
+	const cb = () => {
+		if (this.baseNode() instanceof HTMLHtmlElement) {
+			callback(global[storageName].getState(), this);
+		} else {
+			// if isn't in the html tree remove listener
+			global[storageName].removeListener(event, cb)
+		}
+	}
+	global[storageName].on(event, cb);
+	return this;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 	global.router.on(/lobby\/host/, () => {
@@ -35,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	}).on(/lobby\/find_game/, () => {
 		_setContent( FindGame() )
 	}).on(/\/game\//, () => {
+		console.log('load game view')
 		_setContent( TableTop() )
 	}).on(/tests/, () => {
 		_setContent(Div({ id: 'tests' }, Tests()))
@@ -132,3 +156,8 @@ function goByStatus(status) {
 			break;
 	}
 }
+
+
+window.addEventListener('beforeunload', () => {
+	global._matchListener()
+})

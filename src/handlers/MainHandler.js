@@ -1,5 +1,3 @@
-import HostApi from "../lib/backend/firebase/host/index";
-
 /*
 * DEFAULT HANDLER
 */
@@ -79,22 +77,7 @@ export default {
 			state.Match = Object.assign({}, state.Match, data)
 			return { newState: state }
 		},
-		'MATCH_UPDATE': (action, state) => {
-			const { data } = action;
-			const { uid } = state.Main.user
-			state.Match.isHost = data.id === uid;
-			state.Match = Object.assign({}, state.Match, data)
-			state.Match.usedDeck = action.deck;
-			if(state.Match.players[uid].hand) state.Match.hand = state.Match.players[uid].hand;
-			state.Match.isCzar = state.Match.players[uid].isCzar;
-			if (state.Match.isHost) {
-				HostApi.setHand(state.Match.id,state.Match.players, state.Match.pool)
-			}
-			if (state.Match.czarCard) {
-				state.Match.selectedCardsLimit = state.Match.usedDeck.blackCards[state.Match.czarCard].pick;
-			}
-			return { newState: state }
-		},
+		'MATCH_UPDATE': updateEvent,
 		'MATCH_JOINED': (action, state) => {
 			const { id } = action
 			state.Match.id = id;
@@ -108,3 +91,23 @@ export default {
 		}
 	}
 };
+
+function updateEvent (action, state) {
+	const { data } = action;
+	const { uid } = state.Main.user
+	// Set isHost boolean
+	state.Match.isHost = data.id === uid;
+	// merge the current state with fb response
+	state.Match = Object.assign({}, state.Match, data)
+	// get the used deck
+	state.Match.usedDeck = action.deck;
+	if(state.Match.hand !== state.Match.players[uid].hand) {
+		state.Match.hand = state.Match.players[uid].hand;
+	}
+	state.Match.isCzar = state.Match.players[uid].isCzar;
+	if (state.Match.czarCard) {
+		const bc = state.Match.usedDeck.blackCards[parseInt(state.Match.czarCard)];
+		state.Match.selectedCardsLimit = bc.pick;
+	}
+	return { newState: state }
+}

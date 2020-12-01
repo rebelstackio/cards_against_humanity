@@ -6,6 +6,7 @@ import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
 import { checkReady } from '../../util';
 import { Settings } from '../../components/Settings';
+import MatchData from '../../controllers/MatchDataManager';
 
 const _storage = global.storage;
 const UPDATE_EV = 'MATCH_UPDATE';
@@ -47,35 +48,32 @@ const CzarHeader = () => Div({ className: 'czar-header' }, [
 ])
 
 /*----------------------------------------------------------------------------------- */
+/**
+ *
+ */
 const WhiteSubmits = () => Div({ className: 'submits' }, () => {
 	let isReadyToShow = checkReady();
+	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
 	return isReadyToShow ? _getPreview() : _getWaitingSubmits()
 }).onStoreEvent(UPDATE_EV, (state, that) => {
 	let isReadyToShow = checkReady();
-	that.innerHTML = '';
-	let content = isReadyToShow ? _getPreview() : _getWaitingSubmits();
-	that.append(...content);
-})
-
-function _chekcReady() {
-	const { players } = _storage.getState().Match;
-	for(let k in players) {
-		const p = players[k];
-		if(!p.isCzar) {
-			if (p.status !== 'R') return false;
-		}
+	let isEmpty =  that.innerHTML === '';
+	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
+	if (isReadyToShow || isEmpty) {
+		that.innerHTML = '';
+		console.log(isReadyToShow ? '#>Czar Ready to see the submits' : 'init submits components');
+		let content = isReadyToShow ? _getPreview() : _getWaitingSubmits()
+		that.append(...content);
 	}
-	return true
-}
-
+})
+/**
+ * Get the black cards with the payers submits
+ */
 function _getPreview() {
-	const { rounds } = _storage.getState().Match;
-	const lastRound = rounds[rounds.length - 1];
-	if(!lastRound) return [];
-	return Object.keys(lastRound.whiteCards).map((_k) => {
-		const wc = lastRound.whiteCards[_k];
+	const submits = MatchData.getSubmits();
+	return submits.map((sbm) => {
 		return Div({ className: 'submits-wrapper' }, () => {
-			return _getTextCard(wc, _k)
+			return _getTextCard(sbm.submits, sbm.uid)
 		})
 	})
 }
@@ -86,20 +84,20 @@ function _getPreview() {
  * @param {String} pid Player id
  */
 function _getTextCard(submits, pid) {
-	const { usedDeck: { whiteCards, blackCards }, czarCard, id } = _storage.getState().Match;
-	let { text, pick } = blackCards[czarCard];
+	const { usedDeck: { blackCards }, czarCard, id } = _storage.getState().Match;
+	let { text } = blackCards[czarCard];
 	let fullText = text;
 	let isQuestion = fullText.match(/___/g) === null;
 	let isRoundOver = _checkIsWinner();
 	if (!isQuestion) {
 		for (let i = 0; i < submits.length; i++) {
 			let subm = submits[i];
-			fullText = fullText.replace(/___/, `<span>${whiteCards[subm]}</span>`);
+			fullText = fullText.replace(/___/, `<span>${subm}</span>`);
 		}
 	} else {
 		for (let i = 0; i < submits.length; i++) {
 			let subm = submits[i];
-			fullText += `<span>${whiteCards[subm]}</span>`
+			fullText += `<span>${subm}</span>`
 		}
 	}
 	return PreviewSubmit({
@@ -122,8 +120,8 @@ function _getTextCard(submits, pid) {
 }
 
 function _getWaitingSubmits() {
-	const { players, selectedCardsLimit } = _storage.getState().Match;
-	return Object.keys(players).map(key => {
+	//const { players, selectedCardsLimit } = _storage.getState().Match;
+	/* return Object.keys(players).map(key => {
 		const pl = players[key]
 		let content = [];
 		if (!pl.isCzar) {
@@ -134,7 +132,13 @@ function _getWaitingSubmits() {
 			}
 		}
 		return Div({ className: 'submit-wrapper' }, content);
-	})
+	}) */
+	return [
+		Div({ className: 'waiting-for-players' }, [
+			H3({}, 'Waiting for your dumb friends to pick'),
+			Span({ className: 'modal-spinner' })
+		])
+	]
 }
 /**
  * Check if the round have a winner

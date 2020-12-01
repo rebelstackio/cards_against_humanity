@@ -39,13 +39,13 @@ const getFullText = function _getFullText (text, selectedCards) {
 */
 const checkReady = function _chekcReady() {
 	let players = MatchData.getPlayers(true);
+	if(players.length === 0) return false;
 	for (let i=0; i < players.length; i++) {
 		let p = players[i];
 		if(!p.isCzar && p.status !== 'D') {
 			if (p.status !== 'R') return false;
 		}
 	}
-	console.log('#> Every one is ready');
 	return true
 }
 
