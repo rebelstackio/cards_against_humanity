@@ -30,11 +30,12 @@ global.gameSounds = new GameSounds();
 
 if ( location.hash === '' ) global.router.go( '/lobby/host/' );
 /**
- * Temporal fix to the onStoreEvent 
- * @param {*} event 
- * @param {*} callback 
- * @param {*} stName 
- */
+ * Temporal fix to the onStoreEvent
+ * this is soon to be patched in metaflux
+ * @param {*} event
+ * @param {*} callback
+ * @param {*} stName
+ *
 HTMLElement.prototype.onStoreEvent = function (event, callback, stName = false) {
 	const storageName = stName ? stName : 'storage'
 	if (!global[storageName]){
@@ -50,7 +51,7 @@ HTMLElement.prototype.onStoreEvent = function (event, callback, stName = false) 
 	}
 	global[storageName].on(event, cb);
 	return this;
-}
+}*/
 
 document.addEventListener('DOMContentLoaded', () => {
 	global.router.on(/lobby\/host/, () => {

@@ -63,6 +63,6 @@
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^5.14.0",
-		"@rebelstack-io/metaflux": "^2.0.1"
+		"@rebelstack-io/metaflux": "^2.0.2"
 	}
 }
