@@ -29,6 +29,7 @@
 		grid-template-columns: repeat(3, 1fr);
 		column-gap: 10px;
 		overflow-y: auto;
+		position: relative;
 	}
 }
 .submits-wrapper {
@@ -57,4 +58,20 @@
 		display: grid;
 		place-content: center;
 	}
+}
+
+.winner-card {
+	min-height: 300px;
+	min-width: 250px;
+}
+
+
+.winner-box {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: grid;
+	place-content: center;
 }
