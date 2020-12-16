@@ -1,27 +1,29 @@
 import selectAudio from '../assets/audios/select_card.mp3';
 import pickAudio from '../assets/audios/pick_card.mp3';
-import notAuido from '../assets/audios/not.mp3';
+import notAudio from '../assets/audios/not.mp3';
 
 class GameSounds {
 	constructor () {
+		this.selectAudio = new Audio(selectAudio);
+		this.pickAudio = new Audio(pickAudio);
+		this.notAudio = new Audio(notAudio);
 	}
 
 	Play(type) {
 		let s;
 		switch (type) {
 			case 'SELECT':
-				s = selectAudio;
+				this.selectAudio.play();
 				break;
 			case 'PICK':
-				s = pickAudio;
+				this.pickAudio.play();
 				break;
 			default:
-				s = notAuido
+				this.notAudio.play();
 				break;
 		}
-		let audio = new Audio(s);
-		audio.play();
 	}
+
 }
 
 export { GameSounds };
