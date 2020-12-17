@@ -6,7 +6,11 @@ const _storge = global.storage;
 
 const ShuffleHand = () => Div({ className: 'shuffle-white', onclick: () => {
 	const { id } = _storge.getState().Match;
+	// start loading
 	Actions.loadingOn({ msg: 'Getting new cards' })
+	// clear selected cards
+	Actions.cancelSelection();
+	// call shuffle API
 	roomApi.shuffleHand(id);
 }},
 	Span({ className: 'fas fa-random' })

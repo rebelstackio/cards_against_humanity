@@ -1,7 +1,7 @@
-import { Div, Span, P } from '@rebelstack-io/metaflux';
+import { Div, Span, P, Img } from '@rebelstack-io/metaflux';
 
 const PreviewSubmit = (props) => {
-	const { fullText, footer, isWinner } = props;
+	const { fullText, footer, isWinner, uid } = props;
 	let rawText = fullText.replace(/(<span>|<\/span>)/g, '');
 	return Div({
 		className: "draw-card-body"
@@ -24,8 +24,17 @@ const PreviewSubmit = (props) => {
 			style: 'font-size: 20px;'
 		}, fullText),
 		_getFooter(footer),
-		isWinner ? Span({ className: 'fas fa-star' }) : ''
+		isWinner ? _getWinnerAvatar(uid) : ''
 	]);
+}
+/**
+ * get the winner avatar
+ * @param {String} uid user id
+ */
+function _getWinnerAvatar(uid) {
+	const { players } = global.storage.getState().Match;
+	if (!players[uid]) return;
+	return Img({ src: players[uid].photoURL });
 }
 
 function _getFooter(footer) {

@@ -105,7 +105,7 @@ function _getTextCard(submits, pid) {
 	return Div({ className:!_checkWinner(pid)
 		? 'submits-wrapper'
 		: 'submits-wrapper winner-card'}, () => {
-			return PreviewSubmit({ fullText, isWinner: _checkWinner(pid) });
+			return PreviewSubmit({ fullText, isWinner: _checkWinner(pid), uid: pid });
 	})
 
 }

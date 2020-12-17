@@ -115,7 +115,9 @@ function _getTextCard(submits, pid) {
 				})
 			}
 		}
-		: false
+		: false,
+		isWinner: isRoundOver,
+		uid: pid
 	});
 }
 

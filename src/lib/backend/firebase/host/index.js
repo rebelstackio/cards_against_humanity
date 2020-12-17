@@ -175,7 +175,8 @@ const NextRound = function _nextRound(id, rounds, players, pool, winningScore, d
 	// set hands
 	const res = _setHands(players, pool)
 	players = res.players;
-	pool = res.pool;
+	// shuffle pool in random rounds
+	pool = Math.round(Math.random()) ? _shufflePool(res.pool) : res.pool;
 	// get last black card from the pool;
 	pool.blackCards = pool.blackCards.split(',')
 	const czarCard = pool.blackCards.pop();
