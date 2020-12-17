@@ -57,9 +57,15 @@ exports.joinGame = functions.https.onCall(async (data, context) => {
 		wc = wc.join();
 		_data.pool.whiteCards = hand + ',' + wc;
 		const newPlayers = _addPlayer(_data.players, user);
+		if (_data.nplayers >= data.size) {
+			return { error: 'Match is full' }
+		}
 		_data.nplayers = _data.nplayers + 1;
 		_data.players = newPlayers;
 		_data.players[user.uid].hand = hand;
+		if( password && password !== _data.password ) {
+			return { error: 'Wrong password' }
+		}
 		await ref.set(_data)
 		return { success: 'Joined to the game'}
 	} else {

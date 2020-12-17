@@ -1,9 +1,11 @@
-import { Tr, Td, Th, Div, Img, H3 } from '@rebelstack-io/metaflux';
+import { Tr, Td, Th, Div, Img, H3, Input, Button } from '@rebelstack-io/metaflux';
 import RoomApi from '../../lib/backend/firebase/room';
 import emptyStateImg from '../../css/images/empty_list.svg';
 import Actions from '../../handlers/actions';
+import { passwordPopup } from '../PasswordPopup';
 
 const _store = global.storage;
+let popup = new passwordPopup();
 /**
  * Get list from storage
  */
@@ -12,7 +14,17 @@ function _getList() {
 	if(_isEmpty(matchList)) return _getEmptyState();
 	return Object.keys(matchList).map((_k) => {
 			const _m = matchList[_k];
-			return Tr({onclick: () => { requestToJoin(_k, _m) }}, [
+			return Tr({onclick: () => {
+					if (!_m.password) {
+						requestToJoin(_k, false, _m)
+					} else {
+						popup.open()
+						popup.onSubmit((passw) =>  {
+							popup.close();
+							requestToJoin(_k, passw, _m)
+						})
+					}
+				}}, [
 				Td({}, _m.name),
 				Td({}, _m.createdBy.displayName),
 				Td({}, `${_m.nplayers}/${_m.size}`),
@@ -53,7 +65,7 @@ let tableHeader = Tr({}, [
  */
 const MatchsTable =
 () => {
-	return Div({className: 'table-wrapper'}).Table({ className: 'match-table' },
+	return Div({className: 'table-wrapper'}, popup.content).Table({ className: 'match-table' },
 	() => {
 		_getMatchs()
 		return [
@@ -110,13 +122,15 @@ function _getMatchs() {
  * Request to Join Room
  * @param {Object} match
  */
-function requestToJoin(id, match) {
+function requestToJoin(id, password, match) {
 	console.log(id)
 	Actions.loadingOn({ msg: `Joining to ${ match.name }` });
-	RoomApi.joinRoom(id,false, (resp) => {
+	RoomApi.joinRoom(id, password, (resp) => {
 		if(resp.success) {
 			localStorage.setItem('m_joined', id);
 			Actions.roomJoined({ id, deck: match.deck })
+		} else {
+			Actions.displayNotification({ msg: resp.error, icon: 'fas fa-exclamation-triangle' })
 		}
 		Actions.loadingOff();
 	})
