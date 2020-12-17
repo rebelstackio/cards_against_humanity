@@ -53,10 +53,14 @@ let tableHeader = Tr({}, [
  */
 const MatchsTable =
 () => {
-	return Div({className: 'table-wrapper'}).Table({ className: 'match-table' },[
-		tableHeader,
-		..._getList()
-	]).onStoreEvent('ROOMS_LIST', (_, that) => {
+	return Div({className: 'table-wrapper'}).Table({ className: 'match-table' },
+	() => {
+		_getMatchs()
+		return [
+			tableHeader,
+			..._getList()
+		]
+	}).onStoreEvent('ROOMS_LIST', (_, that) => {
 		that.innerHTML = '';
 		that.append(tableHeader, ..._getList());
 	}).onStoreEvent('SEARCH_GAME', (state) => {
