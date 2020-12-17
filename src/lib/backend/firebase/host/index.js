@@ -145,7 +145,10 @@ function getNext(plys, i) {
 function _resetStatus(players) {
 	const keys = Object.keys(players);
 	for(let i=0; i < keys.length; i++) {
-		if(players[keys[i]].status !== 'D') players[keys[i]].status = 'P';
+		if(players[keys[i]].status !== 'D') {
+			players[keys[i]].status = 'P';
+			players[keys[i]].isAllowShuffle = 1;
+		}
 	}
 	return players;
 }

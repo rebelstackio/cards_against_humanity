@@ -106,6 +106,30 @@ exports.leaveMatch = functions.https.onCall(async (data, context) => {
 	}
 })
 /**
+ * shuffle once you white cards hand
+ */
+exports.shuffleHand = functions.https.onCall(async (data, context) => {
+	const { id } = data;
+	const ref = _DB.collection('rooms').doc(id);
+	const doc = await ref.get();
+	const user = _getUserFromContext(context)
+	let _data = doc.data();
+	// set allow shuffle to false
+	_data.players[user.uid].isAllowShuffle = 0;
+	let wc = _data.pool.whiteCards.split(',');
+	// get last ten cards from the pool
+	let hand = wc.splice(Math.max(wc.length - 10, 0));
+	// format into string
+	hand = hand.join();
+	wc = wc.join();
+	// re append the cards to the end of the maze
+	_data.pool.whiteCards = hand + ',' + wc;
+	_data.players[user.uid].hand = hand;
+	await ref.set(_data)
+	return { success: 'cards shuffle' }
+})
+
+/**
  * get a nice object from the firebase auth context
  * @param {*} context Firebase auth context
  */
@@ -128,7 +152,8 @@ function _addPlayer(pl = {}, user) {
 			photoURL: user.photoURL,
 			score: 0,
 			status: 'P',
-			hand: ''
+			hand: '',
+			isAllowShuffle: 1
 		}
 	} else {
 		pl[user.uid].status = 'P';

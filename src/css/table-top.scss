@@ -42,3 +42,21 @@
 		}
 	}
 }
+
+.shuffle-white {
+	position: fixed;
+	right: 0;
+	width: 45px;
+	height: 45px;
+	background-color: #fff;
+	display: grid;
+	place-content: center;
+	top: calc(50vh - 45px);
+	border-radius: 3px 0px 0px 3px;
+	cursor: pointer;
+	font-size: 22px;
+	transition: all .3s linear;
+	&.away {
+		transform: translate(100%, 0);
+	}
+}

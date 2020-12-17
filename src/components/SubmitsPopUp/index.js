@@ -71,7 +71,6 @@ function _getSubmitContent() {
  */
 function _getWinnerConent(winner) {
 	const pid = Object.keys(winner)[0];
-	console.log(winner, pid);
 	return Div({ className: 'winner-box' },
 		_getTextCard(winner[pid], pid)
 	)
@@ -100,7 +99,6 @@ function _getTextCard(submits, pid) {
 	} else {
 		for (let i = 0; i < submits.length; i++) {
 			let subm = submits[i];
-			console.log(subm);
 			fullText += `<span>${subm}</span>`
 		}
 	}
