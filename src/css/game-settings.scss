@@ -15,12 +15,13 @@
 	& img {
 		width: 45px;
 		border-radius: 50%;
+		grid-area: 1 / 1 / span 2;
 	}
 	& .setting-box {
 		display: grid;
 		padding: 0 10px;
 		color: #fff;
-		grid-template-rows: 45px 45px 1fr;
+		grid-template-rows: 45px 45px 45px 1fr;
 		row-gap: 10px;
 		position: relative;
 		border-left: 1px solid #fff;
@@ -48,7 +49,7 @@
 			overflow: auto;
 			> div {
 				display: grid;
-				grid-template-columns: 1fr 45px 45px;
+				grid-template-columns: 45px 1fr 45px;
 				column-gap: 5px;
 				align-items: center;
 				justify-items: center;

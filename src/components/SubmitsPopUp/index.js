@@ -29,9 +29,11 @@ const SubmitPopUp = () => Div({ className: 'popup-wrapper hidden' }, [
  */
 function _getContent() {
 	const isReady = checkReady();
-	console.log(isReady ? '#> Every one is ready' : 'not Ready');
+	const winner = MatchData.checkForWinner();
+	let title = isReady ? 'Wating for the Czar' : 'Players are picking';
+	if (winner) title = 'We have a stupid winner!';
 	return [
-		H3({ className: 'submit-title' }, isReady ? 'Wating for the Czar' : 'Players are picking'),
+		H3({ className: 'submit-title' }, title),
 		TurnStatus(),
 		Div({className: 'all-submits'}, _getSubmits())
 	]
@@ -40,15 +42,22 @@ function _getContent() {
  * Get non-czar players submits
  */
 function _getSubmits() {
+	let winner = MatchData.checkForWinner();
+	console.log(winner ? '#> there is a winner' : 'not winner yet');
+	if ( winner ) return _getWinnerConent(winner);
+	return _getSubmitContent()
+}
+/**
+ * get all submits
+ */
+function _getSubmitContent() {
 	const { user: { uid } } =_storage.getState().Main
 	const submits = MatchData.getSubmits();
 	let isReady = checkReady();
 	console.log(isReady ? '#> Every one is ready' : 'not Ready');
 	return submits.map(sbm => {
 		if(isReady || sbm.uid === uid) {
-			return Div({ className: 'submits-wrapper' }, () => {
-				return _getTextCard(sbm.submits, sbm.uid)
-			})
+			return _getTextCard(sbm.submits, uid)
 		} else {
 			return Div({ className: 'submits-wrapper' }, () => {
 				return _getLoadingCard()
@@ -57,9 +66,18 @@ function _getSubmits() {
 	})
 }
 /**
+ * get the winner card
+ * @param {Object} winner winner object
+ */
+function _getWinnerConent(winner) {
+	const pid = Object.keys(winner)[0];
+	return Div({ className: 'winner-box' },
+		_getTextCard(winner[pid], pid)
+	)
+}
+
+/**
  * get loading state when other players picking
- * @param {String} id
- * @param {Number} i
  */
 function _getLoadingCard() {
 	return Div({ className: 'Loading-submit' },Span({ className: 'modal-spinner' }))
@@ -69,7 +87,7 @@ function _getLoadingCard() {
  * @param {Array} submits Array of played cards
  */
 function _getTextCard(submits, pid) {
-	const { usedDeck: { whiteCards, blackCards }, czarCard } = _storage.getState().Match;
+	const { usedDeck: { blackCards }, czarCard } = _storage.getState().Match;
 	let { text } = blackCards[czarCard];
 	let fullText = text;
 	let isQuestion = fullText.match(/___/g) === null;
@@ -84,7 +102,12 @@ function _getTextCard(submits, pid) {
 			fullText += `<span>${subm}</span>`
 		}
 	}
-	return PreviewSubmit({ fullText, isWinner: _checkWinner(pid) });
+	return Div({ className:!_checkWinner(pid)
+		? 'submits-wrapper'
+		: 'submits-wrapper winner-card'}, () => {
+			return PreviewSubmit({ fullText, isWinner: _checkWinner(pid), uid: pid });
+	})
+
 }
 
 function _checkWinner(pid) {

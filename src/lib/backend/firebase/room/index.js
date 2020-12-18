@@ -134,6 +134,13 @@ const leaveRoom = function _leaveRoom(id) {
 	const leaveMatch = firebase.functions().httpsCallable('leaveMatch');
 	return leaveMatch({ id })
 }
+/**
+ * shuffle hand API
+ */
+const shuffleHand = function _shuffleHand(id) {
+	const cf = firebase.functions().httpsCallable('shuffleHand');
+	return cf({ id });
+}
 
 export default {
 	STATUS,
@@ -144,5 +151,6 @@ export default {
 	joinRoom,
 	listenRoom,
 	submitTurn,
-	leaveRoom
+	leaveRoom,
+	shuffleHand
 };

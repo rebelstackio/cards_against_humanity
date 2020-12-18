@@ -37,7 +37,7 @@ function _getContent () {
 		// host content
 		content.append(..._getHostContent())
 	} else {
-		content.append(_getGuestContent())
+		content.append(..._getGuestContent())
 	}
 	return content;
 }
@@ -59,7 +59,8 @@ function _getHostContent () {
 				}
 			} })
 		}}, 'Delete Game'),
-		_getPlayers()
+		H3({}, 'Players'),
+		_getPlayers(true)
 	]
 }
 /**
@@ -79,20 +80,30 @@ async function _deleteGameHandler() {
  * get players list (HOST ONLY)
  *
  */
-function _getPlayers() {
-	const players = MatchData.getPlayers();
+function _getPlayers(isHost) {
+	const players = MatchData.getPlayers(true);
+	const { user: { uid } } = _storage.getState().Main;
 	return Div({ className: 'players-box' }, () => (
 		players.map(pl => {
 			return Div({}, [
-				Span({}, pl.displayName),
 				Img({ src: pl.photoURL }),
-				Div({ className: 'kick_icom', onclick:() => _kickPlayer(pl) },
-					Span({ className: 'fas fa-skull-crossbones'})
-				)
+				Span({}, pl.displayName),
+				(isHost && uid !== pl.uid) ? _getKickButton(pl) : Div(),
+				Span({}, `Awsome Points: ${pl.score}`)
 			])
 		})
 	))
 }
+/**
+ * kick button
+ * @param {Object} pl Player object
+ */
+function _getKickButton(pl) {
+	return Div({ className: 'kick_icom', onclick:() => _kickPlayer(pl) },
+		Span({ className: 'fas fa-skull-crossbones'})
+	)
+}
+
 /**
  * Handle kick player
  * @param {Object} pl player object
@@ -128,7 +139,7 @@ async function _kickPlayerHandler(id, pl, that) {
  * get guest content
  */
 function _getGuestContent () {
-	return Div({ className: 'guest_settigns' }, [
+	return [
 		Button({ className: 'btn black', onclick: () => {
 			Actions.displayConfirmation({ data: {
 				text: `Leave the game? you can comeback any time.`,
@@ -143,8 +154,10 @@ function _getGuestContent () {
 					}
 				}
 			} })
-		}}, 'Leave Game')
-	]);
+		}}, 'Leave Game'),
+		H3({}, 'Players'),
+		_getPlayers()
+	]
 }
 /**
  * Handle confirm leave game.

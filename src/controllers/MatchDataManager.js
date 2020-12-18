@@ -23,7 +23,9 @@ const getPlayers = function _getPlayers(isMySelfRequired) {
 		}
 	});
 }
-
+/**
+ * get current round
+ */
 function _getLastRound() {
 	const { rounds } = _getState().Match;
 	return rounds.pop();
@@ -51,15 +53,28 @@ const getSubmits = function _getSubmits() {
 		}
 	});
 }
-
+/**
+ * map index from cards to text
+ * @param {Array} submits
+ */
 function _getSubmitText(submits) {
 	const { whiteCards } = _getState().Match.usedDeck;
 	return submits.map(s => {
 		return whiteCards[s];
 	});
 }
+/**
+ * Check if there is a winner for this round and return it
+ */
+function checkForWinner() {
+	const thisRound = _getLastRound();
+	if (!thisRound) return false;
+	let comp = '{}' !== JSON.stringify(thisRound.winner);
+	return comp ? thisRound.winner : false;
+}
 
 export default {
 	getPlayers,
-	getSubmits
+	getSubmits,
+	checkForWinner
 }

@@ -2,8 +2,13 @@ cah-hand {
 	width: 100vw;
 	/*height: 320px;*/
 	display: block;
-	padding: 0 20px 0 20px;
+	/*padding: 0 20px 0 20px;*/
 	box-sizing: border-box;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	> div {
 		position: relative;
 		height: 100%;
