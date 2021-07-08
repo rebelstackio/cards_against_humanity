@@ -59,10 +59,9 @@ function _getHeaderByState(isFind) {
 	return [
 		isFind ? _search : Span(),
 		Div({className: 'auth'}, [
-			H3({},user.uid ? user.displayName : 'Sign In'),
 			_opts,
 			user.uid
-			? Img({src: user.photoURL, onclick: () => { _toggle() }})
+			? Div({ className: 'avatar', onclick: () => { _toggle() }, style: `background-image: url(${user.photoURL});`})
 			: Div({class: 'socials'}, [
 					Button({ onclick: () => {
 						singInWithGoogle();
@@ -70,7 +69,8 @@ function _getHeaderByState(isFind) {
 					Button({ onclick: () => {
 						singInWithFacebook();
 					}}, Span({className: 'fab fa-facebook-f'}))
-			])
+			]),
+			H3({},user.uid ? user.displayName : 'Sign In')
 		])
 	]
 }

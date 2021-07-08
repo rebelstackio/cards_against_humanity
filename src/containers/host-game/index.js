@@ -6,7 +6,7 @@ const Host = () => Div({
 	className: 'main-lobby host'
 }, [
 	UserHeader(),
-	CreationMenu(),
+	...CreationMenu(),
 ]);
 
 export {

@@ -5,7 +5,7 @@ import HostApi from "../../lib/backend/firebase/host/index";
 import { getDeck } from '../../util';
 
 const _storage = global.storage;
-const _name = Input({name: 'name', placeholder: 'ej: Stupid Name'});
+const _name = Input({name: 'name', placeholder: 'ej: Stupid Name', autocomplete:'nope'});
 const _win = Select({name: 'wining', value: 10}, [
 	Option({value: 10}, '10'),
 	Option({value: 10}, '50'),
@@ -17,13 +17,13 @@ const _deck = Select({name: 'deck', value: 'Base'}, [
 ])
 const _pass = Input({name: 'password', placeholder: 'ej: Stupid Password', type: 'password'});
 const _Actions = Div({ className: 'host-actions' }, [
-	Button({ onclick: createNew }, 'Let\'s Go'),
-	Button({ onclick: _findGame }, 'Find Game')
+	Button({ onclick: createNew , className: 'btn-primary'}, 'Let\'s Go'),
+	Button({ onclick: _findGame, className: 'btn-warn' }, 'Find Game')
 ]);
 /**
  * Creatio menu componetn
  */
-const CreationMenu = () =>(
+const CreationMenu = () =>([
 	Div({ className: 'creation-menu' },[
 		H3({}, 'Create Game'),
 		Label({for: 'name'}, 'Name'),
@@ -35,8 +35,9 @@ const CreationMenu = () =>(
 		Label({for: 'password'}, 'Password'),
 		_pass,
 		_Actions,
-	])
-);
+	]),
+	Div({ className: 'bg-effects' })
+]);
 
 function _findGame() {
 	global.router.go('/lobby/find_game/');
