@@ -8,6 +8,9 @@
 	position: relative;
 	height: 50px;
 	z-index: 2;
+	margin: auto;
+	width: 70vw;
+	margin-top: 2em;
 	& h3 {
 		color: #ffffff;
 	}
@@ -61,9 +64,10 @@
 	}
 	> div {
 		display: grid;
-		grid-template-columns: 45px 1fr;
 		column-gap: 10px;
+		grid-auto-flow: column;
 		&.auth {
+			grid-template-columns: 45px 1fr;
 			place-self: center end;
 			h3 {
 				padding: 5px 0;
@@ -94,27 +98,26 @@
 			> button {
 				font-size: 16px;
 				height: 35px;
-				color: black;
-				border-radius: 4px;
-				border: 1px solid black;
+				color: #ffffff;
 				outline: none;
-				transition: all .3s ease-in-out;
 				font-weight: bold;
-				&:hover {
-					background-color: black;
-					color: #ffffff;
-				}
+				border: none;
+				background-size: 60%;
+				background-position: center;
+				background-repeat: no-repeat
 			}
 			> div {
 				display: grid;
 				grid-template-columns: 1fr 45px;
-				background-color: #ffffff;
-				border: 1px solid #000000;
-				border-radius: 3px;
+				border: 1px solid;
+				border-radius: 2em;
+				color: #fff;
+				overflow: hidden;
 				> input {
 					outline: none;
 					border: none;
 					padding: 0 10px;
+					background-color: transparent;
 				}
 				> div {
 					place-self: center;

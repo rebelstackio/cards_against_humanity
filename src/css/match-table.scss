@@ -1,33 +1,36 @@
 .table-wrapper {
-	height: 90%;
-	background-color: $cah-lightest;
+	place-self: center;
+	width: 70vw;
+	height: 50vh;
+	background-color: $list-dark;
 	margin: 10px;
 	align-self: center;
 	transition: all .3s ease-in-out;
-	border-radius: 3px;
-	&:hover {
-		box-shadow: 0px 0 8px 5px #1d4943;
-	}
+	border-radius: 2em;
+	padding: 2em;
+	box-sizing: border-box;
+	box-shadow: inset 0px 0 1em 0.5em;
 	overflow: auto;
 	position: relative;
 }
 .match-table {
-
-	border-collapse: collapse;
+	border-collapse: separate;
+	border-spacing: 0px .5em;
 	width: 100%;
 	& .empty-state {
 		/* width: 100%; */
 		position: absolute;
 		bottom: 0;
-		top: 0;
+		top: calc(60px + 2em);
 		right: 0;
 		left: 0;
 		display: grid;
 		place-content: center;
+		color: rgba($color: #fff, $alpha: 0.5);
+		background: rgba($color: #000000, $alpha: 0.5);
 	}
 	> tr {
-		background-color: $cah-lightest;
-		height: 45px;
+		height: calc(1.5rem + .6vw);
 		transition: all .5s ease;
 		cursor: pointer;
 		&:hover:not(:first-child) {
@@ -42,9 +45,19 @@
 		}
 		&:first-child {
 			height: 60px;
+			background-color: transparent;
+			border-bottom: 2px solid;
+			color: #ffffff;
+			text-shadow: 0px 0px 3px red;
 		}
-		&:nth-child(odd) {
-			background-color: black;
+		&:nth-child(2n) {
+			background: linear-gradient(-90deg, rgba(0,0,0,.8), rgba(0,0,0,.4));
+			> td, th {
+				color: $cah-lightest;
+			}
+		}
+		&:nth-child(2n+3) {
+			background: linear-gradient(90deg,  rgba(0,0,0,.8), rgba(0,0,0,.4));
 			> td, th {
 				color: $cah-lightest;
 			}

@@ -31,11 +31,11 @@ const _searInput = Input({ placeholder: 'Find Game', disabled:true, onkeyup: fun
 const _search = Div({ className: 'search-area' }, [
 	Div({}, [
 		_searInput,
-		Div({ onclick:() => { _clearSearch(); _searInput.value = '';}},
+		Div({onclick:() => { _clearSearch(); _searInput.value = '';}},
 			Span({className: 'fas fa-times'})
 		)
 	]),
-	Button({ onclick: _hostGame }, 'Host game')
+	Button({ className: 'btn-primary', onclick: _hostGame }, 'Host game')
 ]);
 /**
  * Clean the search value

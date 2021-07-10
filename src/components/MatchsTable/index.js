@@ -1,6 +1,5 @@
 import { Tr, Td, Th, Div, Img, H3, Input, Button } from '@rebelstack-io/metaflux';
 import RoomApi from '../../lib/backend/firebase/room';
-import emptyStateImg from '../../css/images/empty_list.svg';
 import Actions from '../../handlers/actions';
 import { passwordPopup } from '../PasswordPopup';
 
@@ -44,12 +43,13 @@ function _isEmpty(obj) {
  */
 function _getEmptyState() {
 	const { uid } = _store.getState().Main.user;
-	return [
+	let ret = [
 		Div({className: 'empty-state'},[
-			Img({src: emptyStateImg}),
 			H3({}, !uid ? 'Need to login to enter a match' : 'No active matchs, create One')
-		])
+		]),
+		...getEmptyRows([])
 	]
+	return ret;
 }
 /**
  * Table header
@@ -134,6 +134,20 @@ function requestToJoin(id, password, match) {
 		}
 		Actions.loadingOff();
 	})
+}
+/**
+ * Refill with empty rows
+ * @param {*} list
+ * @returns
+ */
+function getEmptyRows(list) {
+	if (list.length > 4) return list;
+	for(let i =0; i < 4; i++) {
+		if (list[i] === undefined) {
+			list[i] = Tr({},[Td(), Td(), Td(), Td()]);
+		}
+	}
+	return list;
 }
 
 export { MatchsTable }
