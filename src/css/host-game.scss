@@ -11,19 +11,30 @@
 		position: relative;
 		display: grid;
 		place-self: center;
-		width: 25vw;
 		height: fit-content;
-		background-color: $cah-lightest;
 		transition: all .3s ease-in-out;
-		border-radius: 1.5em;
-		grid-template-rows: 60px repeat(7, 2rem);
-		background-color: $menu-dark;
-		overflow: hidden;
-		padding-bottom: 2.2rem;
+		grid-template-rows: 2rem repeat(8, calc(1rem + .5vw));
 		z-index: 2;
+		width: 20vw;
+		height: 27vw;
+		box-sizing: border-box;
+		place-content: center;
+		grid-template-columns: 85%;
+		&::after{
+			content: '';
+			background: url(/src/assets/img/bloques/contenedor-inicio.svg);
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: -1;
+		}
 		> h3 {
-			text-align: center;
-			padding: 20px 0;
+			place-self: center;
 			color: $text-yellow;
 		}
 		> label {
@@ -34,7 +45,6 @@
 		> input {
 			padding: 0 10px;
 			color: #fff;
-			height: 2rem;
 			background-color: rgba($color: #fff, $alpha: .3);
 			border: none;
 			border-radius: .3rem;
@@ -47,7 +57,6 @@
 		}
 		> select {
 			padding: 0 10px;
-			height: 2rem;
 			border: none;
 			background-color: rgba($color: #fff, $alpha: .3);
 			border-radius: .3rem;
@@ -64,7 +73,7 @@
 			column-gap: 15px;
 			> button {
 				font-size: 18px;
-				height: 2.2rem;
+				height: 1.8rem;
 				border: none;
 				color: #ffffff;
 				border-radius: 4px;
@@ -129,6 +138,8 @@
 	background: url(/src/assets/img/botones/boton-2do-primary.svg);
 	background-size: cover;
 	transition: transform .1s linear;
+	border: none;
+	cursor: pointer;
 	&:hover {
 		transform: scale(1.05);
 	}
@@ -138,6 +149,8 @@
 	background: url(/src/assets/img/botones/boton-primary.svg);
 	background-size: cover;
 	transition: transform .1s linear;
+	border: none;
+	cursor: pointer;
 	&:hover {
 		transform: scale(1.05);
 	}

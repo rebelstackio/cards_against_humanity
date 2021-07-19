@@ -70,11 +70,11 @@ const MatchsTable =
 		_getMatchs()
 		return [
 			tableHeader,
-			..._getList()
+			...getEmptyRows(_getList())
 		]
 	}).onStoreEvent('ROOMS_LIST', (_, that) => {
 		that.innerHTML = '';
-		that.append(tableHeader, ..._getList());
+		that.append(tableHeader, ...getEmptyRows(_getList()));
 	}).onStoreEvent('SEARCH_GAME', (state) => {
 		const val = state.Main.searchValue;
 		_searchMatch(val)

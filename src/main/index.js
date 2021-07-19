@@ -24,11 +24,12 @@ import { SnackBar } from '../components/SnackBar';
 import { Summary } from '../containers/summary';
 import { GameSounds } from '../audio';
 import { ConfirmationPopUp } from '../components/ConfirmationPopup';
+import { Landing } from '../containers/landing';
 
 global.router = new Router();
 global.gameSounds = new GameSounds();
 
-if ( location.hash === '' ) global.router.go( '/lobby/host/' );
+if ( location.hash === '' ) global.router.go( '/' );
 
 document.addEventListener('DOMContentLoaded', () => {
 	global.router.on(/lobby\/host/, () => {
@@ -50,7 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	.on(/summary/, () => {
 		_setContent( Summary() )
 	})
-
+	.on(/^\/(?![a-z])/g, () => {
+		_setContent( Landing() )
+	})
 });
 /**
  * Clean the body and append content
