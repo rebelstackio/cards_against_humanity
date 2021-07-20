@@ -14,7 +14,7 @@ const ChatInput = () => Div({ className: 'chat-input' },
 				_sendMessage(target)
 			}
 		}}),
-		Div( { onclick: _touchMessage}, Span({ className: 'fas fa-caret-right' }) )
+		Div( { onclick: _touchMessage, className: 'send-btn'})
 	])
 );
 /**

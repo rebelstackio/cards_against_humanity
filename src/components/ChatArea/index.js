@@ -25,8 +25,17 @@ _storage.on('MATCH_UPDATE', () => {
 const msgArea = Div({ className: 'msg-area' });
 const ChatArea = () => Div({ className: 'chat-area' }, [
 	msgArea,
-	ChatInput()
+	ChatInput(),
+	Div({ className: 'toggle-btn', onclick: _toggle })
 ]);
+/**
+ * Toggle the chat area
+ */
+function _toggle() {
+	const chatArea = document.querySelector('.chat-area');
+	chatArea.classList.toggle('toggled');
+}
+
 /**
  * Listen to RoomID
  * @param {String} id RoomID
@@ -61,7 +70,7 @@ function _listentMessages(id) {
  */
 function getTime(_date) {
 	let _d = new Date(parseInt(_date));
-	return `${_d.getHours()}:${_d.getMinutes()}:${_d.getSeconds()}`;
+	return `${_d.getHours()}:${_d.getMinutes()}`;
 }
 
 _storage.on('MESSAGE_ARRIVE', ( action ) => {
@@ -75,9 +84,11 @@ function _appendMessage(from, msg, date) {
 	const { uid } = _storage.getState().Main.user;
 	const el = Div({ className: uid === from.uid ? 'msg-wrapper right' : 'msg-wrapper left' },
 	[
-		Span({}, msg),
-		Img({ src: from.photoURL }),
-		Span({className: 'date'}, date)
+		Div({ className: 'avatar', style: `background-image: url(${from.photoURL});`}),
+		Div({ className: 'msg-body' }, [
+			Span({}, msg),
+			Span({className: 'date'}, date)
+		])
 	]);
 	msgArea.appendChild(el);
 	msgArea.scrollTop = msgArea.scrollHeight;

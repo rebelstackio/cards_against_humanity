@@ -10,14 +10,15 @@ const PlayerSideBar = () => Div({
 	className: 'sidebar'
 }, [
 	H3({}, 'The People'),
-	..._getThePeople(),
+	Div({}, [...getEmptyRows(_getThePeople())]),
 	_getButton()
 ])
 .onStoreEvent(UPDATE_EV, (state, that) => {
 	that.innerHTML = '';
+	console.log(_getThePeople());
 	that.append(
 		H3({}, 'The People'),
-		..._getThePeople(),
+		Div({}, [...getEmptyRows(_getThePeople())]),
 		_getButton()
 	);
 });
@@ -27,29 +28,47 @@ function _getButton() {
 	return isHost
 	? Button({
 		className: 'btn black',
-		style: `grid-area: ${size + 2}/ 1;`,
 		onclick: () => {
 			const { id, players, pool } = _storage.getState().Match;
 			hostApi.startMatch(id, players, pool);
 		}},
 	`Start with ${nplayers}/${size} players`)
-	: Div();
+	: Span();
 }
 /**
  * get the match players and listed
  */
 function _getThePeople() {
 	const match = _storage.getState().Match;
-	return Object.keys(match.players).map(_uid => {
-		const pl = match.players[_uid];
+	const { uid } = _storage.getState().Main.user;
+	return Object.keys(match.players).map(_pid => {
+		const pl = match.players[_pid];
 		if (pl.status !== 'D') {
 			return Div({className: 'player-box'}, [
-				Img({src: pl.photoURL}),
+				(match.id === uid && _pid !== uid)
+				? Div({ className: 'delete-btn', onclick: kick })
+				: Div(),
 				Span({}, pl.displayName),
-				match.id === _uid ? Span({className: 'fas fa-crown'}) : ''
+				Div({ className: 'score' }, [Span({}, `x${pl.score}`), Span({className: 'score-coin'})])
 			])
 		}
 	})
+}
+/**
+ * Fill with empty player box if there is less than 5
+ */
+function getEmptyRows(arr) {
+	if(arr.length > 4) return arr;
+	for(let i=0; i < 5; i++) {
+		if (arr[i] === undefined) {
+			arr[i] = Div({className: 'player-box'})
+		}
+	}
+	return arr;
+}
+
+function kick () {
+	//TODO:
 }
 
 export { PlayerSideBar };

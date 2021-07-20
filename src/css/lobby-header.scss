@@ -135,3 +135,24 @@
 		}
 	}
 }
+
+.avatar{
+	width: 35px;
+	height: 35px;
+	outline: 2px solid;
+	outline-offset: 2px;
+	transform: rotate(45deg);
+	overflow: hidden;
+	display: grid;
+	place-content: center;
+	&::before {
+		content: "";
+		display: block;
+		width: 45px;
+		height: 45px;
+		flex-shrink:0;
+		background: center/cover;
+		background-image: inherit;
+		transform: rotate(-45deg);
+	}
+}
