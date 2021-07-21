@@ -82,10 +82,12 @@ _storage.on('MESSAGE_ARRIVE', ( action ) => {
 
 function _appendMessage(from, msg, date) {
 	const { uid } = _storage.getState().Main.user;
-	const el = Div({ className: uid === from.uid ? 'msg-wrapper right' : 'msg-wrapper left' },
+	let isYou = uid === from.uid;
+	const el = Div({ className: isYou ? 'msg-wrapper right' : 'msg-wrapper left' },
 	[
 		Div({ className: 'avatar', style: `background-image: url(${from.photoURL});`}),
 		Div({ className: 'msg-body' }, [
+			Span({className: 'user'}, `${from.displayName}${isYou ? ' - You' : ''}`),
 			Span({}, msg),
 			Span({className: 'date'}, date)
 		])

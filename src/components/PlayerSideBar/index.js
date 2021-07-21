@@ -27,7 +27,7 @@ function _getButton() {
 	const { isHost, nplayers, size } = _storage.getState().Match;
 	return isHost
 	? Button({
-		className: 'btn black',
+		className: 'btn-primary',
 		onclick: () => {
 			const { id, players, pool } = _storage.getState().Match;
 			hostApi.startMatch(id, players, pool);

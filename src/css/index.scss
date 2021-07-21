@@ -17,6 +17,8 @@ $cah-card-height: 200px;
 $menu-dark: #2d2d2d;
 $text-yellow: #f3d774;
 $list-dark: #231616;
+$text-blue: #00ffff;
+$text-light: #b3b3b3;
 /*----------------------------------------------*/
 /*--------------------COMMONDS----------------------------------------*/
 .btn.black {
@@ -123,8 +125,39 @@ html, body {
 	width: 100%;
 	height: 100%;
 	/*box-shadow: inset 0 0 50px #000000;*/
-	background: url(/src/assets/img/background/mesa.jpg);
+}
+
+body {
+	background-image: url(/src/assets/img/background/mesa.jpg);
 	overflow: hidden;
+	position: relative;
+	z-index: 1;
+	&::before {
+		content: '';
+		background: url(/src/assets/img/background/ficha.png);
+		background-size: contain;
+		width: calc(15em + .5vw);
+		height: calc(15em + .5vw);
+		position: absolute;
+		top: 25%;
+		left: 6em;
+		background-position: center;
+		background-repeat: no-repeat;
+		z-index: -1;
+	}
+	&::after {
+		content: '';
+		background: url(/src/assets/img/background/coins.png);
+		background-size: contain;
+		width: 15em;
+		height: 15em;
+		position: absolute;
+		top: 25%;
+		right: 6em;
+		background-position: center;
+		background-repeat: no-repeat;
+		z-index: -1;
+	}
 }
 
 #container {

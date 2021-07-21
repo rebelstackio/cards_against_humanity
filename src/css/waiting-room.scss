@@ -49,24 +49,54 @@
 				grid-template-columns: 1fr 50px;
 				color: #fff;
 				align-items: center;
-				background-color: rgba(0,0,0,.5);
 				padding: 5px;
-				width: 50%;
+				width: 75%;
 				box-sizing: border-box;
+				column-gap: 2rem;
 				> span {
 					text-align: justify;
 					margin: 5px;
 				}
+				> .msg-body {
+					display: grid;
+					border-radius: 1rem;
+					padding: .5rem;
+					> .user {
+						font-size: .7rem;
+						color: $text-light;
+					}
+					> .date {
+						text-align: end;
+						font-size: .6rem;
+						color: $text-light;
+					}
+				}
 				&.right {
 					place-self: end;
-					border-radius: 0 0 0 8px;
+					> .msg-body {
+						background-color: #fff;
+						color: $menu-dark;
+						border-bottom-right-radius: 0px;
+					}
 					> .avatar {
 						grid-area: 1 / 2;
 					}
 				}
 				&.left {
 					grid-template-columns: 50px 1fr;
-					border-radius: 0 0 8px 0;
+					> .msg-body {
+						background-color: rgba($color: #000000, $alpha: .5);
+						border: 1px solid white;
+						color: $menu-dark;
+						border-bottom-left-radius: 0px;
+						color: white;
+						> .user {
+							color: $text-blue;
+						}
+						> .date ´{
+							color: white;
+						}
+					}
 					> .avatar {
 						grid-area: 1 / 1;
 					}
@@ -103,6 +133,10 @@
 		}
 		& > button {
 			place-self: center;
+			font-size: .8rem;
+			padding: .5rem 1rem;
+			color: #fff;
+			min-height: 45px;
 		}
 		& .player-box {
 			padding: 0 10px;
