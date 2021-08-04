@@ -1,6 +1,8 @@
 score-board {
 	display: block;
-
+	position: absolute;
+	top: 3rem;
+	right: 10%;
 	.board {
 		content:"";
 		position:relative;

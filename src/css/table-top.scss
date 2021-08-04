@@ -12,13 +12,14 @@
 
 		> div {
 			display: flex;
-			flex-wrap: wrap-reverse;
-			justify-content: space-between;
+			justify-content: center;
 		}
 
 		cah-card.black > div {
-			width: calc(#{$cah-card-width} * 1.3);
-			height: calc(#{$cah-card-height} * 1.3);
+			width: 130px;
+			height: 135px;
+			display: grid;
+			place-content: center;
 			color: $cah-lightest;
 			span {
 				border-radius: 2px;

@@ -12,10 +12,10 @@ class Czar extends MetaComponent {
 		this.blackCard = document.createElement("cah-card");
 		this.blackCard.className = "black";
 
-		const scoreBoard = document.createElement("score-board");
+		//const scoreBoard = document.createElement("score-board");
 
 		content.append(this.blackCard);
-		content.append(scoreBoard);
+		//content.append(scoreBoard);
 		this.updateContent();
 		return content;
 	}

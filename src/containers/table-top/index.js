@@ -11,6 +11,8 @@ const TableTop = () => Div({
 	className: 'table-top'
 }, [
 	CardBanner(),
+	HTMLElementCreator("czar-indicator", {}),
+	HTMLElementCreator("score-board", {}),
 	HTMLElementCreator('cah-czar'),
 	HTMLElementCreator('cah-hand'),
 	HTMLElementCreator('cah-popup', {

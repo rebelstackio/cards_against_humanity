@@ -1,26 +1,25 @@
 cah-card {
 	display: inline-block;
-	background-color: $cah-darkest;
+	background: url(/src/assets/img/cartas/negras/1.svg);
+	background-size: cover;
+	background-repeat: no-repeat;
 	border-radius: 6px;
 	padding: .5em;
-	box-shadow: 0 0 2px #000000;
 	color: #ffffff;
+	display: grid;
+	place-content: center;
+	width: 193px;
+	height: 300px;
 	> div {
 		width: $cah-card-width;
 		height: $cah-card-height;
 		padding: 1em;
 		border-radius: 6px;
-		border: 1px solid $cah-lightest;
 	}
 }
 
 cah-card.white {
-	background-color: $cah-lightest;
-
-	> div {
-		border: 1px solid $cah-darkest;
-	}
-
+	background: url(/src/assets/img/cartas/basica/1.svg);
 	* {
 		color: $cah-darkest;
 	}

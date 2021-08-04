@@ -1,4 +1,4 @@
-import { MetaComponent, Div, H2, HTMLElementCreator } from '@rebelstack-io/metaflux';
+import { MetaComponent, Div, H2 } from '@rebelstack-io/metaflux';
 import '../czar-indicator';
 
 class ScoreBoard extends MetaComponent {
@@ -9,18 +9,13 @@ class ScoreBoard extends MetaComponent {
 
 	render () {
 		this.scoreCounter = document.createElement("div");
-
-		this.pickedCardCounter = document.createElement("div");
-
 		const content = Div(false, [
 			Div({
 				className: "board"
 			}, Div(false, [
-				H2(false, "Your Score:"),
-				H2(false, "Czar:"),
+				H2(false, "My Score:"),
 				this.scoreCounter,
-				this.pickedCardCounter,
-				HTMLElementCreator("czar-indicator", {})
+				//HTMLElementCreator("czar-indicator", {})
 			]))
 		]);
 
@@ -31,10 +26,9 @@ class ScoreBoard extends MetaComponent {
 
 	fillCounters () {
 		const { user: { uid } } = this.storage.getState().Main;
-		const { selectedCards, selectedCardsLimit, players } = this.storage.getState().Match;
+		const { players } = this.storage.getState().Match;
 		const score = players[uid] ? players[uid].score : 0;
-		this.scoreCounter.textContent = `Awesome Points: ${ score }`;
-		this.pickedCardCounter.textContent = `Cards picked: ${selectedCards}/${selectedCardsLimit}`;
+		this.scoreCounter.textContent = `Points: ${ score }`;
 	}
 
 	handleStoreEvents () {

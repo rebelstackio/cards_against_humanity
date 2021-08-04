@@ -9,7 +9,9 @@ class CzarIndicator extends MetaComponent {
 	render () {
 		const content = Div();
 		this.userIcon = content.Img();
-		this.userName = content.Div();
+		const textContent = content.Div();
+		textContent.H3(false, 'czar');
+		this.userName = textContent.Span();
 		this.setUser();
 		return content;
 	}
@@ -20,7 +22,7 @@ class CzarIndicator extends MetaComponent {
 			const player = players[_k];
 			if (player.isCzar) {
 				this.userIcon.setAttribute("src", player.photoURL);
-				this.userName.textContent = player.displayName;
+				this.userName.textContent = player.displayName.split(' ')[0].toUpperCase();
 			}
 		})
 	}
@@ -33,7 +35,7 @@ class CzarIndicator extends MetaComponent {
 					const player = players[_k];
 					if (player.isCzar) {
 						this.userIcon.setAttribute("src", player.photoURL);
-						this.userName.textContent = player.displayName;
+						this.userName.textContent = player.displayName.split(' ')[0].toUpperCase();
 					}
 				})
 			}
