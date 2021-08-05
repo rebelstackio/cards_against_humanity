@@ -1,4 +1,4 @@
-import { MetaComponent, Div, H2 } from '@rebelstack-io/metaflux';
+import { MetaComponent, Div, H3 } from '@rebelstack-io/metaflux';
 import '../czar-indicator';
 
 class ScoreBoard extends MetaComponent {
@@ -8,15 +8,17 @@ class ScoreBoard extends MetaComponent {
 	}
 
 	render () {
-		this.scoreCounter = document.createElement("div");
+		const { user: { photoURL } } = this.storage.getState().Main;
+		this.scoreCounter = Div();
+		this.avatar = Div({ className: 'avatar', style: `background-image: url(${photoURL});` })
 		const content = Div(false, [
 			Div({
 				className: "board"
 			}, Div(false, [
-				H2(false, "My Score:"),
+				H3(false, "My Score"),
 				this.scoreCounter,
-				//HTMLElementCreator("czar-indicator", {})
-			]))
+			])),
+			this.avatar
 		]);
 
 		this.fillCounters();
@@ -25,10 +27,11 @@ class ScoreBoard extends MetaComponent {
 	}
 
 	fillCounters () {
-		const { user: { uid } } = this.storage.getState().Main;
+		const { user: { uid, photoURL } } = this.storage.getState().Main;
 		const { players } = this.storage.getState().Match;
 		const score = players[uid] ? players[uid].score : 0;
-		this.scoreCounter.textContent = `Points: ${ score }`;
+		this.scoreCounter.textContent = `Points  ${ score }`;
+		this.avatar.style = `background-image: url(${photoURL});`;
 	}
 
 	handleStoreEvents () {

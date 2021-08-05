@@ -28,7 +28,7 @@ class Hand extends MetaComponent {
 		const { whiteCards } = this.storage.getState().Match.usedDeck;
 		this.content.innerHTML = '';
 		for (let i = 0; i < hand.length; i++) {
-			const cardNode = new cahCard(whiteCards[hand[i]], 'white', hand[i]);
+			const cardNode = new cahCard(whiteCards[hand[i]], 'white', hand[i], i);
 			this.cards.push(cardNode);
 			this.content.appendChild(cardNode);
 		}

@@ -10,7 +10,7 @@ class CzarIndicator extends MetaComponent {
 		const content = Div();
 		this.userIcon = content.Img();
 		const textContent = content.Div();
-		textContent.H3(false, 'czar');
+		textContent.H3(false, 'CZAR');
 		this.userName = textContent.Span();
 		this.setUser();
 		return content;

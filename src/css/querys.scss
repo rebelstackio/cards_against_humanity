@@ -1,0 +1,28 @@
+@media (max-width: 1500px) {
+	cah-hand {
+		@for $i from 2 to 11 {
+			& cah-card:nth-child(#{$i}) {
+				left: calc(#{$i - 1} * 90px) !important;
+			}
+		}
+		cah-card {
+			width: 95px;
+			height: 150px;
+			> div {
+				width: unset !important;
+				height: unset !important;
+			}
+		}
+	}
+	cah-card {
+		&.black {
+			width: 128px !important;
+			height: 200px !important;
+			> div {
+				width: unset !important;
+				height: unset !important;
+				text-align: center;
+			}
+		}
+	}
+}

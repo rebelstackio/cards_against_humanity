@@ -20,6 +20,7 @@ cah-card {
 
 cah-card.white {
 	background: url(/src/assets/img/cartas/basica/1.svg);
+	background-repeat: no-repeat;
 	* {
 		color: $cah-darkest;
 	}

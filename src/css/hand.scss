@@ -14,8 +14,10 @@ cah-hand {
 	> div {
 		position: relative;
 		justify-self: center;
+		align-self: start;
 		width: 80%;
-		overflow: auto;
+		height: 85%;
+		overflow-x: auto;
 		> cah-card {
 			position: absolute;
 			z-index: 0;
@@ -34,7 +36,7 @@ cah-hand {
 
 		> cah-card:hover, > cah-card.selected {
 			z-index: 11;
-			transform: translateY(-15px) scale(1.1, 1.1);
+			transform: translateY(-15px) scale(1.05, 1.05);
 			box-shadow: 0 0 5px #000000;
 		}
 
