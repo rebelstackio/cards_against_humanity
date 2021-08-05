@@ -1,6 +1,7 @@
-import { Div, Span } from '@rebelstack-io/metaflux';
+import { Div, Img } from '@rebelstack-io/metaflux';
 import roomApi from '../../lib/backend/firebase/room';
 import Actions from '../../handlers/actions';
+import shuffleImg from '../../assets/img/botones/refresh-card.svg';
 
 const _storge = global.storage;
 
@@ -13,7 +14,7 @@ const ShuffleHand = () => Div({ className: 'shuffle-white', onclick: () => {
 	// call shuffle API
 	roomApi.shuffleHand(id);
 }},
-	Span({ className: 'fas fa-random' })
+	Img({src: shuffleImg})
 )
 .onStoreEvent('MATCH_UPDATE', (state, that) => {
 	const { user: { uid } } = state.Main;

@@ -18,6 +18,21 @@ cah-card {
 	}
 }
 
+.shuffle-white {
+	place-content: center;
+	width: 193px;
+	height: 300px;
+	display: grid;
+	background: url(/src/assets/img/cartas/basica/card-back.svg);
+	background-size: cover;
+	background-repeat: no-repeat;
+	padding: .5em;
+	> img {
+		width: 45px;
+		height: 45px;
+	}
+}
+
 cah-card.white {
 	background: url(/src/assets/img/cartas/basica/1.svg);
 	background-repeat: no-repeat;

@@ -15,10 +15,10 @@ cah-hand {
 		position: relative;
 		justify-self: center;
 		align-self: start;
-		width: 80%;
+		width: 86%;
 		height: 85%;
 		overflow-x: auto;
-		> cah-card {
+		> cah-card, .shuffle-white {
 			position: absolute;
 			z-index: 0;
 			left: 0;
@@ -27,15 +27,15 @@ cah-hand {
 			cursor: pointer;
 		}
 
-		@for $i from 2 to 11 {
-			> cah-card:nth-child(#{$i}) {
+		@for $i from 2 to 12 {
+			> *:nth-child(#{$i}) {
 				z-index: #{$i};
 				left: calc(#{$i - 1} * 140px);
 			}
 		}
 
 		> cah-card:hover, > cah-card.selected {
-			z-index: 11;
+			z-index: 12;
 			transform: translateY(-15px) scale(1.05, 1.05);
 			box-shadow: 0 0 5px #000000;
 		}

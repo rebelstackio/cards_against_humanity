@@ -5,7 +5,6 @@ import '../../components/popup';
 import { CardBanner } from '../../components/catBanner';
 import { SubmitPopUp } from '../../components/SubmitsPopUp';
 import { Settings } from '../../components/Settings';
-import { ShuffleHand } from '../../components/ShuffleHand';
 
 const TableTop = () => Div({
 	className: 'table-top'
@@ -19,8 +18,7 @@ const TableTop = () => Div({
 		className: 'hidden'
 	}),
 	SubmitPopUp(),
-	Settings(),
-	ShuffleHand()
+	Settings()
 ]);
 
 export {

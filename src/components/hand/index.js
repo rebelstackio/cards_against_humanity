@@ -1,5 +1,6 @@
 import { MetaComponent, Div } from '@rebelstack-io/metaflux';
 import cahCard from '../../components/card';
+import { ShuffleHand } from '../ShuffleHand';
 import '../../handlers';
 
 const UPDATE_EV = 'MATCH_UPDATE';
@@ -32,6 +33,7 @@ class Hand extends MetaComponent {
 			this.cards.push(cardNode);
 			this.content.appendChild(cardNode);
 		}
+		this.content.appendChild(ShuffleHand())
 	}
 
 	tagCard () {
