@@ -18,7 +18,7 @@ const TableTop = () => Div({
 		className: 'hidden'
 	}),
 	SubmitPopUp(),
-	Settings()
+	...Settings()
 ]);
 
 export {

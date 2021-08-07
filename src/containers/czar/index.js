@@ -26,7 +26,7 @@ const Czar = () => Div({
 	_getBlackCard(),
 	CzarHeader(),
 	WhiteSubmits(),
-	Settings()
+	...Settings()
 ]);
 
 function _getBlackCard() {

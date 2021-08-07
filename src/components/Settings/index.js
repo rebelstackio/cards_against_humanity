@@ -3,25 +3,26 @@ import MatchData from '../../controllers/MatchDataManager';
 import HostAPI from '../../lib/backend/firebase/host';
 import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
+import settingsImg from '../../assets/img/botones/menu.svg';
 
 const _storage = global.storage;
 
-const Settings = () => Div({
+const Settings = () => [Div({
 	className: 'settings-wrapper away'
-}, [_getContent()])
+}, [_getContent(), _getHandler()])
 .onStoreEvent('MATCH_UPDATE', (_, that) => {
 	that.innerHTML = '';
 	that.append(_getContent());
-})
+}),
+_getHandler()
+]
 
 function _getHandler() {
 	return Div({ className: 'setting-handler', onclick: function () {
-		const parent = this.parentElement.parentElement;
+		const parent = document.querySelector('.settings-wrapper');
 		parent.classList.toggle('away');
 	} },
-		Span({
-			className:'fas fa-bars'
-		})
+		Img({ src: settingsImg })
 	);
 }
 /**
@@ -31,7 +32,10 @@ function _getContent () {
 	const { isHost } = _storage.getState().Match;
 	let content = Div({ className: 'setting-box' }, [
 		H3({}, 'Settings'),
-		_getHandler()
+		Div({className: 'close', onclick: () => {
+			const parent = document.querySelector('.settings-wrapper');
+			parent.classList.add('away');
+		}})
 	]);
 	if (isHost) {
 		// host content
@@ -44,7 +48,8 @@ function _getContent () {
 
 function _getHostContent () {
 	return [
-		Button({ className: 'btn black', onclick: () => {
+		_getPlayers(true),
+		Button({ className: 'btn-danger', onclick: () => {
 			Actions.displayConfirmation({ data: {
 				text: `This will delete the game progress, are you sure?`,
 				submit: {
@@ -58,9 +63,7 @@ function _getHostContent () {
 					}
 				}
 			} })
-		}}, 'Delete Game'),
-		H3({}, 'Players'),
-		_getPlayers(true)
+		}}, 'Delete Game')
 	]
 }
 /**
@@ -86,22 +89,30 @@ function _getPlayers(isHost) {
 	return Div({ className: 'players-box' }, () => (
 		players.map(pl => {
 			return Div({}, [
-				Img({ src: pl.photoURL }),
-				Span({}, pl.displayName),
 				(isHost && uid !== pl.uid) ? _getKickButton(pl) : Div(),
-				Span({}, `Awsome Points: ${pl.score}`)
+				Span({}, pl.displayName),
+				_getPoints(pl)
 			])
 		})
 	))
 }
 /**
+ *
+ */
+function _getPoints(pl) {
+	return 	Div({ className: 'score' }, [Span({}, `x${pl.score}`), Span({className: 'score-coin'})])
+}
+
+/**
  * kick button
  * @param {Object} pl Player object
  */
 function _getKickButton(pl) {
-	return Div({ className: 'kick_icom', onclick:() => _kickPlayer(pl) },
+	return Div({ className: 'delete-btn', onclick:() => _kickPlayer(pl) })
+
+	/*return Div({ className: 'kick_icom', onclick:() => _kickPlayer(pl) },
 		Span({ className: 'fas fa-skull-crossbones'})
-	)
+	)*/
 }
 
 /**
@@ -140,7 +151,8 @@ async function _kickPlayerHandler(id, pl, that) {
  */
 function _getGuestContent () {
 	return [
-		Button({ className: 'btn black', onclick: () => {
+		_getPlayers(),
+		Button({ className: 'btn-danger', onclick: () => {
 			Actions.displayConfirmation({ data: {
 				text: `Leave the game? you can comeback any time.`,
 				submit: {
@@ -154,9 +166,7 @@ function _getGuestContent () {
 					}
 				}
 			} })
-		}}, 'Leave Game'),
-		H3({}, 'Players'),
-		_getPlayers()
+		}}, 'Leave Game')
 	]
 }
 /**

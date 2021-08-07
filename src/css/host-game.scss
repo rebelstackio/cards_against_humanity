@@ -156,6 +156,17 @@
 	}
 }
 
+.btn-danger {
+	background: url(/src/assets/img/botones/boton-delete-longer.svg);
+	background-size: cover;
+	transition: transform .1s linear;
+	border: none;
+	cursor: pointer;
+	&:hover {
+		transform: scale(1.05);
+	}
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

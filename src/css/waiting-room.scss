@@ -148,21 +148,22 @@
 			> span {
 				color: #ffffff;
 			}
-			> .score {
-				color: $text-yellow;
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				> * {
-					place-self: center;
-				}
-				& .score-coin {
-					background: url(/src/assets/img/botones/points-coin.png);
-					height: 1.5rem;
-					width: 1.5rem;
-					background-size: cover;
-				}
-			}
 		}
+	}
+}
+
+.score {
+	color: $text-yellow;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	> * {
+		place-self: center;
+	}
+	& .score-coin {
+		background: url(/src/assets/img/botones/points-coin.png);
+		height: 1.5rem;
+		width: 1.5rem;
+		background-size: cover;
 	}
 }
 
