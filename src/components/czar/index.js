@@ -1,4 +1,4 @@
-import { MetaComponent } from '@rebelstack-io/metaflux';
+import { MetaComponent, Div, HTMLElementCreator, Span } from '@rebelstack-io/metaflux';
 import '../score-board';
 
 class Czar extends MetaComponent {
@@ -7,15 +7,14 @@ class Czar extends MetaComponent {
 	}
 
 	render () {
-		const content = document.createElement("div");
+		const content = Div();
 
-		this.blackCard = document.createElement("cah-card");
-		this.blackCard.className = "black";
+		this.blackCard = HTMLElementCreator('cah-card', { className: 'black' });
 
-		//const scoreBoard = document.createElement("score-board");
+		this.selectedCards = Span({}, this.storage.getState().Match.selectedCards);
+		this.selectedLimit = Div({}, '/' + this.storage.getState().Match.selectedCardsLimit);
 
-		content.append(this.blackCard);
-		//content.append(scoreBoard);
+		content.append(this.blackCard, this._getSelectCount());
 		this.updateContent();
 		return content;
 	}
@@ -29,13 +28,24 @@ class Czar extends MetaComponent {
 		return text;
 	}
 
+	_getSelectCount() {
+		return Div({ className: 'cards-counter' },
+			Div({}, [
+				this.selectedCards,
+				this.selectedLimit
+			])
+		)
+	}
+
 	onSelectedCardsChange () {
 		const newText = this.replaceBlanks();
 		this.blackCard.innerHTML = `<div>${newText}</div>`;
 	}
 
 	updateContent () {
-		const { usedDeck, czarCard } = this.storage.getState().Match;
+		const { usedDeck, czarCard, selectedCardsLimit, selectedCards } = this.storage.getState().Match;
+		this.selectedLimit.innerHTML = '/' + selectedCardsLimit;
+		this.selectedCards.innerHTML = selectedCards;
 		if(usedDeck.blackCards[czarCard]) {
 			const { text } = usedDeck.blackCards[czarCard];
 			this.blackCard.innerHTML = `<div>${text}</div>`;
@@ -47,12 +57,18 @@ class Czar extends MetaComponent {
 	handleStoreEvents () {
 		return {
 			'INCREASE_SELECTED_CARDS': _ => {
+				const { selectedCards } = this.storage.getState().Match;
+				this.selectedCards.innerHTML = selectedCards;
 				this.onSelectedCardsChange();
 			},
 			'DECREASE_SELECTED_CARDS': _ => {
+				const { selectedCards } = this.storage.getState().Match;
+				this.selectedCards.innerHTML = selectedCards;
 				this.onSelectedCardsChange();
 			},
 			'CANCEL_SELECTION': _ => {
+				const { selectedCards } = this.storage.getState().Match;
+				this.selectedCards.innerHTML = selectedCards;
 				this.onSelectedCardsChange();
 			},
 			'MATCH_UPDATE': _ => {

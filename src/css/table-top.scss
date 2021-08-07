@@ -13,6 +13,7 @@
 		> div {
 			display: flex;
 			justify-content: center;
+			position: relative;
 		}
 
 		cah-card.black > div {
@@ -27,6 +28,31 @@
 				margin: 0 2px 0 2px;
 				background-color: $cah-light;
 				color: $cah-lightest;
+			}
+		}
+		.cards-counter {
+			position: absolute;
+			bottom: -31px;
+			width: 55px;
+			height: 55px;
+			border-radius: 50%;
+			background-color: #000;
+			color: #fff;
+			display: grid;
+			box-shadow: 0px 0px 10px 0px $text-blue;
+			> div {
+				width: 45px;
+				height: 45px;
+				border-radius: 50%;
+				border: 1px solid;
+				box-sizing: border-box;
+				display: grid;
+				grid-auto-flow: column;
+				place-content: center;
+				place-self: center;
+				> span {
+					color: $text-yellow;
+				}
 			}
 		}
 	}
