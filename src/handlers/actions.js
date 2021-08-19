@@ -41,5 +41,8 @@ export default {
 	},
 	displayConfirmation: (props) => {
 		_dispatch('DISPLAY_CONFIRMATION', props)
+	},
+	kickPlayer: (props) => {
+		_dispatch('KICK_PLAYER', props);
 	}
 }

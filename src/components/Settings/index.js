@@ -1,10 +1,10 @@
-import { Div, Button, Span, Img, H3 } from '@rebelstack-io/metaflux';
+import { Div, Button, Span, Img, H3, HTMLElementCreator } from '@rebelstack-io/metaflux';
 import MatchData from '../../controllers/MatchDataManager';
 import HostAPI from '../../lib/backend/firebase/host';
 import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
 import settingsImg from '../../assets/img/botones/menu.svg';
-
+import '../SettingActions';
 const _storage = global.storage;
 
 const Settings = () => [Div({
@@ -16,7 +16,9 @@ const Settings = () => [Div({
 }),
 _getHandler()
 ]
-
+/**
+ * Get close button
+ */
 function _getHandler() {
 	return Div({ className: 'setting-handler', onclick: function () {
 		const parent = document.querySelector('.settings-wrapper');
@@ -43,27 +45,16 @@ function _getContent () {
 	} else {
 		content.append(..._getGuestContent())
 	}
+	content.append(_getConfirmation());
 	return content;
 }
-
+/**
+ * Get content for the host of the game
+ */
 function _getHostContent () {
 	return [
 		_getPlayers(true),
-		Button({ className: 'btn-danger', onclick: () => {
-			Actions.displayConfirmation({ data: {
-				text: `This will delete the game progress, are you sure?`,
-				submit: {
-					text: 'Do it!',
-					handler: _deleteGameHandler
-				},
-				cancel: {
-					text: `No, keep my stupid game.`,
-					handler: function () {
-						this.parentElement.parentElement.parentElement.classList.add('hidden')
-					}
-				}
-			} })
-		}}, 'Delete Game')
+		HTMLElementCreator('setting-actions')
 	]
 }
 /**
@@ -80,7 +71,7 @@ async function _deleteGameHandler() {
 
 
 /**
- * get players list (HOST ONLY)
+ * get players list
  *
  */
 function _getPlayers(isHost) {
@@ -109,10 +100,32 @@ function _getPoints(pl) {
  */
 function _getKickButton(pl) {
 	return Div({ className: 'delete-btn', onclick:() => _kickPlayer(pl) })
-
-	/*return Div({ className: 'kick_icom', onclick:() => _kickPlayer(pl) },
-		Span({ className: 'fas fa-skull-crossbones'})
-	)*/
+}
+/**
+ * Get notification text
+ * @param {Strign} text1 Message 1
+ * @param {String} text2 Message 2
+ * @returns HTMLDivElement
+ */
+function _getConfirmation() {
+	return Div({ className: 'conf-wrapper hidden' }, [
+		Div({className: 'text-1'}, 'Placeholder 1'),
+		Div({}),
+		Div({className: 'text-2'}, 'Placeholder 2')
+	])
+}
+/**
+ * Display confirmation messages
+ * @param {String} text1 message 1
+ * @param {String} text2 Message 2
+ */
+global._showConfirmation = function(text1, text2) {
+	const wrapper = document.querySelector('.conf-wrapper');
+	const textW1 = wrapper.querySelector('.text-1');
+	const textW2 = wrapper.querySelector('.text-2');
+	wrapper.classList.remove('hidden');
+	textW1.innerHTML = text1;
+	textW2.innerHTML = text2;
 }
 
 /**
@@ -120,22 +133,8 @@ function _getKickButton(pl) {
  * @param {Object} pl player object
  */
 function _kickPlayer(pl) {
-	const { id } = _storage.getState().Match;
-	Actions.displayConfirmation({ data: {
-		text: `Kick player ${pl.displayName}?`,
-		submit: {
-			text: 'Do it!',
-			handler: function () {
-				_kickPlayerHandler(id, pl, this);
-			}
-		},
-		cancel: {
-			text: `No, i have no balls to do it`,
-			handler: function () {
-				this.parentElement.parentElement.parentElement.classList.add('hidden')
-			}
-		}
-	} })
+	global._showConfirmation('Are you sure', '...Kick player');
+	Actions.kickPlayer({ pl });
 }
 /**
  * Handle confirm player kick
@@ -152,21 +151,7 @@ async function _kickPlayerHandler(id, pl, that) {
 function _getGuestContent () {
 	return [
 		_getPlayers(),
-		Button({ className: 'btn-danger', onclick: () => {
-			Actions.displayConfirmation({ data: {
-				text: `Leave the game? you can comeback any time.`,
-				submit: {
-					text: 'Do it!',
-					handler: _leaveGameHandler
-				},
-				cancel: {
-					text: `No, keep playing this stupid game`,
-					handler: function () {
-						this.parentElement.parentElement.parentElement.classList.add('hidden')
-					}
-				}
-			} })
-		}}, 'Leave Game')
+		HTMLElementCreator('setting-actions')
 	]
 }
 /**
