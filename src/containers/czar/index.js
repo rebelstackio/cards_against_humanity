@@ -1,11 +1,11 @@
-import { Div, Span, H3 } from '@rebelstack-io/metaflux';
-import Card from '../../components/card';
+import { Div, Span, H3, HTMLElementCreator } from '@rebelstack-io/metaflux';
 import { TurnStatus } from '../../components/TurnStatus';
 import { PreviewSubmit } from '../../components/PreviewSubmit';
 import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
 import { checkReady } from '../../util';
 import { Settings } from '../../components/Settings';
+import { BlackPreview } from '../../components/BlackPreview';
 import MatchData from '../../controllers/MatchDataManager';
 
 const _storage = global.storage;
@@ -23,72 +23,109 @@ _storage.on(UPDATE_EV, () => {
 const Czar = () => Div({
 	className: 'czar-top'
 }, [
-	_getBlackCard(),
-	CzarHeader(),
-	WhiteSubmits(),
+	HTMLElementCreator("czar-indicator", {}),
+	HTMLElementCreator("score-board", {}),
+	_getCzarByStatus(),
 	...Settings()
 ]);
-
-function _getBlackCard() {
-	const card = new Card(_getBlackCardText(), 'black', 0)
-	return card.onStoreEvent(UPDATE_EV, (_, that) => {
-		that.querySelector('div').innerHTML = _getBlackCardText();
-	});
-}
-
-function _getBlackCardText() {
-	let { czarCard, usedDeck} = _storage.getState().Match;
-	let text = usedDeck.blackCards[czarCard] ? usedDeck.blackCards[czarCard].text : '';
-	return text;
-}
-
-const CzarHeader = () => Div({ className: 'czar-header' }, [
-	H3({}, `You're the czar`),
-	TurnStatus()
-])
-
-/*----------------------------------------------------------------------------------- */
 /**
- *
+ * Get the main view by status
  */
-const WhiteSubmits = () => Div({ className: 'submits' }, () => {
-	let isReadyToShow = checkReady();
-	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
-	return isReadyToShow ? _getPreview() : _getWaitingSubmits()
-}).onStoreEvent(UPDATE_EV, (state, that) => {
-	let isReadyToShow = checkReady();
-	let isEmpty =  that.innerHTML === '';
-	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
-	if (isReadyToShow || isEmpty) {
+function _getCzarByStatus() {
+	return Div({ className: 'czar-status' })
+	.onStoreEvent(UPDATE_EV, (_, that) => {
+		const isReady = checkReady();
+		// clean the DOM
 		that.innerHTML = '';
-		console.log(isReadyToShow ? '#>Czar Ready to see the submits' : 'init submits components');
-		let content = isReadyToShow ? _getPreview() : _getWaitingSubmits()
-		that.append(...content);
-	}
-})
-/**
- * Get the black cards with the payers submits
- */
-function _getPreview() {
-	const submits = MatchData.getSubmits();
-	return submits.map((sbm) => {
-		return Div({ className: 'submits-wrapper' }, () => {
-			return _getTextCard(sbm.submits, sbm.uid)
-		})
+		if(!isReady) {
+			that.appendChild(_getNotReady())
+		} else {
+			that.appendChild(_getReady());
+			_handleScroll();
+		}
 	})
 }
-
 /**
- * Get a preview for a card
- * @param {Array} submits Array of played cards
- * @param {String} pid Player id
+ * get information not ready to pick
  */
-function _getTextCard(submits, pid) {
-	const { usedDeck: { blackCards }, czarCard, id } = _storage.getState().Match;
-	let { text } = blackCards[czarCard];
+function _getNotReady() {
+	return Div({ className: 'not-ready' }, [
+		H3({}, 'Players are picking...'),
+		BlackPreview(_getBlackCardText()),
+		TurnStatus()
+	])
+}
+/**
+ * get the submits to pick.
+ */
+function _getReady() {
+	return Div({ className: 'ready' }, [
+		H3({}, 'PICK THE BEST ANSWER!'),
+		AllSubmits()
+	])
+}
+/**
+ * Get a list for the submits
+ * @returns
+ */
+function AllSubmits() {
+	const submits = MatchData.getSubmits();
+	let text = _getBlackCardText();
+	return Div({ className: 'all-submits' }, () => {
+		const contentArr = submits.map(sb => {
+			return BlackPreview(replaceBlanks(sb.submits, text), true)
+		});
+		contentArr.push(
+			Div({ className: 'handler-back' }),
+			Div({ className: 'handler-right' })
+		)
+		return contentArr;
+	})
+}
+/**
+ * handle scroll for the submits
+ */
+function _handleScroll () {
+	const parent = document.querySelector('.all-submits');
+	const left = parent.querySelector('.handler-back');
+	const right = parent.querySelector('.handler-right');
+	let calculate = () => {
+		// if the scroll is at the start disable back
+		if (parent.scrollLeft === 0) {
+			left.classList.add('disabled')
+		} else {
+			left.classList.remove('disabled');
+		}
+		// if scroll is at the end disable next
+		if (parent.scrollLeft === parent.scrollWidth) {
+			right.classList.add('disabled')
+		} else {
+			right.classList.remove('disabled');
+		}
+		// if there is no scroll disable both
+		if (parent.offsetWidth === parent.scrollWidth) {
+			left.classList.add('disabled');
+			right.classList.add('disabled');
+	}
+	}
+	calculate();
+	right.onclick = () => {
+		if (right.classList.contains('disabled')) return;
+		parent.scrollLeft += 230;
+		calculate();
+	}
+	left.onclick = () => {
+		if (left.classList.contains('disabled')) return;
+		parent.scrollLeft -= 230;
+		calculate();
+	}
+}
+
+
+function replaceBlanks(submits, text) {
+	if(!text) return '';
 	let fullText = text;
 	let isQuestion = fullText.match(/___/g) === null;
-	let isRoundOver = _checkIsWinner();
 	if (!isQuestion) {
 		for (let i = 0; i < submits.length; i++) {
 			let subm = submits[i];
@@ -100,7 +137,9 @@ function _getTextCard(submits, pid) {
 			fullText += `<span>${subm}</span>`
 		}
 	}
-	return PreviewSubmit({
+	return fullText
+	/*
+	PreviewSubmit({
 		fullText,
 		footer: !isRoundOver
 		? {
@@ -118,23 +157,55 @@ function _getTextCard(submits, pid) {
 		: false,
 		isWinner: isRoundOver,
 		uid: pid
-	});
+	});*/
 }
 
+/**-----------------SOON TO DEPRECATED--------------------- */
+
+function _getBlackCardText() {
+	let { czarCard, usedDeck} = _storage.getState().Match;
+	let text = usedDeck.blackCards[czarCard] ? usedDeck.blackCards[czarCard].text : '';
+	return text;
+}
+/*----------------------------------------------------------------------------------- */
+/**
+ *
+ *//*
+const WhiteSubmits = () => Div({ className: 'submits' }, () => {
+	let isReadyToShow = checkReady();
+	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
+	return isReadyToShow ? _getPreview() : _getWaitingSubmits()
+}).onStoreEvent(UPDATE_EV, (state, that) => {
+	let isReadyToShow = checkReady();
+	let isEmpty =  that.innerHTML === '';
+	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
+	if (isReadyToShow || isEmpty) {
+		that.innerHTML = '';
+		console.log(isReadyToShow ? '#>Czar Ready to see the submits' : 'init submits components');
+		let content = isReadyToShow ? _getPreview() : _getWaitingSubmits()
+		that.append(...content);
+	}
+})*/
+/**
+ * Get the black cards with the payers submits
+ *//*
+function _getPreview() {
+	const submits = MatchData.getSubmits();
+	return submits.map((sbm) => {
+		return Div({ className: 'submits-wrapper' }, () => {
+			return _getTextCard(sbm.submits, sbm.uid)
+		})
+	})
+}*/
+
+/**
+ * Get a preview for a card
+ * @param {Array} submits Array of played cards
+ * @param {String} pid Player id
+ */
+
+
 function _getWaitingSubmits() {
-	//const { players, selectedCardsLimit } = _storage.getState().Match;
-	/* return Object.keys(players).map(key => {
-		const pl = players[key]
-		let content = [];
-		if (!pl.isCzar) {
-			for (let i=0; i < selectedCardsLimit; i++) {
-				content.push(Div({ id: `subm-${ key }-${i}` }, () => (
-					Span({ className: 'modal-spinner' })
-				)))
-			}
-		}
-		return Div({ className: 'submit-wrapper' }, content);
-	}) */
 	return [
 		Div({ className: 'waiting-for-players' }, [
 			H3({}, 'Waiting for your dumb friends to pick'),

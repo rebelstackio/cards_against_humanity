@@ -16,11 +16,10 @@ function _getTurnContent() {
 	return players.map((pl) => {
 		if(!pl.isCzar && pl.status !== 'D') {
 			return Div({
-				className: `user-icon s-${pl.status}`, id: `trn-${pl.id}`
-			}, Img( { src: pl.photoURL } ))
-			/*.onStoreEvent(UPDATE_EV, (state, that) => {
-				that.className = `user-icon s-${state.Match.players[pl.id].status}`
-			})*/
+				className: `user-icon`, id: `trn-${pl.id}`
+			},
+				Div({ className: `avatar s-${pl.status}`, style: `background-image: url(${pl.photoURL});` })
+			)
 		} else {
 			return ''
 		}
