@@ -1,8 +1,5 @@
 import { Div, Span, H3, HTMLElementCreator } from '@rebelstack-io/metaflux';
 import { TurnStatus } from '../../components/TurnStatus';
-import { PreviewSubmit } from '../../components/PreviewSubmit';
-import Actions from '../../handlers/actions';
-import RoomApi from '../../lib/backend/firebase/room';
 import { checkReady } from '../../util';
 import { Settings } from '../../components/Settings';
 import { BlackPreview } from '../../components/BlackPreview';
@@ -32,8 +29,10 @@ const Czar = () => Div({
  * Get the main view by status
  */
 function _getCzarByStatus() {
-	return Div({ className: 'czar-status' })
+	return Div({ className: 'czar-status' }, _getNotReady())
 	.onStoreEvent(UPDATE_EV, (_, that) => {
+		const isWinner = _checkIsWinner()
+		console.log(isWinner);
 		const isReady = checkReady();
 		// clean the DOM
 		that.innerHTML = '';
@@ -125,7 +124,9 @@ function _handleScroll () {
 	}
 }
 
-
+/**
+ * Replace blanks in black card text with the submits
+ */
 function replaceBlanks(submits, text) {
 	if(!text) return '';
 	let fullText = text;
@@ -142,80 +143,14 @@ function replaceBlanks(submits, text) {
 		}
 	}
 	return fullText
-	/*
-	PreviewSubmit({
-		fullText,
-		footer: !isRoundOver
-		? {
-			submit: 'Pick this',
-			submitHandler: () => {
-				global.gameSounds.Play('PICK');
-				Actions.loadingOn({ msg: 'Choosing round winner' })
-				RoomApi.submitTurn(id, true, submits, pid)
-				.then(() => {
-					console.log('#> Czar submited winner');
-					Actions.loadingOff();
-				})
-			}
-		}
-		: false,
-		isWinner: isRoundOver,
-		uid: pid
-	});*/
 }
-
-/**-----------------SOON TO DEPRECATED--------------------- */
-
+/**
+ * get black card text
+ */
 function _getBlackCardText() {
 	let { czarCard, usedDeck} = _storage.getState().Match;
 	let text = usedDeck.blackCards[czarCard] ? usedDeck.blackCards[czarCard].text : '';
 	return text;
-}
-/*----------------------------------------------------------------------------------- */
-/**
- *
- *//*
-const WhiteSubmits = () => Div({ className: 'submits' }, () => {
-	let isReadyToShow = checkReady();
-	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
-	return isReadyToShow ? _getPreview() : _getWaitingSubmits()
-}).onStoreEvent(UPDATE_EV, (state, that) => {
-	let isReadyToShow = checkReady();
-	let isEmpty =  that.innerHTML === '';
-	console.log(isReadyToShow ? '#> Every one is ready' : 'not Ready');
-	if (isReadyToShow || isEmpty) {
-		that.innerHTML = '';
-		console.log(isReadyToShow ? '#>Czar Ready to see the submits' : 'init submits components');
-		let content = isReadyToShow ? _getPreview() : _getWaitingSubmits()
-		that.append(...content);
-	}
-})*/
-/**
- * Get the black cards with the payers submits
- *//*
-function _getPreview() {
-	const submits = MatchData.getSubmits();
-	return submits.map((sbm) => {
-		return Div({ className: 'submits-wrapper' }, () => {
-			return _getTextCard(sbm.submits, sbm.uid)
-		})
-	})
-}*/
-
-/**
- * Get a preview for a card
- * @param {Array} submits Array of played cards
- * @param {String} pid Player id
- */
-
-
-function _getWaitingSubmits() {
-	return [
-		Div({ className: 'waiting-for-players' }, [
-			H3({}, 'Waiting for your dumb friends to pick'),
-			Span({ className: 'modal-spinner' })
-		])
-	]
 }
 /**
  * Check if the round have a winner
@@ -226,7 +161,6 @@ function _checkIsWinner() {
 	return JSON.stringify(lastRound.winner) !== JSON.stringify({})
 }
 
-/*----------------------------------------------------------------------------------------*/
 export {
 	Czar
 }

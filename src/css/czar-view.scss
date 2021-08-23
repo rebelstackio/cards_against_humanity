@@ -114,9 +114,9 @@
 		);
 	}
 	> .handler-back {
-		position: absolute;
+		position: fixed;
 		left: 0;
-		top: calc(55% - 50px);
+		top: calc(60% - 50px);
 		width: 100px;
 		height: 100px;
 		background: url(/src/assets/img/botones/next.svg);
@@ -127,9 +127,9 @@
 		}
 	}
 	> .handler-right {
-		position: absolute;
+		position: fixed;
 		right: 0;
-		top: calc(55% - 50px);
+		top: calc(60% - 50px);
 		width: 100px;
 		height: 100px;
 		background: url(/src/assets/img/botones/next.svg);
