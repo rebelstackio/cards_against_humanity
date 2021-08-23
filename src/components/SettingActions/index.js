@@ -1,4 +1,6 @@
 import { Div, Button, MetaComponent } from '@rebelstack-io/metaflux';
+import HostAPI from '../../lib/backend/firebase/host';
+import Actions from '../../handlers/actions';
 
 class SettingActions extends MetaComponent {
 	constructor () {
@@ -6,6 +8,7 @@ class SettingActions extends MetaComponent {
 		this.fallBack = this.fallBack.bind(this);
 		this.deleteActions = this.deleteActions.bind(this);
 		this.leaveActions = this.leaveActions.bind(this);
+		this._kickPlayerHandler = this._kickPlayerHandler.bind(this);
 	}
 	render () {
 		this.isHost = this.storage.getState().Match.isHost;
@@ -26,7 +29,7 @@ class SettingActions extends MetaComponent {
 		// clean the DOM
 		this.content.innerHTML = '';
 		this.content.append(
-			Button({ className: 'btn-danger' }, 'DO IT!'),
+			Button({ className: 'btn-danger', onclick: this._kickPlayerHandler }, 'DO IT!'),
 			Button({ className: 'btn-warn', onclick: this.fallBack }, 'NO, I HAVE NO BALLS ')
 		)
 	}
@@ -57,6 +60,15 @@ class SettingActions extends MetaComponent {
 		this.content.innerHTML = '';
 		this.content.append(this._getDefaultAction());
 		document.querySelector('.conf-wrapper').classList.add('hidden');
+	}
+	/**
+ * Handle confirm player kick
+ */
+	async _kickPlayerHandler() {
+		const { id } = this.storage.getState().Match;
+		Actions.loadingOn({ msg: `kicking ${this.pl.displayName}` })
+		await HostAPI.kickPLayer(id, this.pl.uid)
+		Actions.loadingOff();
 	}
 	/**
 	 *

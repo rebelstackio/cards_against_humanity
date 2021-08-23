@@ -1,6 +1,5 @@
 import { Div, Button, Span, Img, H3, HTMLElementCreator } from '@rebelstack-io/metaflux';
 import MatchData from '../../controllers/MatchDataManager';
-import HostAPI from '../../lib/backend/firebase/host';
 import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
 import settingsImg from '../../assets/img/botones/menu.svg';
@@ -136,15 +135,7 @@ function _kickPlayer(pl) {
 	global._showConfirmation('Are you sure', '...Kick player');
 	Actions.kickPlayer({ pl });
 }
-/**
- * Handle confirm player kick
- */
-async function _kickPlayerHandler(id, pl, that) {
-	that.parentElement.parentElement.parentElement.classList.add('hidden')
-	Actions.loadingOn({ msg: `kicking ${pl.displayName}` })
-	await HostAPI.kickPLayer(id, pl.uid)
-	Actions.loadingOff();
-}
+
 /**
  * get guest content
  */

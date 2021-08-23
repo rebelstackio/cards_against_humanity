@@ -51,7 +51,7 @@ function _getCzarByStatus() {
 function _getNotReady() {
 	return Div({ className: 'not-ready' }, [
 		H3({}, 'Players are picking...'),
-		BlackPreview(_getBlackCardText()),
+		BlackPreview(_getBlackCardText(), false, false, { submits: '', pid: '', pl: '' }),
 		TurnStatus()
 	])
 }
@@ -73,7 +73,11 @@ function AllSubmits() {
 	let text = _getBlackCardText();
 	return Div({ className: 'all-submits' }, () => {
 		const contentArr = submits.map(sb => {
-			return BlackPreview(replaceBlanks(sb.submits, text), true)
+			console.log(sb);
+			const pl = global.storage.getState().Match.players[sb.uid];
+			const fullText = replaceBlanks(sb.submits, text);
+			const data = { pl, submits: sb.submits, pid: sb.uid };
+			return BlackPreview(fullText, true, false, data)
 		});
 		contentArr.push(
 			Div({ className: 'handler-back' }),

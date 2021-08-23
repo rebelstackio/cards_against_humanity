@@ -4,7 +4,8 @@ import RoomApi from '../../lib/backend/firebase/room';
 
 const speach = new SpeechSynthesisUtterance();
 
-function BlackPreview(text ,isPickable, isUserShow, pl) {
+function BlackPreview(text ,isPickable, isUserShow, data) {
+	const { pl, submits, pid } = data;
 	return Div({ className: 'black-preview' },[
 		Div({ className: 'user' },
 				isUserShow
@@ -17,7 +18,7 @@ function BlackPreview(text ,isPickable, isUserShow, pl) {
 				Button({ className: 'speaker', onclick: () => { speak(text) } })
 			]),
 			isPickable
-			? Button({ className: 'btn-warn', onclick: () => { handleSubmit() } }, 'PICK THIS')
+			? Button({ className: 'btn-warn', onclick: () => { handleSubmit(submits, pid) } }, 'PICK THIS')
 			: ''
 		])
 	])
@@ -30,9 +31,14 @@ function speak(text) {
 	speach.text = rawText;
 	window.speechSynthesis.speak(speach)
 }
-
+/**
+ * submit winner by czar
+ * @param {Array} submits Array of submits
+ * @param {String} pid UDI from the winner
+ */
 function handleSubmit(submits, pid) {
 	const {id} = global.storage.getState().Match;
+	console.log(submits, pid, id);
 	global.gameSounds.Play('PICK');
 	Actions.loadingOn({ msg: 'Choosing round winner' })
 	RoomApi.submitTurn(id, true, submits, pid)
