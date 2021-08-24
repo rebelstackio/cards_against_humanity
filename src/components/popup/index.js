@@ -8,7 +8,7 @@ class Popup extends MetaComponent {
 	}
 
 	render () {
-		const cahCard = Div().HTMLElementCreator("cah-card", {});
+		const cahCard = Div();
 
 		this.content = cahCard.Div();
 

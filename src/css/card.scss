@@ -11,9 +11,7 @@ cah-card {
 	width: 193px;
 	height: 300px;
 	> div {
-		width: $cah-card-width;
-		height: $cah-card-height;
-		padding: 1em;
+		padding: 1.5em 1em;
 		border-radius: 6px;
 	}
 }

@@ -144,8 +144,8 @@
 .black-preview {
 	display: grid;
 	background: url(/src/assets/img/bloques/contenedor-question.svg);
-	width: 214px;
-	height: 250px;
+	width: 264px;
+	height: 300px;
 	place-content: center;
 	color: #fff;
 	box-sizing: border-box;
@@ -159,7 +159,12 @@
 		display: grid;
 		row-gap: .5rem;
 	}
-	.btn-warn {
+	.white-confirmation {
+		display: grid;
+		grid-auto-flow: column;
+		column-gap: .5rem;
+	}
+	.btn-warn, .btn-danger {
 		width: 100px;
 		height: 22px;
 		margin: auto;

@@ -7,7 +7,8 @@ cah-popup {
 
 	background-color: rgba($color: #000000, $alpha: 0.5);
 	z-index: 15;
-
+	display: grid;
+	place-content: center;
 	> div {
 		width: 100%;
 		height: 100%;

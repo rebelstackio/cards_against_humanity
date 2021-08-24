@@ -1,14 +1,16 @@
 import { Div, Span, P } from '@rebelstack-io/metaflux';
 import RoomApi from '../../lib/backend/firebase/room';
 import Actions from '../../handlers/actions';
-import actions from '../../handlers/actions';
+import { BlackPreview } from '../BlackPreview';
+
 
 const _storage = global.storage;
 
 function DrawCardPopup () {
 	const { czarCard, usedDeck: { whiteCards, blackCards }, selectedCardIds} = global.storage.getState().Match;
+	const pl = _storage.getState().Main.user;
 	const selectedCards = selectedCardIds.map(id => whiteCards[id]);
-	let { text, pick } = blackCards[czarCard];
+	let { text } = blackCards[czarCard];
 	let fullText = text;
 	let isQuestion = fullText.match(/___/g) === null;
 	if (!isQuestion) {
@@ -20,8 +22,8 @@ function DrawCardPopup () {
 			fullText += `<span>${selectedCards[i]}</span>`
 		}
 	}
-	let rawText = fullText.replace(/(<span>|<\/span>)/g, '');
-	return Div({
+	return BlackPreview(fullText, false, true, { pid: pl.uid, submits: selectedCardIds, pl }, true)
+	/*return Div({
 		className: "draw-card-body"
 	}, [
 		Div({
@@ -65,7 +67,7 @@ function DrawCardPopup () {
 				}
 			}, [Span({className: "fa fa-times-circle"}), Span(false, "Cancel")])
 		])
-	]);
+	]);*/
 }
 
 export default DrawCardPopup;

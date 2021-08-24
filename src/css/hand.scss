@@ -34,6 +34,15 @@ cah-hand {
 			}
 		}
 
+		@for $i from 1 to 11 {
+			> cah-card:nth-child(#{$i}) {
+				background: url(/src/assets/img/cartas/basica/#{$i}.svg);
+				&.selected {
+					background: url(/src/assets/img/cartas/naipes-gatos/#{$i}.svg);
+				}
+			}
+		}
+
 		> cah-card:hover, > cah-card.selected {
 			z-index: 12;
 			transform: translateY(-15px) scale(1.05, 1.05);
