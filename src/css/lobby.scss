@@ -19,40 +19,56 @@
 		opacity: 0;
 	}
 	> .modal-body {
-		width: 300px;
-		height: 300px;
-		border-radius: 3px;
-		background-color: $cah-lightest;
 		display: grid;
 		justify-items: center;
 		align-items: center;
-		box-sizing: border-box;
+		grid-template-columns: 1fr 6rem;
 		> h3 {
-			color: black;
+			color: $text-yellow;
 		};
 		/* circular */
 		> .modal-spinner {
+			position: relative;
+			width: .3rem;
+			height: .3rem;
+			border-radius: 50%;
+			background-color: rgba($color: $text-yellow, $alpha: .5);
+			color: rgba($color: $text-yellow, $alpha: .5);
+			box-shadow: 9999px 0 0 -5px rgba($color: $text-yellow, $alpha: .5);
+			background-color: rgba($color: $text-yellow, $alpha: .5);
+			place-self: end start;
+			margin-left: .8rem;
+			margin-bottom: 2px;
+			/*transition: all .2s ease;*/
+			animation: dots-loading 1s infinite linear alternate;
+			animation-delay: .5s;
+		}
+		> .modal-spinner:after, .modal-spinner:before {
+			content: '';
 			display: inline-block;
-			width: 150px;
-			height:150px;
+			position: absolute;
+			top: 0;
+			width: .3rem;
+			height: .3rem;
+			border-radius: 50%;
+			background-color: rgba($color: $text-yellow, $alpha: .5);;
+			color: rgba($color: $text-yellow, $alpha: .5);;
+		}
+		> .modal-spinner:before {
+			left: -.5rem;
+			animation: dots-loading 1s infinite alternate;
+			animation-delay: 0s;
 		}
 		> .modal-spinner:after {
-			content: " ";
-			display: block;
-			box-sizing: border-box;
-			width: 150px;
-			height: 150px;
-			margin: 1px;
-			border-radius: 50%;
-			border: 20px solid #666666;
-			border-color: #666666 transparent #666666 transparent;
-			animation: loading-animation 1.2s linear infinite;
+			left: .5rem;
+			animation: dots-loading 1s infinite alternate;
+			animation-delay: 1s;
 		}
 	}
 
 }
 
-/* circular */
+/* circular
 .modal-spinner {
 	display: inline-block;
 	width: 150px;
@@ -70,7 +86,16 @@
 	border-color: #666666 transparent #666666 transparent;
 	animation: loading-animation 1.2s linear infinite;
 }
-
+*/
+@keyframes dots-loading {
+	0% {
+		background-color:$text-yellow;
+	}
+	50%,
+	100% {
+		background-color: rgba($color: $text-yellow, $alpha: .5);
+	}
+}
 @keyframes loading-animation {
 	0% {
 		transform: rotate(0deg);

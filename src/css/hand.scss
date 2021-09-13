@@ -37,6 +37,7 @@ cah-hand {
 		@for $i from 1 to 11 {
 			> cah-card:nth-child(#{$i}) {
 				background: url(/src/assets/img/cartas/basica/#{$i}.svg);
+				background-repeat: no-repeat;
 				&.selected {
 					background: url(/src/assets/img/cartas/naipes-gatos/#{$i}.svg);
 				}
