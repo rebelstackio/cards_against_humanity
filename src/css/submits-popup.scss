@@ -4,21 +4,17 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(0,0,0,.5);
+	background: rgba(0,0,0,.7);
 	z-index: 1000;
 	place-content: center;
 	display: grid;
 	> div {
-		width: 80vw;
-		height: 80vh;
-		background-color: #fff;
-		border-radius: 4px;
-		box-shadow: 0px 0px 4px 1px black;
+		width: 100vw;
+		height: 70vh;
 		display: grid;
-		grid-template-rows: 45px 70px 1fr;
+		grid-template-rows: 45px 1fr;
 		> h3 {
-			background-color: black;
-			color: #fff;
+			color: $text-yellow;
 			text-align: center;
 			padding: 10px 0;
 		}
@@ -34,19 +30,15 @@
 }
 .submits-wrapper {
 	position: relative;
-	background-color: black;
 	width: 200px;
 	height: fit-content;
 	padding: 10px;
 	border-radius: 4px;
 	min-height: 200px;
 	display: grid;
+	margin: 2rem 0;
 	> div {
-		padding: 5px;
-		border: 1px solid #fff;
-		border-radius: 4px;
 		box-sizing: border-box;
-		height: auto;
 		padding-bottom: 35px;
 		position: relative;
 		> img {
@@ -75,11 +67,54 @@
 
 
 .winner-box {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	grid-area: 1 / 2;
 	display: grid;
 	place-content: center;
+	&::after {
+		content: '';
+		position: absolute;
+		top: 0; bottom: 0;
+		right: 0; left: 0;
+		background: url(/src/assets/img/efectos/destello-verde.png);
+		background-repeat: no-repeat;
+		background-position: center;
+		z-index: -1;
+		background-size: 60%;
+		animation: winner-glow-after 2.5s infinite;
+	}
+	&::before {
+		content: '';
+		position: absolute;
+		top: 30%; bottom: 20%;
+		right: 0; left: 0;
+		background: url(/src/assets/img/efectos/puntos-brillantes.png);
+		background-repeat: no-repeat;
+		background-position: center;
+		z-index: -1;
+		background-size: 30%;
+		animation: winner-glow-before 5s infinite;
+	}
+}
+@keyframes winner-glow-after {
+	0% {
+		background-size: 60%;
+	}
+	50% {
+		background-size: 65%;
+	}
+	100% {
+		background-size: 60%;
+	}
+}
+
+@keyframes winner-glow-before {
+	0% {
+		background-size: 30%;
+	}
+	50% {
+		background-size: 35%;
+	}
+	100% {
+		background-size: 30%;
+	}
 }

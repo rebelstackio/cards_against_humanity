@@ -1,4 +1,4 @@
-import { Div, Button, Span } from '@rebelstack-io/metaflux';
+import { Div, Span } from '@rebelstack-io/metaflux';
 import HostApi from '../../lib/backend/firebase/host';
 
 const _storage = global.storage;
@@ -20,7 +20,7 @@ const getCounter = function () {
 }
 
 const NextRound = () => Div({className: 'next-turn away'},[
-	Span({}, 'Next Round strarts in: '),
+	Span({}, 'Next Round starts in: '),
 	Span({
 		id: 'counter'
 	}, '')

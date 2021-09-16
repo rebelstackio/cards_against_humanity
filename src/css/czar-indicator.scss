@@ -2,6 +2,7 @@ czar-indicator {
 	position: absolute;
 	left: 10%;
 	top: 3rem;
+	z-index: 1001;
 	img {
 		border-radius: 50%;
 		background-color: #fff;

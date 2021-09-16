@@ -1,8 +1,9 @@
 import { Div, Span, H3 } from '@rebelstack-io/metaflux';
-import { PreviewSubmit } from '../PreviewSubmit';
 import { TurnStatus } from '../TurnStatus';
 import { checkReady } from '../../util';
 import MatchData from '../../controllers/MatchDataManager';
+import { BlackPreview } from '../BlackPreview';
+import { WinnerCard } from '../WinnerCard';
 
 
 const _storage = global.storage;
@@ -30,7 +31,7 @@ const SubmitPopUp = () => Div({ className: 'popup-wrapper hidden' }, [
 function _getContent() {
 	const isReady = checkReady();
 	const winner = MatchData.checkForWinner();
-	let title = isReady ? 'Wating for the Czar' : 'Players are picking';
+	let title = isReady ? 'Waiting for the Czar' : 'Players are picking';
 	if (winner) title = 'We have a stupid winner!';
 	return [
 		H3({ className: 'submit-title' }, title),
@@ -44,7 +45,7 @@ function _getContent() {
 function _getSubmits() {
 	let winner = MatchData.checkForWinner();
 	console.log(winner ? '#> there is a winner' : 'not winner yet');
-	if ( winner ) return _getWinnerConent(winner);
+	if ( winner ) return _getWinnerContent(winner);
 	return _getSubmitContent()
 }
 /**
@@ -69,11 +70,14 @@ function _getSubmitContent() {
  * get the winner card
  * @param {Object} winner winner object
  */
-function _getWinnerConent(winner) {
+function _getWinnerContent(winner) {
 	const pid = Object.keys(winner)[0];
-	return Div({ className: 'winner-box' },
-		_getTextCard(winner[pid], pid)
-	)
+	const pl = _storage.getState().Match.players[pid];
+	const {usedDeck: { blackCards }, czarCard} = _storage.getState().Match;
+	const { text } = blackCards[czarCard];
+	const fullText = getFullText(winner[pid], text)
+	console.log(winner);
+	return WinnerCard({ pl, fullText })
 }
 
 /**
@@ -87,8 +91,18 @@ function _getLoadingCard() {
  * @param {Array} submits Array of played cards
  */
 function _getTextCard(submits, pid) {
-	const { usedDeck: { blackCards }, czarCard } = _storage.getState().Match;
+	const { usedDeck: { blackCards }, czarCard, players } = _storage.getState().Match;
 	let { text } = blackCards[czarCard];
+	const pl = players[pid];
+	let fullText = getFullText(submits, text)
+	return Div({ className:!_checkWinner(pid)
+		? 'submits-wrapper'
+		: 'submits-wrapper winner-card'}, () => {
+			return BlackPreview(fullText, false, _checkWinner(pid), { pl })
+	})
+}
+
+function getFullText(submits, text) {
 	let fullText = text;
 	let isQuestion = fullText.match(/___/g) === null;
 	if (!isQuestion) {
@@ -102,12 +116,7 @@ function _getTextCard(submits, pid) {
 			fullText += `<span>${subm}</span>`
 		}
 	}
-	return Div({ className:!_checkWinner(pid)
-		? 'submits-wrapper'
-		: 'submits-wrapper winner-card'}, () => {
-			return PreviewSubmit({ fullText, isWinner: _checkWinner(pid), uid: pid });
-	})
-
+	return fullText
 }
 
 function _checkWinner(pid) {

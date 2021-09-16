@@ -7,12 +7,17 @@
 		> div {
 			display: grid;
 			row-gap: 2.5rem;
+			height: 100%;
+			position: relative;
 			h3 {
 				color: $text-yellow;
 				font-style: italic;
 			}
 			> * {
 				justify-self: center;
+			}
+			& .winner-box {
+				grid-area: unset !important;
 			}
 		}
 	}
@@ -97,9 +102,10 @@
 	position: relative;
 	z-index: 1;
 	overflow-x: hidden;
-	height: 300px;
+	height: fit-content;
+	height: -moz-fit-content;
 	&::after {
-		z-index: -1;
+		z-index: -2;
 		content: '';
 		position: absolute;
 		left: 0;
@@ -155,6 +161,7 @@
 	background-position: center;
 	position: relative;
 	padding-top: 1.5rem;
+	margin: 2rem 0;
 	> div {
 		display: grid;
 		row-gap: .5rem;
@@ -196,10 +203,10 @@
 	}
 	> .user {
 		position: absolute;
-		top: -1.2rem;
+		top: -2rem;
 		width: 30px;
 		height: 30px;
-		left: calc(50% - 15px);
+		left: calc(50% - 20px);
 		> span {
 			font-size: 18px;
 			display: grid;

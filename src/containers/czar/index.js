@@ -1,9 +1,10 @@
-import { Div, Span, H3, HTMLElementCreator } from '@rebelstack-io/metaflux';
+import { Div, H3, HTMLElementCreator } from '@rebelstack-io/metaflux';
 import { TurnStatus } from '../../components/TurnStatus';
 import { checkReady } from '../../util';
 import { Settings } from '../../components/Settings';
 import { BlackPreview } from '../../components/BlackPreview';
 import MatchData from '../../controllers/MatchDataManager';
+import { WinnerCard } from '../../components/WinnerCard';
 
 const _storage = global.storage;
 const UPDATE_EV = 'MATCH_UPDATE';
@@ -31,11 +32,15 @@ const Czar = () => Div({
 function _getCzarByStatus() {
 	return Div({ className: 'czar-status' }, _getNotReady())
 	.onStoreEvent(UPDATE_EV, (_, that) => {
-		const isWinner = _checkIsWinner()
-		console.log(isWinner);
+		const winner = MatchData.checkForWinner();
+		console.log(winner ? '#> there is a winner' : 'not winner yet');
 		const isReady = checkReady();
 		// clean the DOM
 		that.innerHTML = '';
+		if (winner) {
+			that.appendChild(_getWinner(winner));
+			return;
+		}
 		if(!isReady) {
 			that.appendChild(_getNotReady())
 		} else {
@@ -44,6 +49,20 @@ function _getCzarByStatus() {
 		}
 	})
 }
+/**
+ * get Winner Content.
+ */
+function _getWinner(winner) {
+	const pid = Object.keys(winner)[0]
+	const text = _getBlackCardText();
+	const fullText = replaceBlanks(winner[pid], text);
+	const pl = _storage.getState().Match.players[pid];
+	return Div({ className: 'winner' }, [
+		H3({}, 'We have a stupid winner!'),
+		WinnerCard({ pl, fullText })
+	])
+}
+
 /**
  * get information not ready to pick
  */
