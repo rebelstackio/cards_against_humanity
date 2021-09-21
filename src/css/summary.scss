@@ -1,44 +1,103 @@
+.summary-box {
+	background: url(/src/assets/img/background/fondo-start.jpg);
+	background-size: cover;
+	background-repeat: no-repeat;
+	animation: bg-glow 10s infinite;
+	height: 100vh;
+}
+
 .winner-wrapper {
 	display: grid;
 	text-align: center;
 	row-gap: 5px;
 	justify-items: center;
-	background-color: #ffffff;
 	position: relative;
-	height: 30vh;
-	> img {
-		width: 100px;
-		border-radius: 50%;
+	> .winner-info {
+		position: relative;
+		z-index: 1;
+		& .avatar {
+			left: calc(50% - 30px);
+			top: 30px;
+			position: absolute;
+			width: 40px;
+			height: 40px;
+		}
+		&::after {
+			content: '';
+			position: absolute;
+			top: 0; bottom: 0;
+			right: 0; left: -13px;
+			background: url(/src/assets/img/efectos/destello-naranja.png);
+			background-repeat: no-repeat;
+			background-position: center;
+			z-index: -1;
+			background-size: 100%;
+			animation: winner-banner-glow 2s infinite;
+		}
+		&::before {
+			content: '';
+			position: absolute;
+			top: 30%; bottom: 20%;
+			right: 0; left: -5px;
+			background: url(/src/assets/img/efectos/puntos-brillantes.png);
+			background-repeat: no-repeat;
+			background-position: center;
+			z-index: -1;
+			background-size:100%;
+			animation: winner-banner-glow 2s infinite;
+		}
 	}
-
+	& .winner-banner {
+		background: url(/src/assets/img/bloques/contenedor-winner.svg);
+		background-size: 80%;
+		width: 300px;
+		height: 200px;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+	&.scrolled {
+		box-shadow: 0px 2px 12px rgb(0 0 0 / 50%);
+	}
 }
 
 
-.rouns-played {
+.rounds-played {
 	display: grid;
 	overflow: auto;
 	height: 70vh;
 	> div {
 		display: grid;
-		> span {
-			color: #ffffff;
-			background-color: black;
-			text-align: center;
-			padding: 10px 0;
+		position: relative;
+		z-index: 1;
+		& .round-header span {
+			color: $text-yellow;
 			font-weight: bold;
 		}
 		.round-wrapper {
 			display: grid;
-			grid-template-columns: repeat(3, 200px);
-			column-gap: 5px;
-			background-color: #fff;
-			padding: 10px;
-			> * {
-				background-color: black;
-				padding: 5px;
-				border-radius: 4px;
-				box-sizing: border-box;
-				min-height: 280px;
+			grid-auto-flow: column;
+			column-gap: 1rem;
+			place-content: center;
+		}
+		&:nth-child(even) {
+			&:after {
+				background-color: rgba($color: #000000, $alpha: .5);
+			}
+		}
+		&::after {
+			content: '';
+			position: absolute;
+			top: 31px; bottom: 0;
+			left: 0; right: 0;
+			background-color: rgba($color: #000000, $alpha: 0);
+			z-index: -1;
+		}
+		&:nth-child(2n+3) {
+			padding-top: 30px;
+			.round-header {
+				position: absolute;
+				width: 100vw;
+				top: -31px;
 			}
 		}
 	}
@@ -46,25 +105,36 @@
 
 .summary-action {
 	position: fixed;
-	top: 10px;
-	right: 10px;
+	top: 3rem;
+	left: 10%;
+	& button {
+		color: white;
+		width: 130px;
+		height: 37px;
+	}
 }
 
-.score-info {
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	background-color: black;
-	color: #ffffff;
-	padding: 10px;
-	border-radius: 4px;
-	& img {
-		width: 45px;
-		border-radius: 50%;
-	}
-	> .score {
-		display: grid;
-		grid-template-columns: 1fr 30px;
+.round-header {
+	display: grid;
+	place-content: center;
+	height: 60px;
+	> div {
+		display: flex;
+		flex-direction: row;
+		gap: 19px;
 		align-items: center;
+		color: white;
+	}
+}
+
+@keyframes winner-banner-glow {
+	0% {
+		background-size: 100%;
+	}
+	50% {
+		background-size: 120%;
+	}
+	100% {
+		background-size: 100%;
 	}
 }

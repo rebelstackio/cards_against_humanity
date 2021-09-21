@@ -1,51 +1,69 @@
-import { Div, H2, Img, Span, H1, Button } from '@rebelstack-io/metaflux';
+import { Div, Span, Button, HTMLElementCreator } from '@rebelstack-io/metaflux';
 import { PreviewSubmit } from '../../components/PreviewSubmit';
-import { ScoreInfo } from '../../components/ScoreInfo';
+import { BlackPreview } from '../../components/BlackPreview';
 import { getFullText } from '../../util';
 import RoomAPI from '../../lib/backend/firebase/room';
 import HostApi from '../../lib/backend/firebase/host';
 import Actions from '../../handlers/actions';
+import '../../components/score-board';
 
 const _storage = global.storage;
 
-const Summary = () => Div({}, () => {
+const Summary = () => Div({ className: 'summary-box' }, () => {
 	const { players, winningScore } = _storage.getState().Match;
 	const winner = _getWinner(players, winningScore);
 	if (!winner) return [];
-	return [
-		Div({ className:'winner-wrapper' }, [
-			H1({}, 'The stupid Winner'),
-			Img({ src: winner.photoURL, alt: 'winner-picture' }),
-			H2({}, winner.displayName),
-			ScoreInfo()
-		]),
-		Div({ className: 'rouns-played' }, _getPlayedRounds()),
-		_getActions(),
-	]
+	const content = _getWinnerContent(winner);
+	return content
 }).onStoreEvent('MATCH_UPDATE', (state, that) => {
 	const { players, winningScore } = _storage.getState().Match;
 	const winner = _getWinner(players, winningScore);
 	that.innerHTML = '';
 	if (!winner) return;
-	that.append(
-		Div({ className:'winner-wrapper' }, [
-			H1({}, 'The stupid Winner'),
-			Img({ src: winner.photoURL, alt: 'winner-picture' }),
-			H2({}, winner.displayName),
-			ScoreInfo()
-		]),
-		Div({ className: 'rouns-played' }, _getPlayedRounds()),
-		_getActions(),
-	)
+	const content = _getWinnerContent(winner);
+	that.append(...content);
+	_setListeners(that);
 })
+
+function _setListeners(content) {
+	const body = content.querySelector('.rounds-played');
+	const header = content.querySelector('.winner-wrapper');
+	body.onscroll = () => {
+		if (body.scrollTop > 0) {
+			header.classList.add('scrolled');
+		} else {
+			header.classList.remove('scrolled');
+		}
+	}
+}
+
+function _getWinnerContent(winner) {
+	return [
+		Div({ className:'winner-wrapper' }, [
+			Div({className: 'winner-info'}, [
+				Div({ className: 'avatar s-R', style: `background-image: url(${winner.photoURL});` }),
+				Div({ className: 'winner-banner' }),
+			]),
+			HTMLElementCreator('score-board')
+		]),
+		Div({ className: 'rounds-played' }, _getPlayedRounds()),
+		_getActions(),
+	]
+}
 
 function _getPlayedRounds() {
 	const { rounds, players } = _storage.getState().Match;
 	return rounds.map((round, i) => {
 		const winnerID = Object.keys(round.winner)[0]
-		const name = winnerID ? players[winnerID].displayName : '';
+		const photoURL = winnerID ? players[winnerID].photoURL : '';
 		return Div({}, [
-			Span({}, `Winner of the Round ${ i + 1 }: ${name}`),
+			Div({className:'round-header'},
+				Div({},
+					[
+						Div({ className: 'avatar s-W', style: `background-image: url(${photoURL});` }),
+						Span({}, `Winner of the Round ${ i + 1 }`),
+					])
+				),
 			Div({ className: 'round-wrapper' }, _getRound(round))
 		])
 	})
@@ -57,17 +75,15 @@ function _getRound(round) {
 	return Object.keys(whiteCards).map(pid => {
 		const selectedCards = whiteCards[pid];
 		let fullText = getFullText(_dbc[czarCard].text, selectedCards);
-		return PreviewSubmit({
-			fullText,
-			isWinner: winner[pid] !== undefined
-		})
+		const pl = _storage.getState().Match.players[pid];
+		return BlackPreview(fullText, false, true, { pl })
 	})
 }
 
 function _getWinner(players, winningScore) {
-	const pids = Object.keys(players);
-	for (let i=0; i < pids.length; i++) {
-		const player = players[pids[i]];
+	const pid = Object.keys(players);
+	for (let i=0; i < pid.length; i++) {
+		const player = players[pid[i]];
 		if (player.score >= winningScore) {
 			return player;
 		}
@@ -78,7 +94,7 @@ function _getActions () {
 	const { isHost } = _storage.getState().Match;
 	return Div({ className: 'summary-action' }, Button({
 		onclick: isHost ? _startOver : _leaveMatch,
-		className: 'btn black'
+		className: 'btn-primary'
 	},isHost ? 'Start Over' : 'Leave Match'))
 }
 

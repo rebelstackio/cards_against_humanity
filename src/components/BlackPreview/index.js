@@ -2,10 +2,10 @@ import { Div, Span, Button } from '@rebelstack-io/metaflux';
 import Actions from '../../handlers/actions';
 import RoomApi from '../../lib/backend/firebase/room';
 
-const speach = new SpeechSynthesisUtterance();
+const Speech = new SpeechSynthesisUtterance();
 
 function BlackPreview(text ,isPickable, isUserShow, data, isWhite) {
-	const { pl, submits, pid } = data;
+	const { pl, submits, pid } = data || {};
 	return Div({ className: 'black-preview' },[
 		Div({ className: 'user' },
 				isUserShow
@@ -34,12 +34,12 @@ function cancelSelection () {
 	Actions.cancelSelection();
 }
 /**
- * Speach Synthesis handler
+ * Speech Synthesis handler
  */
 function speak(text) {
 	const rawText = text.replace(/(<span>|<\/span>)/g, '');
-	speach.text = rawText;
-	window.speechSynthesis.speak(speach)
+	Speech.text = rawText;
+	window.speechSynthesis.speak(Speech)
 }
 /**
  * submit winner by czar
