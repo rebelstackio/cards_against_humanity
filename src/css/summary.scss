@@ -63,8 +63,9 @@
 
 .rounds-played {
 	display: grid;
-	overflow: auto;
-	height: 70vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: calc(100vh - 200px);
 	> div {
 		display: grid;
 		position: relative;

@@ -1,11 +1,11 @@
 import { Div, Span, Button, HTMLElementCreator } from '@rebelstack-io/metaflux';
-import { PreviewSubmit } from '../../components/PreviewSubmit';
 import { BlackPreview } from '../../components/BlackPreview';
 import { getFullText } from '../../util';
 import RoomAPI from '../../lib/backend/firebase/room';
 import HostApi from '../../lib/backend/firebase/host';
 import Actions from '../../handlers/actions';
 import '../../components/score-board';
+import { CardScroller } from '../../components/CardScroller';
 
 const _storage = global.storage;
 
@@ -41,7 +41,7 @@ function _getWinnerContent(winner) {
 	return [
 		Div({ className:'winner-wrapper' }, [
 			Div({className: 'winner-info'}, [
-				Div({ className: 'avatar s-R', style: `background-image: url(${winner.photoURL});` }),
+				Div({ className: 'avatar s-W', style: `background-image: url(${winner.photoURL});` }),
 				Div({ className: 'winner-banner' }),
 			]),
 			HTMLElementCreator('score-board')
@@ -56,6 +56,7 @@ function _getPlayedRounds() {
 	return rounds.map((round, i) => {
 		const winnerID = Object.keys(round.winner)[0]
 		const photoURL = winnerID ? players[winnerID].photoURL : '';
+		const data = _getRound(round)
 		return Div({}, [
 			Div({className:'round-header'},
 				Div({},
@@ -64,7 +65,7 @@ function _getPlayedRounds() {
 						Span({}, `Winner of the Round ${ i + 1 }`),
 					])
 				),
-			Div({ className: 'round-wrapper' }, _getRound(round))
+			Div({ className: 'round-wrapper' }, CardScroller({ data }))
 		])
 	})
 }
