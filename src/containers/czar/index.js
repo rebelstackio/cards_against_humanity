@@ -5,6 +5,7 @@ import { Settings } from '../../components/Settings';
 import { BlackPreview } from '../../components/BlackPreview';
 import MatchData from '../../controllers/MatchDataManager';
 import { WinnerCard } from '../../components/WinnerCard';
+import { CardScroller } from '../../components/CardScroller';
 
 const _storage = global.storage;
 const UPDATE_EV = 'MATCH_UPDATE';
@@ -45,7 +46,6 @@ function _getCzarByStatus() {
 			that.appendChild(_getNotReady())
 		} else {
 			that.appendChild(_getReady());
-			_handleScroll();
 		}
 	})
 }
@@ -89,58 +89,14 @@ function _getReady() {
 function AllSubmits() {
 	const submits = MatchData.getSubmits();
 	let text = _getBlackCardText();
-	return Div({ className: 'all-submits' }, () => {
-		const contentArr = submits.map(sb => {
-			console.log(sb);
-			const pl = global.storage.getState().Match.players[sb.uid];
-			const fullText = replaceBlanks(sb.submits, text);
-			const data = { pl, submits: sb.submits, pid: sb.uid };
-			return BlackPreview(fullText, true, false, data)
-		});
-		contentArr.push(
-			Div({ className: 'handler-back' }),
-			Div({ className: 'handler-right' })
-		)
-		return contentArr;
+	const data = submits.map(sb => {
+		console.log(sb);
+		const pl = global.storage.getState().Match.players[sb.uid];
+		const fullText = replaceBlanks(sb.submits, text);
+		const data = { pl, submits: sb.submits, pid: sb.uid };
+		return BlackPreview(fullText, true, false, data)
 	})
-}
-/**
- * handle scroll for the submits
- */
-function _handleScroll () {
-	const parent = document.querySelector('.all-submits');
-	const left = parent.querySelector('.handler-back');
-	const right = parent.querySelector('.handler-right');
-	let calculate = () => {
-		// if the scroll is at the start disable back
-		if (parent.scrollLeft === 0) {
-			left.classList.add('disabled')
-		} else {
-			left.classList.remove('disabled');
-		}
-		// if scroll is at the end disable next
-		if (parent.scrollLeft === parent.scrollWidth) {
-			right.classList.add('disabled')
-		} else {
-			right.classList.remove('disabled');
-		}
-		// if there is no scroll disable both
-		if (parent.offsetWidth === parent.scrollWidth) {
-			left.classList.add('disabled');
-			right.classList.add('disabled');
-	}
-	}
-	calculate();
-	right.onclick = () => {
-		if (right.classList.contains('disabled')) return;
-		parent.scrollLeft += 230;
-		calculate();
-	}
-	left.onclick = () => {
-		if (left.classList.contains('disabled')) return;
-		parent.scrollLeft -= 230;
-		calculate();
-	}
+	return Div({ className: 'all-submits' }, CardScroller( { data } ))
 }
 
 /**
@@ -170,14 +126,6 @@ function _getBlackCardText() {
 	let { czarCard, usedDeck} = _storage.getState().Match;
 	let text = usedDeck.blackCards[czarCard] ? usedDeck.blackCards[czarCard].text : '';
 	return text;
-}
-/**
- * Check if the round have a winner
- */
-function _checkIsWinner() {
-	const { rounds } = _storage.getState().Match;
-	const lastRound = rounds[rounds.length - 1];
-	return JSON.stringify(lastRound.winner) !== JSON.stringify({})
 }
 
 export {
