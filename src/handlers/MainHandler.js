@@ -85,7 +85,7 @@ export default {
 		},
 		'LEAVE_ROOM': (_, state) => {
 			localStorage.removeItem('m_joined');
-			global.router.go('/lobby/host/');
+			global.router.go('/');
 			location.reload();
 			return { newState: state }
 		}

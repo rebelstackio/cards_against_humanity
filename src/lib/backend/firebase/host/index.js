@@ -12,12 +12,12 @@ function _setHands(players, pool, db = firebase.firestore()) {
 		let pl = players[_k];
 		let hand = pl.hand;
 		hand = hand.match(/[0-9]+/g) || [];
-		let wihiteCards = pool.whiteCards.split(',');
+		let whiteCards = pool.whiteCards.split(',');
 		const left = 10 - hand.length;
 		for (let i = 0; i < left; i++){
-			hand.push(wihiteCards.pop());
+			hand.push(whiteCards.pop());
 		}
-		pool.whiteCards = wihiteCards.join();
+		pool.whiteCards = whiteCards.join();
 		players[_k].hand = hand.join();
 	});
 	console.log('hands updated');
@@ -61,7 +61,7 @@ function _shuffleArray(arr) {
 }
 
 /**
- * Strart the match
+ * Start the match
  * @param {String} id RoomID
  * @param {Object} players player object
  * @param {Object} pool pool object

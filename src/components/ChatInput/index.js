@@ -30,10 +30,11 @@ function _touchMessage() {
  */
 function _sendMessage(inp) {
 	if(inp.value !== '') {
-		//_storage.dispatch({ type: 'SEND_MESSAGE', msg: inp.value })
 		const { uid } = _storage.getState().Main.user;
 		const { id } = _storage.getState().Match;
-		MessagingApi.sendMessage({ msg: inp.value, uid, id })
+		// remove html from msg to avoid injections
+		const msgValidated = inp.value.replace(/<(\"[^\"]*\"|'[^']*'|[^'\">])*>/g, '');
+		MessagingApi.sendMessage({ msg: msgValidated, uid, id })
 		.then(() => {
 			console.log('message sent');
 		})

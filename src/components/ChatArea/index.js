@@ -65,7 +65,7 @@ function _listentMessages(id) {
 	})
 }
 /**
- * get the hours, minutes and secconds 00:00:00 type of date
+ * get the hours, minutes and seconds 00:00:00 type of date
  * @param {String} _date
  */
 function getTime(_date) {
@@ -83,12 +83,13 @@ _storage.on('MESSAGE_ARRIVE', ( action ) => {
 function _appendMessage(from, msg, date) {
 	const { uid } = _storage.getState().Main.user;
 	let isYou = uid === from.uid;
+	const msgValidated = msg.replace(/<(\"[^\"]*\"|'[^']*'|[^'\">])*>/g, '');
 	const el = Div({ className: isYou ? 'msg-wrapper right' : 'msg-wrapper left' },
 	[
 		Div({ className: 'avatar', style: `background-image: url(${from.photoURL});`}),
 		Div({ className: 'msg-body' }, [
 			Span({className: 'user'}, `${from.displayName}${isYou ? ' - You' : ''}`),
-			Span({}, msg),
+			Span({}, msgValidated),
 			Span({className: 'date'}, date)
 		])
 	]);
