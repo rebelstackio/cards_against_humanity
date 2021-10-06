@@ -25,11 +25,25 @@ import { Summary } from '../containers/summary';
 import { GameSounds } from '../audio';
 import { ConfirmationPopUp } from '../components/ConfirmationPopup';
 import { Landing } from '../containers/landing';
+const { app, BrowserWindow } = require('electron')
 
 global.router = new Router();
 global.gameSounds = new GameSounds();
 
 if ( location.hash === '' ) global.router.go( '/' );
+
+function createWindow () {
+	const win = new BrowserWindow({
+		width: 800,
+		height: 600
+	})
+
+	win.loadFile('index.html')
+}
+
+app.whenReady().then(() => {
+	createWindow()
+})
 
 document.addEventListener('DOMContentLoaded', () => {
 	global.router.on(/lobby\/host/, () => {
