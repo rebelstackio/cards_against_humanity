@@ -1,5 +1,7 @@
 /* src/lib/backend/firebase/auth/index.js */
-
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 /**
  * Sign in with google provider
  * @param {object} auth Auth object
@@ -16,7 +18,7 @@ const singInWithFacebook = function _signInWithFacebook( auth = firebase.auth() 
 
 /**
  * SignOut
- * @param {object} auth Auth object
+ * @param {object} auth firebase.auth() object
  */
 const signOut = function _signOut( auth = firebase.auth() ) {
 	return auth.signOut()
@@ -25,7 +27,7 @@ const signOut = function _signOut( auth = firebase.auth() ) {
 /**
  * Event - Runs the next callbacks when the auth changes
  * @param {function} next Event callback
- * @param {object} auth Auth object
+ * @param {object} auth firebase.auth() object
  */
 const onAuthStateChanged = function _onAuthStateChanged( next,  auth = firebase.auth()) {
 	auth.onAuthStateChanged(next);

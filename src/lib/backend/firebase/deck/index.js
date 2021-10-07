@@ -1,4 +1,5 @@
 /* src/lib/backend/firebase/deck/index.js */
+import firebase from 'firebase/compat/app';
 const COLLECTION = 'decks';
 /**
  * Return all the decks with all the details

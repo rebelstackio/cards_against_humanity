@@ -1,4 +1,6 @@
 /* src/lib/backend/firebase/messaging.js */
+import firebase from 'firebase/compat/app';
+
 const COLLECTION = 'waiting_room';
 
 const sendMessage = function _sendMessage(payload, db=firebase.firestore()) {

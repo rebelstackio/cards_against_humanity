@@ -1,3 +1,5 @@
+import firebase from 'firebase/compat/app';
+
 const COLLECTION = 'rooms';
 const WCOLLECTION = 'waiting_room';
 /**

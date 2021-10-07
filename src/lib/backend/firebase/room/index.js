@@ -1,4 +1,5 @@
 /* src/lib/backend/firebase/room/index.js */
+import firebase from 'firebase/compat/app';
 
 const COLLECTION = 'rooms';
 

@@ -1,5 +1,6 @@
 /* src/lib/firebase/index.js */
-
+import firebase from 'firebase/compat/app';
+console.log(process.env.APIKEY);
 const CONFIG = {
 	apiKey: process.env.APIKEY,
 	authDomain: process.env.AUTHDOMAIN,

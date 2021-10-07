@@ -1,158 +1,63 @@
-import '@fortawesome/fontawesome-free/css/all.css';
-import '@fortawesome/fontawesome-free/js/fontawesome';
-import '@fortawesome/fontawesome-free/js/solid';
-import '@fortawesome/fontawesome-free/js/regular';
-import '@fortawesome/fontawesome-free/js/brands';
-import '../css/index.scss';
-import '../handlers';
-import { Div } from '@rebelstack-io/metaflux';
-import { TableTop } from '../containers/table-top';
-import { FindGame } from '../containers/find-game';
-import { Tests } from '../containers/tests';
-import { Host } from '../containers/host-game';
-import { WaitingRoom } from '../containers/wating-room';
-import { Czar } from '../containers/czar';
-import Router from  '../router';
-import '../../src/lib/backend/firebase';
-import { signOut, onAuthStateChanged } from '../../src/lib/backend/firebase/auth';
-import RoomApi from '../lib/backend/firebase/room';
-import Actions from '../handlers/actions';
-import { getDeck } from  '../util';
-import { NextRound } from '../components/NextRound';
-import { LoadignModal } from '../components/LoadingModal';
-import { SnackBar } from '../components/SnackBar';
-import { Summary } from '../containers/summary';
-import { GameSounds } from '../audio';
-import { ConfirmationPopUp } from '../components/ConfirmationPopup';
-import { Landing } from '../containers/landing';
-const { app, BrowserWindow } = require('electron')
 
-global.router = new Router();
-global.gameSounds = new GameSounds();
+'use strict'
 
-if ( location.hash === '' ) global.router.go( '/' );
+import { app, BrowserWindow } from 'electron'
+import * as path from 'path'
+import { format as formatUrl } from 'url'
+import dotenv from 'dotenv';
 
-function createWindow () {
-	const win = new BrowserWindow({
-		width: 800,
-		height: 600
-	})
+let mainWindow
+let isDevelopment = true;
 
-	win.loadFile('index.html')
-}
+const env = dotenv.config({
+	path: path.resolve(process.cwd(),'.env')
+}).parsed;
 
-app.whenReady().then(() => {
-	createWindow()
-})
+// Reduce it to a nice object, the same as before
+Object.keys(env).reduce((prev, next) => {
+	prev[`process.env.${next}`] = JSON.stringify(env[next]);
+	return prev;
+}, {});
 
-document.addEventListener('DOMContentLoaded', () => {
-	global.router.on(/lobby\/host/, () => {
-		_setContent( Div({ id: 'container' }, Host()) )
-	}).on(/lobby\/find_game/, () => {
-		_setContent( FindGame() )
-	}).on(/\/game\//, () => {
-		console.log('load game view')
-		_setContent( TableTop() )
-	}).on(/tests/, () => {
-		_setContent(Div({ id: 'tests' }, Tests()))
-	})
-	.on(/waiting_room/, () => {
-		_setContent( WaitingRoom() )
-	})
-	.on(/czar/, () => {
-		_setContent( Czar() )
-	})
-	.on(/summary/, () => {
-		_setContent( Summary() )
-	})
-	.on(/^\/(?![a-z])/g, () => {
-		_setContent( Landing() )
-	})
-});
-/**
- * Clean the body and append content
- * @param {HTMLElement} Content HTMLElement to append
- */
-function _setContent(Content) {
-	document.body.innerHTML = '';
-	document.body.append(Content, ..._getCommondComponents());
-}
-
-function _getCommondComponents() {
-	return [
-		NextRound(),
-		LoadignModal(),
-		SnackBar(),
-		ConfirmationPopUp()
-	]
-}
-
-global.storage.on('LOGOUT', () => {
-	signOut().then(() => {
-		console.log('logout');
-	}).catch((error) => {
-		//TODO: Handle Errors here.
-		console.error('Logout', error);
-	});
-});
-/**
- *
- */
-onAuthStateChanged( (user) => {
-	let _user = {};
-	if(user) {
-		const { displayName, email, uid, photoURL } = user;
-		_user = { displayName, email, uid, photoURL }
-		const joined = localStorage.getItem('m_joined');
-		if (joined !== null) {
-			_listenRoom({ newState: { Match: { id: joined } }})
-		}
-	}
-	global.storage.dispatch({ type: 'AUTH_CHANGE', user: _user });
-});
-
-global.storage.on('MATCH_CREATED',_listenRoom);
-global.storage.on('MATCH_JOINED',_listenRoom)
-/**
- * Listen to room changes
- * @param {*} action
- */
-function _listenRoom(action) {
-	const state = action.newState;
-	RoomApi.listenRoom(state.Match.id, async (snap) => {
-		const data = snap.data();
-		if (!data) return;
-		const _deck = await getDeck(data.deck)
-		Actions.roomUpdate({ data, deck:_deck });
-		const {uid} = global.storage.getState().Main.user;
-		const player = data.players[uid];
-		if (player.isCzar && data.status === 'R') {
-			global.router.go('/czar/')
-		} else {
-			goByStatus(data.status);
+function createMainWindow() {
+	const window = new BrowserWindow({
+		webPreferences: {
+			nodeIntegration: true,
+			contextIsolation: false,
+			enableRemoteModule: true,
 		}
 	})
-}
-/**
- * change dir by the match status
- * @param {String} status
- */
-function goByStatus(status) {
-	console.log('#> Match status: ',status);
-	switch (status) {
-		case 'R':
-			global.router.go('/game/')
-			break;
-		case 'E':
-			global.router.go('/summary/');
-			break;
-		default:
-			global.router.go('/waiting_room/');
-			break;
+
+	if (isDevelopment) {
+		window.webContents.openDevTools()
 	}
+
+	if (isDevelopment) {
+		window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
+	}
+	else {
+		window.loadURL(formatUrl({
+			pathname: path.join(__dirname+'/public/', 'index.html'),
+			protocol: 'file',
+			slashes: true
+		}))
+	}
+
+	window.on('closed', () => {
+		mainWindow = null
+	})
+
+	window.webContents.on('devtools-opened', () => {
+		window.focus()
+		setImmediate(() => {
+			window.focus()
+		})
+	})
+
+	return window
 }
 
-
-window.addEventListener('beforeunload', () => {
-	global._matchListener()
+// create main BrowserWindow when electron is ready
+app.on('ready', () => {
+	mainWindow = createMainWindow()
 })
