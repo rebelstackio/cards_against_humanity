@@ -2,10 +2,11 @@
 	height: 100%;
 	display: grid;
 	grid-template-rows: 50px 1fr;
-	background: url(/src/assets/img/background/fondo-start.jpg);
-	background-size: cover;
+	background: url(/src/assets/img/background/fondo-start-big.jpg);
+	background-size: 100% 120%;
 	animation: bg-glow 10s infinite;
 	transition: all .1s linear;
+	background-position: center;
 	/* CREATION MENU */
 	.creation-menu {
 		position: relative;
@@ -122,13 +123,13 @@
 
 @keyframes bg-glow {
 	0% {
-		background-size: 100%;
-	}
-	50% {
 		background-size: 120%;
 	}
+	50% {
+		background-size: 140%;
+	}
 	100% {
-		background-size: 100%;
+		background-size: 120%;
 	}
 }
 

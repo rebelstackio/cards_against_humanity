@@ -1,6 +1,7 @@
 import { Div } from '@rebelstack-io/metaflux';
 import { PlayerSideBar } from '../../components/PlayerSideBar';
 import { ChatArea } from '../../components/ChatArea';
+import { Settings } from '../../components/Settings';
 
 const _storage = global.storage;
 
@@ -11,6 +12,7 @@ const WaitingRoom = () => Div({
 }, [
 	PlayerSideBar(),
 	ChatArea(),
+	...Settings()
 ]);
 
 

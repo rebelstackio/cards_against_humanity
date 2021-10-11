@@ -52,6 +52,7 @@ function _getThePeople() {
 				Div({ className: 'score' }, [Span({}, `x${pl.score}`), Span({className: 'score-coin'})])
 			])
 		}
+		return;
 	})
 }
 /**
